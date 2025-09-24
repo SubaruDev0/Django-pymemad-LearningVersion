@@ -1,0 +1,409 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ title_navbar }} - {{ block.super }}{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block dashboard_content %}
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{{ breadcrumb_item_url }}">{{ breadcrumb_item }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ title_navbar }}</li>
+        </ol>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-0">
+                <i class="ai-file-plus me-2"></i>{{ title_navbar }}
+            </h1>
+            <p class="text-muted mb-0">Crea un nuevo artículo para el blog con contenido multiidioma</p>
+        </div>
+        <div>
+            <a href="{{ breadcrumb_item_url }}" class="btn btn-outline-secondary">
+                <i class="ai-arrow-left me-2"></i>Volver al listado
+            </a>
+        </div>
+    </div>
+
+    <!-- Quick Tips -->
+    <div class="alert alert-info d-flex mb-4" role="alert">
+        <i class="ai-circle-info lead me-2 me-sm-3"></i>
+        <div class="mb-1"><span class="fw-semibold">Consejos rápidos:</span>
+        <ul class="mb-0 ps-3">
+            <li>Completa al menos el título y contenido en español para crear el post</li>
+            <li>Puedes agregar traducciones después usando el botón "Generar Traducciones"</li>
+            <li>El post se creará como borrador por defecto</li>
+            <li>Después de crear, serás redirigido a la edición completa del post</li>
+        </ul>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="card border-0">
+        <div class="card-body">
+            <!-- Post Form -->
+            <form method="POST" id="postForm" enctype="multipart/form-data" action="{{ form_action }}">
+                {% csrf_token %}
+
+                <!-- Hidden fields for Quill content -->
+                <input type="hidden" id="id_body_es" name="body_es" value="">
+                <input type="hidden" id="id_body_en" name="body_en" value="">
+                <input type="hidden" id="id_body_pt" name="body_pt" value="">
+
+                <!-- Basic Information Section -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.category.id_for_label }}">
+                                <i class="ai-folder me-1"></i>{{ form.category.label }}
+                            </label>
+                            {{ form.category }}
+                            {% if form.category.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.category.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.img_featured.id_for_label }}">
+                                <i class="ai-image me-1"></i>{{ form.img_featured.label }}
+                            </label>
+                            {{ form.img_featured }}
+                            {% if form.img_featured.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.img_featured.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Formatos permitidos: JPG, PNG, WEBP. Tamaño máximo: 5MB
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.publish.id_for_label }}">
+                                <i class="ai-calendar me-1"></i>{{ form.publish.label }}
+                            </label>
+                            {{ form.publish }}
+                            {% if form.publish.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.publish.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="{{ form.status.id_for_label }}">
+                                <i class="ai-toggle-left me-1"></i>{{ form.status.label }}
+                            </label>
+                            {{ form.status }}
+                            {% if form.status.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.status.errors.0 }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">
+                                Se recomienda crear como borrador y publicar después de revisar
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Language Tabs -->
+                <h5 class="mb-3">
+                    <i class="ai-globe me-2"></i>Contenido del Post
+                </h5>
+
+                <ul class="nav nav-tabs mb-4" id="languageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="spanish-tab" data-bs-toggle="tab" data-bs-target="#spanish" type="button" role="tab">
+                            <span class="language-indicator no-content" id="indicator-es"></span>
+                            🇪🇸 Español
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="english-tab" data-bs-toggle="tab" data-bs-target="#english" type="button" role="tab">
+                            <span class="language-indicator no-content" id="indicator-en"></span>
+                            🇬🇧 Inglés
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="portuguese-tab" data-bs-toggle="tab" data-bs-target="#portuguese" type="button" role="tab">
+                            <span class="language-indicator no-content" id="indicator-pt"></span>
+                            🇧🇷 Portugués
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Language Tab Content -->
+                <div class="tab-content" id="languageTabsContent">
+                    <!-- Spanish Content -->
+                    <div class="tab-pane fade show active" id="spanish" role="tabpanel">
+                        <div class="form-group">
+                            <label for="title_es">Título <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title_es" name="title_es"
+                                   placeholder="Ingresa el título del post en español" required>
+                            <div class="invalid-feedback">El título en español es requerido</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="editor_es">Contenido <span class="text-danger">*</span></label>
+                            <div id="editor_es" class="quill-editor"></div>
+                            <div class="invalid-feedback">El contenido en español es requerido</div>
+                        </div>
+                    </div>
+
+                    <!-- English Content -->
+                    <div class="tab-pane fade" id="english" role="tabpanel">
+                        <div class="form-group">
+                            <label for="title_en">Title</label>
+                            <input type="text" class="form-control" id="title_en" name="title_en"
+                                   placeholder="Enter the post title in English">
+                        </div>
+                        <div class="form-group">
+                            <label for="editor_en">Content</label>
+                            <div id="editor_en" class="quill-editor"></div>
+                        </div>
+                    </div>
+
+                    <!-- Portuguese Content -->
+                    <div class="tab-pane fade" id="portuguese" role="tabpanel">
+                        <div class="form-group">
+                            <label for="title_pt">Título</label>
+                            <input type="text" class="form-control" id="title_pt" name="title_pt"
+                                   placeholder="Digite o título do post em português">
+                        </div>
+                        <div class="form-group">
+                            <label for="editor_pt">Conteúdo</label>
+                            <div id="editor_pt" class="quill-editor"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
+                    <div>
+                        <button type="button" class="btn btn-outline-secondary" onclick="saveDraft()">
+                            <i class="ai-save me-2"></i>Guardar como Borrador
+                        </button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-outline-danger me-2" onclick="confirmCancel()">
+                            <i class="ai-x me-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <i class="ai-check me-2"></i>Crear Post
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+    <script>
+        // Initialize Quill editors
+        const editors = {};
+        const languages = ['es', 'en', 'pt'];
+
+        // Quill toolbar configuration
+        const toolbarOptions = [
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            ['blockquote', 'code-block'],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            [{ 'direction': 'rtl' }],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'align': [] }],
+            ['link', 'image', 'video'],
+            ['clean']
+        ];
+
+        // Initialize editors for each language
+        languages.forEach(lang => {
+            editors[lang] = new Quill(`#editor_${lang}`, {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions
+                },
+                placeholder: `Escribe el contenido del post aquí...`
+            });
+
+            // Update language indicator when content changes
+            editors[lang].on('text-change', function() {
+                updateLanguageIndicator(lang);
+            });
+
+            // Also monitor title changes
+            const titleInput = document.getElementById(`title_${lang}`);
+            if (titleInput) {
+                titleInput.addEventListener('input', function() {
+                    updateLanguageIndicator(lang);
+                });
+            }
+        });
+
+        // Update language indicators
+        function updateLanguageIndicator(lang) {
+            const title = document.getElementById(`title_${lang}`).value.trim();
+            const content = editors[lang].getText().trim();
+            const indicator = document.getElementById(`indicator-${lang}`);
+
+            if (title || content.length > 1) {
+                indicator.classList.remove('no-content');
+                indicator.classList.add('has-content');
+            } else {
+                indicator.classList.remove('has-content');
+                indicator.classList.add('no-content');
+            }
+        }
+
+        // Save as draft
+        function saveDraft() {
+            document.getElementById('id_status').value = 'DRAFT';
+            submitForm();
+        }
+
+        // Confirm cancel
+        function confirmCancel() {
+            Swal.fire({
+                title: '¿Cancelar creación?',
+                text: 'Se perderán todos los cambios no guardados',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'Continuar editando'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ breadcrumb_item_url }}';
+                }
+            });
+        }
+
+        // Form submission
+        document.getElementById('postForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitForm();
+        });
+
+        function submitForm() {
+            // Show loading
+            document.getElementById('loading').classList.add('show');
+
+            // Update hidden fields with Quill content
+            languages.forEach(lang => {
+                const content = editors[lang].root.innerHTML;
+                document.getElementById(`id_body_${lang}`).value = content;
+            });
+
+            // Validate required fields (Spanish)
+            const titleEs = document.getElementById('title_es').value.trim();
+            const bodyEs = editors['es'].getText().trim();
+
+            if (!titleEs || bodyEs.length <= 1) {
+                document.getElementById('loading').classList.remove('show');
+
+                Swal.fire({
+                    title: 'Campos requeridos',
+                    text: 'Por favor completa al menos el título y contenido en español',
+                    icon: 'warning',
+                    confirmButtonText: 'Entendido'
+                });
+                return;
+            }
+
+            // Submit form via AJAX
+            const formData = new FormData(document.getElementById('postForm'));
+
+            fetch('{{ form_action }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loading').classList.remove('show');
+
+                    if (data.success) {
+                        Swal.fire({
+                            title: '¡Éxito!',
+                            text: data.message,
+                            icon: 'success',
+                            confirmButtonText: 'Continuar'
+                        }).then(() => {
+                            // Redirect to edit view
+                            if (data.redirect_url) {
+                                window.location.href = data.redirect_url;
+                            }
+                        });
+                    } else {
+                        // Handle errors
+                        let errorMessage = data.message || 'Ocurrió un error al crear el post';
+
+                        if (data.errors && typeof data.errors === 'object') {
+                            const errorList = [];
+                            for (const field in data.errors) {
+                                if (data.errors[field].messages) {
+                                    errorList.push(`${data.errors[field].field_name}: ${data.errors[field].messages.join(', ')}`);
+                                }
+                            }
+                            if (errorList.length > 0) {
+                                errorMessage = errorList.join('<br>');
+                            }
+                        }
+
+                        Swal.fire({
+                            title: 'Error',
+                            html: errorMessage,
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').classList.remove('show');
+                    console.error('Error:', error);
+
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un error inesperado. Por favor intenta nuevamente.',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                });
+        }
+
+        // Initialize language indicators on load
+        document.addEventListener('DOMContentLoaded', function() {
+            languages.forEach(lang => {
+                updateLanguageIndicator(lang);
+            });
+        });
+    </script>
+{% endblock %}

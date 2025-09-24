@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load static %}
+{% load blog_extras %}
+
+<section class="container py-3 pb-5">
+        <div class="d-flex align-items-center justify-content-between mb-5">
+            <h2 class="h1 mb-0">{% trans "Últimas Noticias" %}</h2>
+            <a href="{% url 'landing:news_list' %}" class="btn btn-sm btn-outline-primary">
+                {% trans "Ver todas" %}
+                <i class="ai-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+        <!-- Grid de noticias -->
+        <div class="row g-4">
+            {% for post in latest_posts %}
+            <div class="col-md-6 col-lg-4">
+                <article class="card h-100 border-0 shadow-sm">
+                    {% if post.img_featured %}
+                    <img src="{{ post.img_featured.url }}" class="card-img-top" alt="{{ post.title }}" style="height: 220px; object-fit: cover;">
+                    {% else %}
+                    <img src="{% static 'images/placeholder-news.jpg' %}" class="card-img-top" alt="{{ post.title }}" style="height: 220px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            {% if post.category %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary">{{ post.category.name }}</span>
+                            {% else %}
+                            <span class="badge bg-primary bg-opacity-10 text-primary">{% trans "Noticias" %}</span>
+                            {% endif %}
+                            <span class="fs-sm text-muted ms-auto">{{ post.publish|date:"d M Y" }}</span>
+                        </div>
+                        <h3 class="h5 mb-3">
+                            <a href="{% post_link_url post %}" class="text-decoration-none text-dark">
+                                {{ post.title|truncatechars:100 }}
+                            </a>
+                        </h3>
+                        <p class="text-muted fs-sm mb-0">
+                            {{ post.body|striptags|truncatechars:150 }}
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0">
+                        <a href="{% post_link_url post %}" class="btn btn-sm btn-link text-primary p-0">
+                            {% trans "Leer más" %} <i class="ai-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+            {% empty %}
+            <!-- Mostrar alerta cuando no hay noticias publicadas -->
+            <div class="col-12">
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="ai-info-circle fs-4 me-3"></i>
+                    <div>
+                        <h5 class="alert-heading mb-1">{% trans "Sin noticias disponibles" %}</h5>
+                        <p class="mb-0">{% trans "No hay noticias publicadas en este momento. Por favor, vuelve a visitarnos pronto para estar al día con las últimas novedades de PymeMad." %}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>

@@ -1,0 +1,485 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Gestionar Posts - {{ block.super }}{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pb-2 pb-sm-4">
+        <!-- Page Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h1 class="h2 mb-0">{{ title_page|default:"Gestionar Publicaciones" }}</h1>
+                <p class="text-muted mb-0">Administra todos los posts del blog</p>
+            </div>
+            <a href="{{ new_post_url }}" class="btn btn-primary">
+                <i class="ai-plus-circle me-2"></i>{{ button_text|default:"Nueva Publicación" }}
+            </a>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card border-0 mb-4">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="ai-filter me-2"></i>Filtros de Búsqueda
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="GET" id="postFilterForm">
+                    <div class="row g-3">
+                        <!-- Status Filter -->
+                        <div class="col-md-3">
+                            <label for="id_status" class="form-label">Estado</label>
+                            <select class="form-select" id="id_status" name="status">
+                                <option value="">Todos los estados</option>
+                                <option value="DRAFT">Borrador</option>
+                                <option value="PUBLISHED">Publicado</option>
+                            </select>
+                        </div>
+
+                        <!-- Category Filter -->
+                        <div class="col-md-3">
+                            <label for="id_category" class="form-label">Categoría</label>
+                            <select class="form-select" id="id_category" name="category">
+                                <option value="">Todas las categorías</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Author Filter -->
+                        <div class="col-md-3">
+                            <label for="id_author" class="form-label">Autor</label>
+                            <select class="form-select" id="id_author" name="author">
+                                <option value="">Todos los autores</option>
+                                {% for author in authors %}
+                                    <option value="{{ author.id }}">{{ author.get_full_name|default:author.username }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Date Range -->
+                        <div class="col-md-3">
+                            <label for="id_date_range" class="form-label">Rango de Fechas</label>
+                            <input type="text" class="form-control" id="id_date_range" name="created_date_range" placeholder="Seleccionar fechas">
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" id="clearFiltersButton" class="btn btn-outline-secondary">
+                            <i class="ai-x-circle me-1"></i>Limpiar
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="filterButton">
+                            <i class="ai-filter me-1"></i>Aplicar Filtros
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Table Card -->
+        <div class="card border-0">
+            <div class="card-body">
+                <!-- Bulk Actions -->
+                <div id="bulk-actions" class="bulk-actions d-none p-3 mb-3">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <i class="ai-check-square me-2"></i>
+                            <strong><span id="selected-count">0</span></strong> publicación(es) seleccionada(s)
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button id="bulk-export-btn" class="btn btn-sm btn-outline-primary">
+                                <i class="ai-download me-1"></i>Exportar
+                            </button>
+                            <button id="bulk-publish-btn" class="btn btn-sm btn-outline-success">
+                                <i class="ai-check-circle me-1"></i>Publicar
+                            </button>
+                            <button id="bulk-draft-btn" class="btn btn-sm btn-outline-warning">
+                                <i class="ai-save me-1"></i>Borrador
+                            </button>
+                            <button id="bulk-delete-btn" class="btn btn-sm btn-outline-danger">
+                                <i class="ai-trash-2 me-1"></i>Eliminar
+                            </button>
+                            <button id="clear-selection-btn" class="btn btn-sm btn-secondary">
+                                <i class="ai-x me-1"></i>Limpiar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="table-responsive">
+                    <table class="table table-hover" id="postTable">
+                        <thead>
+                        <tr>
+                            <th width="30">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="select-all-posts">
+                                </div>
+                            </th>
+                            <th>Título</th>
+                            <th width="100">Idiomas</th>
+                            <th width="150">Autor</th>
+                            <th width="150">Fecha Publicación</th>
+                            <th width="100">Estado</th>
+                            <th width="100">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- DataTable will populate this -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        // Configuración global con URLs generadas por Django
+        var postsConfig = {
+            currentLanguage: '{{ current_language }}',
+            urls: {
+                list: window.location.href,
+                create: '{{ new_post_url }}',
+                update: "{% url 'dashboard:post-update' pk=0 %}",  // Se reemplaza el 0 con el ID real
+                bulkDelete: "{% url 'dashboard:post-bulk-delete' %}",
+                bulkExport: "{% url 'dashboard:post-export' %}",
+                bulkStatus: "{% url 'dashboard:post-bulk-status' %}",
+                dataTableLanguage: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+            },
+            csrfToken: '{{ csrf_token }}'
+        };
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialize date range picker
+            flatpickr("#id_date_range", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+                locale: "es",
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Formatear para usar " a " como separador esperado por el filtro
+                    if (selectedDates.length === 2) {
+                        const startDate = selectedDates[0].toISOString().split('T')[0];
+                        const endDate = selectedDates[1].toISOString().split('T')[0];
+                        instance.input.value = startDate + ' a ' + endDate;
+                    }
+                }
+            });
+
+            // Initialize DataTable
+            var dataTable = $('#postTable').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: postsConfig.urls.list,
+                    type: "GET",
+                    data: function(d) {
+                        // Add filter parameters
+                        d.status = $('#id_status').val();
+                        d.category = $('#id_category').val();
+                        d.author = $('#id_author').val();
+                        d.created_date_range = $('#id_date_range').val();
+                        return d;
+                    },
+                    dataSrc: "data"
+                },
+                columns: [
+                    {
+                        data: "id",
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return `<div class="form-check">
+                        <input class="form-check-input select-post" type="checkbox" value="${data}">
+                    </div>`;
+                        }
+                    },
+                    {
+                        data: "title",
+                        render: function(data, type, row) {
+                            return `<div>
+                        <h6 class="mb-0">${data}</h6>
+                        ${row.category ? `<small class="text-muted">${row.category}</small>` : ''}
+                    </div>`;
+                        }
+                    },
+                    {
+                        data: "languages",
+                        render: function(data) {
+                            if (!data) return '-';
+                            const langs = data.split(', ');
+                            return langs.map(lang => `<span class="lang-tag">${lang}</span>`).join('');
+                        }
+                    },
+                    {
+                        data: "author"
+                    },
+                    {
+                        data: "publish",
+                        render: function(data) {
+                            if (!data) return '-';
+                            const date = new Date(data);
+                            return date.toLocaleDateString('es-ES');
+                        }
+                    },
+                    {
+                        data: "status",
+                        render: function(data) {
+                            const statusClasses = {
+                                'Publicado': 'bg-success',
+                                'Borrador': 'bg-warning',
+                                'Programado': 'bg-info'
+                            };
+                            const badgeClass = statusClasses[data] || 'bg-secondary';
+                            return `<span class="badge ${badgeClass}">${data}</span>`;
+                        }
+                    },
+                    {
+                        data: "actions",
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                order: [[4, 'desc']], // Order by date
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                language: {
+                    url: postsConfig.urls.dataTableLanguage
+                },
+                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+            });
+
+            // Show/hide loading
+            dataTable.on('preXhr.dt', function() {
+                $('#loading').show();
+            });
+
+            dataTable.on('xhr.dt', function() {
+                $('#loading').hide();
+            });
+
+            // Filter form submit
+            $('#postFilterForm').on('submit', function(e) {
+                e.preventDefault();
+                dataTable.ajax.reload();
+            });
+
+            // Clear filters
+            $('#clearFiltersButton').on('click', function() {
+                $('#id_status').val('');
+                $('#id_category').val('');
+                $('#id_author').val('');
+                $('#id_date_range').val('');
+                dataTable.ajax.reload();
+            });
+
+            // Select all checkbox
+            $('#select-all-posts').on('change', function() {
+                $('.select-post').prop('checked', $(this).is(':checked'));
+                updateBulkActions();
+            });
+
+            // Individual checkbox
+            $(document).on('change', '.select-post', function() {
+                updateBulkActions();
+            });
+
+            // Clear selection
+            $('#clear-selection-btn').on('click', function() {
+                $('.select-post').prop('checked', false);
+                $('#select-all-posts').prop('checked', false);
+                updateBulkActions();
+            });
+
+            // Update bulk actions visibility
+            function updateBulkActions() {
+                const selectedCount = $('.select-post:checked').length;
+                if (selectedCount > 0) {
+                    $('#bulk-actions').removeClass('d-none');
+                    $('#selected-count').text(selectedCount);
+                } else {
+                    $('#bulk-actions').addClass('d-none');
+                }
+            }
+
+            // Bulk delete
+            $('#bulk-delete-btn').on('click', function() {
+                const selectedIds = $('.select-post:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) return;
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `Se eliminarán ${selectedIds.length} publicación(es). Esta acción no se puede deshacer.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform bulk delete
+                        $.ajax({
+                            url: postsConfig.urls.bulkDelete,
+                            method: 'POST',
+                            data: {
+                                post_ids: selectedIds,
+                                csrfmiddlewaretoken: getCSRFToken()
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire('Eliminado', response.message, 'success');
+                                    dataTable.ajax.reload();
+                                    $('#select-all-posts').prop('checked', false);
+                                    updateBulkActions();
+                                } else {
+                                    Swal.fire('Error', response.message, 'error');
+                                }
+                            },
+                            error: function(xhr) {
+                                const response = xhr.responseJSON;
+                                Swal.fire('Error', response ? response.message : 'No se pudieron eliminar las publicaciones', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Bulk publish
+            $('#bulk-publish-btn').on('click', function() {
+                const selectedIds = $('.select-post:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) return;
+
+                $.ajax({
+                    url: postsConfig.urls.bulkStatus,
+                    method: 'POST',
+                    data: {
+                        post_ids: selectedIds,
+                        status: 'PUBLISHED',
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('Éxito', response.message, 'success');
+                            dataTable.ajax.reload();
+                            $('#select-all-posts').prop('checked', false);
+                            updateBulkActions();
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        const response = xhr.responseJSON;
+                        Swal.fire('Error', response ? response.message : 'No se pudieron publicar las publicaciones', 'error');
+                    }
+                });
+            });
+
+            // Bulk draft
+            $('#bulk-draft-btn').on('click', function() {
+                const selectedIds = $('.select-post:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) return;
+
+                $.ajax({
+                    url: postsConfig.urls.bulkStatus,
+                    method: 'POST',
+                    data: {
+                        post_ids: selectedIds,
+                        status: 'DRAFT',
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire('Éxito', response.message, 'success');
+                            dataTable.ajax.reload();
+                            $('#select-all-posts').prop('checked', false);
+                            updateBulkActions();
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        const response = xhr.responseJSON;
+                        Swal.fire('Error', response ? response.message : 'No se pudieron cambiar a borrador', 'error');
+                    }
+                });
+            });
+
+            // Bulk export
+            $('#bulk-export-btn').on('click', function() {
+                const selectedIds = $('.select-post:checked').map(function() {
+                    return $(this).val();
+                }).get();
+
+                if (selectedIds.length === 0) return;
+
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Exportando...',
+                    text: 'Generando archivo Excel',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: postsConfig.urls.bulkExport,
+                    method: 'POST',
+                    data: {
+                        post_ids: selectedIds,
+                        format: 'excel',
+                        include_content: 'true',
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Exportación Exitosa',
+                                html: `${response.message}<br><br>
+                               <a href="${response.download_url}"
+                                  class="btn btn-primary"
+                                  target="_blank">
+                                  <i class="ai-download me-2"></i>Descargar Excel
+                               </a>`,
+                                icon: 'success',
+                                showConfirmButton: false,
+                                allowOutsideClick: true
+                            });
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr) {
+                        const response = xhr.responseJSON;
+                        Swal.fire('Error', response ? response.message : 'No se pudo exportar', 'error');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

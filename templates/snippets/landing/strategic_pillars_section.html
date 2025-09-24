@@ -1,0 +1,62 @@
+{% load i18n %}
+{% load static %}
+<section class="bg-secondary py-5">
+    <div class="container py-md-2 py-lg-4 my-xl-2 my-xxl-3">
+        <h2 class="h1 text-center mb-2">{% trans "Nuestros Pilares Estratégicos" %}</h2>
+        <p class="text-center text-muted mb-5">{% trans "Los fundamentos que guían nuestro trabajo por las PyMEs madereras" %}</p>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+
+            <!-- Representación -->
+            <div class="col">
+                <div class="card h-100 border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="ai-message text-primary fs-2"></i>
+                        </div>
+                        <h3 class="h5 mb-3">{% trans "Representación" %}</h3>
+                        <p class="fs-sm mb-0">{% trans "Somos la voz de las PyMEs ante autoridades y grandes empresas, defendiendo intereses y promoviendo políticas justas." %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Desarrollo -->
+            <div class="col">
+                <div class="card h-100 border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="ai-vote-up text-primary fs-2"></i>
+                        </div>
+                        <h3 class="h5 mb-3">{% trans "Desarrollo" %}</h3>
+                        <p class="fs-sm mb-0">{% trans "Impulsamos el crecimiento mediante capacitación, tecnología y acceso a nuevos mercados." %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sostenibilidad -->
+            <div class="col">
+                <div class="card h-100 border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="ai-refresh text-primary fs-2"></i>
+                        </div>
+                        <h3 class="h5 mb-3">{% trans "Sostenibilidad" %}</h3>
+                        <p class="fs-sm mb-0">{% trans "Promovemos el manejo responsable de recursos forestales cuidando el futuro." %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colaboración -->
+            <div class="col">
+                <div class="card h-100 border-0 bg-light">
+                    <div class="card-body text-center p-4">
+                        <div class="bg-primary bg-opacity-10 rounded-circle p-3 d-inline-flex mb-3">
+                            <i class="ai-hangouts text-primary fs-2"></i>
+                        </div>
+                        <h3 class="h5 mb-3">{% trans "Colaboración" %}</h3>
+                        <p class="fs-sm mb-0">{% trans "Fomentamos alianzas estratégicas entre PyMEs para proyectos de mayor envergadura." %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

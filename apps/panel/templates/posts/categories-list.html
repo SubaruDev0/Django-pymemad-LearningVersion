@@ -1,0 +1,467 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Gestión de Categorías{% endblock %}
+
+{% block extra_css %}
+    <!-- Estilos específicos movidos a custom.css -->
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h1 class="h2 mb-0">{{ title_page|default:"Gestionar Categorías" }}</h1>
+                <p class="text-muted mb-0">Organiza y administra las categorías del blog</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success" id="newCategoryBtn">
+                    <i class="ai-plus-circle me-1"></i>Nueva Categoría
+                </button>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card border-0 mb-4">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="ai-filter me-2"></i>Filtros de Búsqueda
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="get" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ filter.form.name.label_tag }}
+                                {{ filter.form.name }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ filter.form.created_date_range.label_tag }}
+                                {{ filter.form.created_date_range }}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button type="button" id="clearFiltersButton" class="btn btn-outline-secondary">
+                                <i class="ai-x-circle me-1"></i>Limpiar
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="filterButton">
+                                <i class="ai-filter me-1"></i>Aplicar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla de Categorías -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="categoriesTable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Nombre</th>
+                            <th>Slug</th>
+                            <th>Posts</th>
+                            <th>Fecha Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para crear/editar categoría -->
+    <div class="modal fade" id="categoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="categoryModalTitle">Nueva Categoría</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="categoryForm">
+                        <input type="hidden" id="category-id" name="category_id">
+                        <div class="mb-3">
+                            <label for="category-name" class="form-label">Nombre <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="category-name" name="name" required>
+                            <small class="text-muted">El nombre de la categoría como se mostrará públicamente</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="category-slug" class="form-label">Slug</label>
+                            <input type="text" class="form-control" id="category-slug" name="slug">
+                            <small class="text-muted">URL amigable. Si lo dejas vacío, se generará automáticamente desde el nombre</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCategoryBtn">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    // Configuración global con URLs generadas por Django
+    var categoriesConfig = {
+        currentLanguage: '{{ current_language }}',
+        urls: {
+            list: window.location.href,
+            create: "{% url 'dashboard:category-create' %}",
+            update: "{% url 'dashboard:category-update' pk=0 %}",  // Se reemplaza el 0 con el ID real
+            delete: "{% url 'dashboard:category-delete' pk=0 %}",  // Se reemplaza el 0 con el ID real
+            dataTableLanguage: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+        }
+    };
+</script>
+
+<script>
+$(document).ready(function() {
+    // Variable para guardar la instancia de DataTable
+    let table;
+    
+    // Obtener configuración del objeto global
+    const currentLanguage = categoriesConfig.currentLanguage;
+    
+    // Modo de edición (create o edit)
+    let editMode = 'create';
+
+    // Configurar Flatpickr para rango de fechas
+    flatpickr("#id_created_date_range", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        locale: "es",
+        altInput: true,
+        altFormat: "d/m/Y",
+        rangeSeparator: " a ",
+        allowInput: true
+    });
+
+    // Configurar DataTable
+    table = $('#categoriesTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: categoriesConfig.urls.list,
+            type: 'GET',
+            data: function(d) {
+                // Agregar parámetros de filtro
+                d.name = $('#id_name').val();
+                d.created_date_range = $('#id_created_date_range').val();
+            }
+        },
+        columns: [
+            {
+                data: 'id',
+                orderable: false,
+                searchable: false,
+                render: function(data) {
+                    return '<input type="checkbox" class="select-category" value="' + data + '">';
+                }
+            },
+            {data: 'name'},
+            {data: 'slug'},
+            {
+                data: 'post_count',
+                render: function(data) {
+                    if (data > 0) {
+                        return '<span class="badge bg-success">' + data + '</span>';
+                    } else {
+                        return '<span class="badge bg-secondary">0</span>';
+                    }
+                }
+            },
+            {data: 'created_at'},
+            {data: 'actions', orderable: false, searchable: false}
+        ],
+        language: {
+            url: categoriesConfig.urls.dataTableLanguage
+        },
+        order: [[1, 'asc']],
+        pageLength: 25,
+        drawCallback: function(settings) {
+            // Reinicializar tooltips si los usas
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
+    });
+
+    // Aplicar filtros al enviar el formulario
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        table.ajax.reload();
+    });
+
+    // Botón limpiar filtros
+    $('#clearFiltersButton').on('click', function() {
+        $('#id_name').val('');
+        $('#id_created_date_range').val('');
+        if ($('#id_created_date_range')[0]._flatpickr) {
+            $('#id_created_date_range')[0]._flatpickr.clear();
+        }
+        table.ajax.reload();
+    });
+
+    // Checkbox select all
+    $('#selectAll').on('change', function() {
+        $('.select-category').prop('checked', this.checked);
+    });
+
+    // Botón nueva categoría
+    $('#newCategoryBtn').on('click', function() {
+        editMode = 'create';
+        $('#categoryModalTitle').text('Nueva Categoría');
+        $('#categoryForm')[0].reset();
+        $('#category-id').val('');
+        $('#categoryModal').modal('show');
+    });
+
+    // Auto-generar slug desde el nombre
+    $('#category-name').on('blur', function() {
+        if (editMode === 'create' && !$('#category-slug').val()) {
+            const name = $(this).val();
+            const slug = name.toLowerCase()
+                .replace(/[áàäâ]/g, 'a')
+                .replace(/[éèëê]/g, 'e')
+                .replace(/[íìïî]/g, 'i')
+                .replace(/[óòöô]/g, 'o')
+                .replace(/[úùüû]/g, 'u')
+                .replace(/ñ/g, 'n')
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-]/g, '')
+                .replace(/--+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
+            $('#category-slug').val(slug);
+        }
+    });
+
+    // Editar categoría
+    $(document).on('click', '.edit-category', function() {
+        const categoryId = $(this).data('id');
+        editMode = 'edit';
+        $('#categoryModalTitle').text('Editar Categoría');
+        
+        // Mostrar loading
+        Swal.fire({
+            title: 'Cargando...',
+            text: 'Obteniendo datos de la categoría',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Cargar datos de la categoría
+        $.ajax({
+            url: categoriesConfig.urls.update.replace('0', categoryId),
+            type: 'GET',
+            success: function(response) {
+                Swal.close();
+
+                if (response.success) {
+                    const category = response.category;
+                    $('#category-id').val(category.id);
+                    $('#category-name').val(category.name);
+                    $('#category-slug').val(category.slug);
+                    $('#categoryModal').modal('show');
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message || 'Error al cargar la categoría',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al cargar la categoría',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+
+    // Guardar categoría
+    $('#saveCategoryBtn').on('click', function() {
+        const categoryId = $('#category-id').val();
+        const name = $('#category-name').val().trim();
+        const slug = $('#category-slug').val().trim();
+
+        // Validar campos requeridos
+        if (!name) {
+            Swal.fire({
+                title: 'Campo requerido',
+                text: 'El nombre de la categoría es obligatorio',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
+        // Preparar datos del formulario
+        const formData = {
+            name: name,
+            slug: slug,
+            csrfmiddlewaretoken: getCSRFToken()
+        };
+
+        // Determinar URL y método según el modo
+        let url, method;
+        if (editMode === 'create') {
+            url = categoriesConfig.urls.create;
+            method = 'POST';
+        } else {
+            url = categoriesConfig.urls.update.replace('0', categoryId);
+            method = 'POST';
+        }
+
+        // Mostrar loading
+        Swal.fire({
+            title: 'Guardando...',
+            text: editMode === 'create' ? 'Creando categoría' : 'Actualizando categoría',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: url,
+            type: method,
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    $('#categoryModal').modal('hide');
+
+                    Swal.fire({
+                        title: '¡Éxito!',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Recargar la tabla
+                    table.ajax.reload(null, false);
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message || 'Error al guardar la categoría',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            },
+            error: function(xhr) {
+                let errorMessage = 'Error al guardar la categoría';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    title: 'Error',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+
+    // Eliminar categoría
+    $(document).on('click', '.delete-category', function() {
+        const categoryId = $(this).data('id');
+        const categoryName = $(this).data('name');
+
+        Swal.fire({
+            title: '¿Eliminar categoría?',
+            html: `¿Estás seguro de que deseas eliminar la categoría <strong>"${categoryName}"</strong>?<br>Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Eliminando...',
+                    text: 'Procesando la solicitud',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: categoriesConfig.urls.delete.replace('0', categoryId),
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: '¡Eliminada!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            // Recargar la tabla
+                            table.ajax.reload(null, false);
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Error al eliminar la categoría',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = 'Error al eliminar la categoría';
+                        
+                        // Intentar obtener el mensaje de error del servidor
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        
+                        Swal.fire({
+                            title: 'Error',
+                            text: errorMessage,
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

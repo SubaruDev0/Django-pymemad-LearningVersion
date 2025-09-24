@@ -1,0 +1,266 @@
+{% load static %}
+{% load i18n %}
+
+<section id="beneficios" class="bg-secondary py-5">
+    <div class="container py-md-2 py-lg-4 my-xl-2 my-xxl-3">
+
+        <!-- Título de sección -->
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center mb-5 pb-3">
+                <h2 class="h1 mb-3">{% trans "Beneficios de ser parte de PymeMad" %}</h2>
+                <p class="fs-xl text-muted max-width-3xl mx-auto">
+                    {% trans "Fortalecemos tu empresa con herramientas concretas, representación efectiva y una red de apoyo que impulsa el crecimiento sostenible del sector." %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Beneficio 1: Representación Gremial -->
+        <div class="card border-0 shadow-sm mb-4" data-aos="fade-up">
+            <div class="card-body p-4 p-lg-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-message text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Representación Gremial" %}</h3>
+                        </div>
+                        <p class="fs-lg text-muted mb-4">
+                            {% trans "Tu voz unificada ante autoridades y grandes empresas del sector forestal." %}
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Representación institucional" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Voz unificada ante gobierno y principales actores del sector" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Incidencia política" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Participación en Mesa Biministerial y propuestas legislativas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Gestión comercial" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Facilitación de negociaciones para condiciones equitativas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Resolución de conflictos" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Mediación y apoyo en situaciones comerciales complejas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4 mt-lg-0">
+                        <img class="rounded-3 shadow-sm" src="{% static 'assets/img/home/representacion.webp' %}" alt="Representación gremial">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beneficio 2: Desarrollo Empresarial -->
+        <div class="card border-0 shadow-sm mb-4" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-body p-4 p-lg-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 mb-4 mb-lg-0 order-lg-2">
+                        <img class="rounded-3 shadow-sm" src="{% static 'assets/img/home/servicios.webp' %}" alt="Desarrollo empresarial">
+                    </div>
+                    <div class="col-lg-8 order-lg-1">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-chart text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Desarrollo y Fortalecimiento Empresarial" %}</h3>
+                        </div>
+                        <p class="fs-lg text-muted mb-4">
+                            {% trans "Impulsa tu crecimiento con herramientas concretas y apoyo especializado." %}
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Capacitación continua" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "PymeMad Academy con cursos y certificaciones especializadas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Oportunidades comerciales" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Marketplace B2B y ruedas de negocios exclusivas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Asesoría técnica" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Apoyo especializado en procesos y tecnología" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Acceso a financiamiento" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Gestión de recursos y subsidios para PyMEs" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beneficio 3: Comunicación y Posicionamiento -->
+        <div class="card border-0 shadow-sm mb-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="card-body p-4 p-lg-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-8">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-globe text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Comunicación y Posicionamiento Sectorial" %}</h3>
+                        </div>
+                        <p class="fs-lg text-muted mb-4">
+                            {% trans "Visibiliza tu empresa y fortalece la identidad del sector PyME forestal." %}
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Revista Digital PymeMad" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Publicación trimestral destacando casos de éxito" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Plataforma digital" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Directorio empresarial y vitrina comercial online" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Promoción sostenible" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Certificaciones ambientales y prácticas responsables" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Presencia en medios" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Difusión de logros y participación en eventos del sector" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4 mt-lg-0">
+                        <img class="rounded-3 shadow-sm" src="{% static 'assets/img/home/regional.webp' %}" alt="Comunicación sectorial">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Beneficio 4: Red de Colaboración -->
+        <div class="card border-0 shadow-sm" data-aos="fade-up" data-aos-delay="300">
+            <div class="card-body p-4 p-lg-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 mb-4 mb-lg-0 order-lg-2">
+                        <img class="rounded-3 shadow-sm" src="{% static 'assets/img/home/crecimiento.webp' %}" alt="Red de colaboración">
+                    </div>
+                    <div class="col-lg-8 order-lg-1">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-user-group text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Red de Colaboración y Apoyo" %}</h3>
+                        </div>
+                        <p class="fs-lg text-muted mb-4">
+                            {% trans "Forma parte de una comunidad activa que comparte conocimientos y oportunidades." %}
+                        </p>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Networking empresarial" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Conexión con más de 100 empresas del sector" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Proyectos conjuntos" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Consorcios para acceder a grandes contratos" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Intercambio de experiencias" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Mejores prácticas y soluciones compartidas" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex">
+                                    <i class="ai-check-circle text-primary fs-5 mt-1 me-2 flex-shrink-0"></i>
+                                    <div>
+                                        <h4 class="h6 mb-1">{% trans "Apoyo regional" %}</h4>
+                                        <p class="fs-sm text-muted mb-0">{% trans "Presencia activa en 4 regiones del país" %}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Final -->
+        <div class="text-center mt-5 pt-3">
+            <a class="btn btn-primary btn-lg" href="#como-asociarse">
+                {% trans "Únete a PymeMad" %}
+                <i class="ai-arrow-right ms-2"></i>
+            </a>
+        </div>
+
+    </div>
+</section>

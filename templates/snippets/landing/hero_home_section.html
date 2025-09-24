@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load static %}
+<section class="position-relative bg-dark pt-lg-4 pt-xl-5">
+        <!-- Video de fondo reemplazando jarallax -->
+        <video id="heroVideo" autoplay muted loop playsinline preload="auto" class="position-absolute top-0 start-0 w-100 h-100" style="object-fit: cover; z-index: 1;">
+            <source src="{% static 'assets/videos/pymemad_home.mp4' %}" type="video/mp4">
+            <!-- Fallback a imagen si el video no carga -->
+            <div class="position-absolute top-0 start-0 w-100 h-100" style="background-image: url({% static 'assets/img/landing/hero/bosque.jpg' %}); background-size: cover; background-position: center;"></div>
+        </video>
+
+        <!-- JavaScript para asegurar el loop infinito -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const video = document.getElementById('heroVideo');
+
+                // Asegurar que el video se reproduzca
+                video.play().catch(function(error) {
+                    console.log('Error al reproducir video:', error);
+                });
+
+                // Forzar loop infinito
+                video.addEventListener('ended', function() {
+                    video.currentTime = 0;
+                    video.play();
+                });
+
+                // Reiniciar video si se pausa accidentalmente
+                video.addEventListener('pause', function() {
+                    video.play();
+                });
+            });
+        </script>
+
+        <!-- Overlay oscuro para mejorar legibilidad -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.5); z-index: 2;"></div>
+
+        <div class="container position-relative pt-2 pt-sm-4 pt-md-5" style="z-index: 3;">
+            <div class="row justify-content-center pt-5">
+                <div class="col-lg-9 col-xl-8 text-center pt-5 mt-1">
+                    <h1 class="display-4 text-white pt-3 mt-3 mb-4">
+                        {% trans "Fortalecemos y representamos a las PyMEs madereras de Chile" %}
+                    </h1>
+                    <p class="text-white fs-xl">
+                        {% trans "Somos la voz del sector forestal PyME en 4 regiones, representando sus intereses ante grandes empresas y autoridades, promoviendo prácticas sostenibles y generando oportunidades de desarrollo para nuestros asociados." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="d-none d-lg-block" style="height: 480px;"></div>
+        <div class="d-lg-none" style="height: 400px;"></div>
+        <div class="d-flex position-absolute bottom-0 start-0 w-100 overflow-hidden mb-n1" style="color: var(--ar-body-bg); z-index: 4;">
+            <div class="position-relative start-50 translate-middle-x flex-shrink-0" style="width: 3774px;">
+                <svg width="3774" height="201" viewBox="0 0 3774 201" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 200.003C0 200.003 1137.52 0.188224 1873.5 0.000134392C2614.84 -0.189325 3774 200.003 3774 200.003H0Z" fill="currentColor"/></svg>
+            </div>
+        </div>
+    </section>

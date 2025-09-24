@@ -1,0 +1,1177 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-24 12:41-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: landing/templates/about_us.html:5
+msgid "Quiénes Somos - PymeMad Nacional"
+msgstr "Quem Somos - PymeMad Nacional"
+
+#: landing/templates/about_us.html:6
+msgid ""
+"Conoce a PymeMad Nacional, la asociación gremial que representa a más de 100 "
+"PyMEs madereras en 4 regiones de Chile, promoviendo el desarrollo sostenible "
+"del sector forestal."
+msgstr ""
+"Conheça a PymeMad Nacional, a associação sindical que representa mais de 100 "
+"PMEs madeireiras em 4 regiões do Chile, promovendo o desenvolvimento sustentável "
+"do setor florestal."
+
+#: landing/templates/about_us.html:27
+#: landing/templates/members_directory.html:27
+#: templates/snippets/home/header.html:27
+msgid "Inicio"
+msgstr "Início"
+
+#: landing/templates/about_us.html:29
+msgid "Quiénes Somos"
+msgstr "Quem Somos"
+
+#: landing/templates/about_us.html:33
+msgid "Somos la voz del sector PyME maderero en Chile"
+msgstr "Somos a voz do setor PME madeireiro no Chile"
+
+#: landing/templates/about_us.html:37
+msgid "Más de 100 empresas asociadas"
+msgstr "Mais de 100 empresas associadas"
+
+#: landing/templates/about_us.html:41
+msgid "Presencia en 4 regiones"
+msgstr "Presença em 4 regiões"
+
+#: landing/templates/about_us.html:45
+msgid "15+ años de trayectoria"
+msgstr "15+ anos de trajetória"
+
+#: landing/templates/about_us.html:57
+msgid "Nuestra Historia"
+msgstr "Nossa História"
+
+#: landing/templates/about_us.html:58
+msgid "Representamos y fortalecemos a las PyMEs madereras desde 2009"
+msgstr "Representamos e fortalecemos as PMEs madeireiras desde 2009"
+
+#: landing/templates/about_us.html:61
+msgid ""
+"PymeMad Nacional A.G. es la asociación gremial que representa a más de 100 "
+"pequeñas y medianas empresas del sector forestal en Chile, con presencia "
+"activa en las regiones del Maule, Biobío, La Araucanía y Los Ríos."
+msgstr ""
+"PymeMad Nacional A.G. é a associação sindical que representa mais de 100 "
+"pequenas e médias empresas do setor florestal no Chile, com presença "
+"ativa nas regiões de Maule, Biobío, La Araucanía e Los Ríos."
+
+#: landing/templates/about_us.html:62
+msgid ""
+"Nacimos con el propósito de proteger y poner en valor el ecosistema de la "
+"PyME maderera, actuando como la voz unificada del sector ante autoridades "
+"gubernamentales y grandes empresas de la industria."
+msgstr ""
+"Nascemos com o propósito de proteger e valorizar o ecossistema da "
+"PME madeireira, atuando como a voz unificada do setor perante autoridades "
+"governamentais e grandes empresas da indústria."
+
+#: landing/templates/about_us.html:63
+msgid ""
+"Promovemos el desarrollo sostenible, la innovación tecnológica y las mejores "
+"prácticas comerciales, generando oportunidades concretas de crecimiento para "
+"nuestros asociados mientras cuidamos el futuro de nuestros bosques."
+msgstr ""
+"Promovemos o desenvolvimento sustentável, a inovação tecnológica e as melhores "
+"práticas comerciais, gerando oportunidades concretas de crescimento para "
+"nossos associados enquanto cuidamos do futuro de nossas florestas."
+
+#: landing/templates/about_us.html:80
+msgid "Nuestra Misión"
+msgstr "Nossa Missão"
+
+#: landing/templates/about_us.html:82
+msgid ""
+"Ser la voz representativa del sector maderero en las regiones de Biobío, "
+"Ñuble, Maule, La Araucanía y Los Ríos, promoviendo el desarrollo sostenible "
+"y el uso adecuado de los recursos forestales, protegiendo el medio ambiente "
+"y contribuyendo al crecimiento económico de las comunidades locales."
+msgstr ""
+"Ser a voz representativa do setor madeireiro nas regiões de Biobío, "
+"Ñuble, Maule, La Araucanía e Los Ríos, promovendo o desenvolvimento sustentável "
+"e o uso adequado dos recursos florestais, protegendo o meio ambiente "
+"e contribuindo para o crescimento econômico das comunidades locais."
+
+#: landing/templates/about_us.html:83
+msgid ""
+"Somos el pilar de un sector unido y en constante evolución, donde las "
+"pequeñas y medianas empresas juegan un rol fundamental en la construcción "
+"del futuro de Chile."
+msgstr ""
+"Somos o pilar de um setor unido e em constante evolução, onde as "
+"pequenas e médias empresas desempenham um papel fundamental na construção "
+"do futuro do Chile."
+
+#: landing/templates/about_us.html:96
+msgid "Nuestra Visión"
+msgstr "Nossa Visão"
+
+#: landing/templates/about_us.html:98
+msgid ""
+"Desarrollar un sector pyme maderero fortalecido y unido en todas las "
+"regiones donde operamos, que trabaje de manera colaborativa, extendiendo su "
+"influencia tanto en el mercado nacional como internacional."
+msgstr ""
+"Desenvolver um setor pme madeireiro fortalecido e unido em todas as "
+"regiões onde operamos, que trabalhe de forma colaborativa, estendendo sua "
+"influência tanto no mercado nacional quanto internacional."
+
+#: landing/templates/about_us.html:99
+msgid ""
+"Al mismo tiempo, educar y sensibilizar a la sociedad sobre la importancia de "
+"la industria forestal, sus aportes a la economía y su impacto positivo en el "
+"entorno social y ecológico."
+msgstr ""
+"Ao mesmo tempo, educar e sensibilizar a sociedade sobre a importância da "
+"indústria florestal, suas contribuições para a economia e seu impacto positivo no "
+"ambiente social e ecológico."
+
+#: landing/templates/about_us.html:110
+msgid "Nuestros Principios"
+msgstr "Nossos Princípios"
+
+#: landing/templates/about_us.html:111
+msgid "Valores que nos guían"
+msgstr "Valores que nos guiam"
+
+#: landing/templates/about_us.html:121 templates/base.html:396
+msgid "Colaboración"
+msgstr "Colaboração"
+
+#: landing/templates/about_us.html:122
+msgid ""
+"Fomentamos el trabajo conjunto entre las pymes, creando redes de apoyo y "
+"desarrollo."
+msgstr ""
+"Fomentamos o trabalho conjunto entre as pmes, criando redes de apoio e "
+"desenvolvimento."
+
+#: landing/templates/about_us.html:132 templates/base.html:383
+msgid "Sostenibilidad"
+msgstr "Sustentabilidade"
+
+#: landing/templates/about_us.html:133
+msgid ""
+"Promovemos un desarrollo forestal responsable, que respete el medio ambiente "
+"y las comunidades."
+msgstr ""
+"Promovemos um desenvolvimento florestal responsável, que respeite o meio ambiente "
+"e as comunidades."
+
+#: landing/templates/about_us.html:143
+msgid "Innovación"
+msgstr "Inovação"
+
+#: landing/templates/about_us.html:144
+msgid ""
+"Buscamos soluciones creativas y tecnológicas para mejorar la competitividad "
+"del sector."
+msgstr ""
+"Buscamos soluções criativas e tecnológicas para melhorar a competitividade "
+"do setor."
+
+#: landing/templates/about_us.html:154
+msgid "Compromiso Social"
+msgstr "Compromisso Social"
+
+#: landing/templates/about_us.html:155
+msgid ""
+"Impulsamos el bienestar de las familias y comunidades que dependen de la "
+"industria forestal."
+msgstr ""
+"Impulsamos o bem-estar das famílias e comunidades que dependem da "
+"indústria florestal."
+
+#: landing/templates/about_us.html:164
+msgid "Plan Estratégico"
+msgstr "Plano Estratégico"
+
+#: landing/templates/about_us.html:165
+msgid "Objetivos que nos mueven"
+msgstr "Objetivos que nos movem"
+
+#: landing/templates/about_us.html:186
+msgid "Incorporación Total"
+msgstr "Incorporação Total"
+
+#: landing/templates/about_us.html:187
+msgid ""
+"Asegurar que todas las empresas madereras de nuestras regiones formen parte "
+"de la asociación, fortaleciendo la representación gremial."
+msgstr ""
+"Garantir que todas as empresas madeireiras de nossas regiões façam parte "
+"da associação, fortalecendo a representação sindical."
+
+#: landing/templates/about_us.html:199
+msgid "Fortalecimiento Empresarial"
+msgstr "Fortalecimento Empresarial"
+
+#: landing/templates/about_us.html:200
+msgid ""
+"Promover la estabilidad y desarrollo continuo de las pymes asociadas, "
+"brindando apoyo en capacitación y recursos."
+msgstr ""
+"Promover a estabilidade e desenvolvimento contínuo das pmes associadas, "
+"oferecendo apoio em capacitação e recursos."
+
+#: landing/templates/about_us.html:212
+msgid "Representación Efectiva"
+msgstr "Representação Efetiva"
+
+#: landing/templates/about_us.html:213
+msgid ""
+"Ser la voz de las pymes ante entidades públicas y privadas, gestionando "
+"políticas favorables para el sector."
+msgstr ""
+"Ser a voz das pmes perante entidades públicas e privadas, gerenciando "
+"políticas favoráveis para o setor."
+
+#: landing/templates/about_us.html:225
+msgid "Oportunidades de Negocio"
+msgstr "Oportunidades de Negócio"
+
+#: landing/templates/about_us.html:226
+msgid ""
+"Identificar y promover oportunidades comerciales a nivel nacional e "
+"internacional para nuestros asociados."
+msgstr ""
+"Identificar e promover oportunidades comerciais em nível nacional e "
+"internacional para nossos associados."
+
+#: landing/templates/about_us.html:238
+msgid "Colaboración Sectorial"
+msgstr "Colaboração Setorial"
+
+#: landing/templates/about_us.html:239
+msgid ""
+"Establecer alianzas estratégicas dentro del sector maderero para potenciar "
+"el crecimiento colectivo."
+msgstr ""
+"Estabelecer alianças estratégicas dentro do setor madeireiro para potencializar "
+"o crescimento coletivo."
+
+#: landing/templates/about_us.html:251
+msgid "Impacto Social"
+msgstr "Impacto Social"
+
+#: landing/templates/about_us.html:252
+msgid ""
+"Asegurar que el desarrollo sea socialmente responsable, generando empleo "
+"local y bienestar comunitario."
+msgstr ""
+"Garantir que o desenvolvimento seja socialmente responsável, gerando emprego "
+"local e bem-estar comunitário."
+
+#: landing/templates/about_us.html:264
+msgid "Consolidación a Largo Plazo"
+msgstr "Consolidação a Longo Prazo"
+
+#: landing/templates/about_us.html:265
+msgid ""
+"Velar por la sostenibilidad económica, ecológica y social del sector "
+"forestal pyme a largo plazo."
+msgstr ""
+"Zelar pela sustentabilidade econômica, ecológica e social do setor "
+"florestal pme a longo prazo."
+
+#: landing/templates/about_us.html:285
+msgid "Nuestro Método"
+msgstr "Nosso Método"
+
+#: landing/templates/about_us.html:286
+msgid "Estrategias para el éxito"
+msgstr "Estratégias para o sucesso"
+
+#: landing/templates/about_us.html:299
+msgid "Fortalecimiento Institucional"
+msgstr "Fortalecimento Institucional"
+
+#: landing/templates/about_us.html:300
+msgid ""
+"Campañas de visibilidad y participación en ferias nacionales e "
+"internacionales, destacando productos forestales sostenibles."
+msgstr ""
+"Campanhas de visibilidade e participação em feiras nacionais e "
+"internacionais, destacando produtos florestais sustentáveis."
+
+#: landing/templates/about_us.html:308
+msgid "Capacitación y Asesoría"
+msgstr "Capacitação e Assessoria"
+
+#: landing/templates/about_us.html:309
+msgid ""
+"Programas continuos en bioenergía, innovación y comercialización "
+"internacional con apoyo técnico especializado."
+msgstr ""
+"Programas contínuos em bioenergia, inovação e comercialização "
+"internacional com apoio técnico especializado."
+
+#: landing/templates/about_us.html:317
+msgid "Incidencia Política"
+msgstr "Incidência Política"
+
+#: landing/templates/about_us.html:318
+msgid ""
+"Participación activa en mesas de trabajo gubernamentales para crear "
+"políticas favorables al sector PyME forestal."
+msgstr ""
+"Participação ativa em mesas de trabalho governamentais para criar "
+"políticas favoráveis ao setor PME florestal."
+
+#: landing/templates/about_us.html:326
+msgid "Negocios Asociativos"
+msgstr "Negócios Associativos"
+
+#: landing/templates/about_us.html:327
+msgid ""
+"Fomento de consorcios entre pymes para acceder a contratos mayores y "
+"proyectos colaborativos."
+msgstr ""
+"Fomento de consórcios entre pmes para acessar contratos maiores e "
+"projetos colaborativos."
+
+#: landing/templates/about_us.html:339
+msgid "Nuestro Equipo"
+msgstr "Nossa Equipe"
+
+#: landing/templates/about_us.html:340
+msgid "Directorio PymeMad"
+msgstr "Conselho de Administração PymeMad"
+
+#: landing/templates/about_us.html:345
+msgid "Nacional"
+msgstr "Nacional"
+
+#: landing/templates/about_us.html:348
+#: landing/templates/members_directory.html:83 templates/base.html:555
+msgid "Región del Maule"
+msgstr "Região do Maule"
+
+#: landing/templates/about_us.html:351
+#: landing/templates/members_directory.html:89 templates/base.html:546
+msgid "Región del Biobío"
+msgstr "Região do Biobío"
+
+#: landing/templates/about_us.html:354
+#: landing/templates/members_directory.html:95 templates/base.html:537
+msgid "Región de La Araucanía"
+msgstr "Região de La Araucanía"
+
+#: landing/templates/about_us.html:357
+#: landing/templates/members_directory.html:101 templates/base.html:528
+msgid "Región de Los Ríos"
+msgstr "Região de Los Ríos"
+
+#: landing/templates/about_us.html:374
+msgid "Presidente Nacional"
+msgstr "Presidente Nacional"
+
+#: landing/templates/about_us.html:392
+msgid "Vicepresidente Nacional"
+msgstr "Vice-presidente Nacional"
+
+#: landing/templates/about_us.html:410
+msgid "Secretaria General"
+msgstr "Secretária Geral"
+
+#: landing/templates/about_us.html:428
+msgid "Tesorero Nacional"
+msgstr "Tesoureiro Nacional"
+
+#: landing/templates/about_us.html:452 landing/templates/about_us.html:494
+#: landing/templates/about_us.html:544
+msgid "Presidente Regional"
+msgstr "Presidente Regional"
+
+#: landing/templates/about_us.html:470
+msgid "Secretaria Regional"
+msgstr "Secretária Regional"
+
+#: landing/templates/about_us.html:519
+msgid "Presidenta Regional"
+msgstr "Presidenta Regional"
+
+#: landing/templates/about_us.html:567
+#: landing/templates/members_directory.html:485
+msgid "Únete a la red PyME forestal más grande de Chile"
+msgstr "Junte-se à maior rede PME florestal do Chile"
+
+#: landing/templates/about_us.html:570
+#: landing/templates/members_directory.html:488
+msgid "Representación gremial efectiva"
+msgstr "Representação sindical efetiva"
+
+#: landing/templates/about_us.html:571
+#: landing/templates/members_directory.html:489
+msgid "Capacitación especializada"
+msgstr "Capacitação especializada"
+
+#: landing/templates/about_us.html:572
+#: landing/templates/members_directory.html:490
+msgid "Asesoría técnica y legal"
+msgstr "Assessoria técnica e jurídica"
+
+#: landing/templates/about_us.html:575
+#: landing/templates/members_directory.html:493 templates/base.html:808
+msgid "Networking empresarial"
+msgstr "Networking empresarial"
+
+#: landing/templates/about_us.html:576
+#: landing/templates/members_directory.html:494 templates/base.html:697
+msgid "Oportunidades comerciales"
+msgstr "Oportunidades comerciais"
+
+#: landing/templates/about_us.html:577
+#: landing/templates/members_directory.html:495
+msgid "Certificaciones forestales"
+msgstr "Certificações florestais"
+
+#: landing/templates/about_us.html:581
+#: landing/templates/members_directory.html:499
+msgid "Hazte socio"
+msgstr "Torne-se sócio"
+
+#: landing/templates/about_us.html:587
+#: landing/templates/members_directory.html:505
+msgid "¿Conversemos?"
+msgstr "Vamos conversar?"
+
+#: landing/templates/about_us.html:588
+#: landing/templates/members_directory.html:506
+msgid ""
+"Somos la asociación que representa los intereses de las PyMEs madereras ante "
+"autoridades y grandes empresas del sector."
+msgstr ""
+"Somos a associação que representa os interesses das PMEs madeireiras perante "
+"autoridades e grandes empresas do setor."
+
+#: landing/templates/about_us.html:590
+#: landing/templates/members_directory.html:508
+msgid "Contáctanos"
+msgstr "Entre em contato"
+
+#: landing/templates/members_directory.html:5
+msgid "Directorio de Socios - PymeMad Nacional"
+msgstr "Diretório de Sócios - PymeMad Nacional"
+
+#: landing/templates/members_directory.html:6
+msgid ""
+"Conoce a las más de 100 empresas PyMEs madereras que forman parte de PymeMad "
+"en las regiones del Maule, Biobío, La Araucanía y Los Ríos."
+msgstr ""
+"Conheça as mais de 100 empresas PMEs madeireiras que fazem parte da PymeMad "
+"nas regiões de Maule, Biobío, La Araucanía e Los Ríos."
+
+#: landing/templates/members_directory.html:29
+#: templates/snippets/home/footer.html:31
+#: templates/snippets/home/header.html:39
+msgid "Socios"
+msgstr "Sócios"
+
+#: landing/templates/members_directory.html:30
+#: templates/snippets/home/footer.html:26
+#: templates/snippets/home/footer.html:34
+#: templates/snippets/home/header.html:35
+msgid "Directorio"
+msgstr "Diretório"
+
+#: landing/templates/members_directory.html:34
+msgid "Directorio de Empresas Asociadas"
+msgstr "Diretório de Empresas Associadas"
+
+#: landing/templates/members_directory.html:35
+msgid ""
+"Más de 100 empresas PyMEs madereras comprometidas con el desarrollo "
+"sostenible del sector forestal en Chile."
+msgstr ""
+"Mais de 100 empresas PMEs madeireiras comprometidas com o desenvolvimento "
+"sustentável do setor florestal no Chile."
+
+#: landing/templates/members_directory.html:39
+msgid "100+ empresas asociadas"
+msgstr "100+ empresas associadas"
+
+#: landing/templates/members_directory.html:43
+msgid "4 regiones activas"
+msgstr "4 regiões ativas"
+
+#: landing/templates/members_directory.html:47
+msgid "5,000+ empleos directos"
+msgstr "5.000+ empregos diretos"
+
+#: landing/templates/members_directory.html:51
+msgid "15+ rubros forestales"
+msgstr "15+ setores florestais"
+
+#: landing/templates/members_directory.html:66
+msgid "Filtrar empresas"
+msgstr "Filtrar empresas"
+
+#: landing/templates/members_directory.html:70
+msgid "Buscar"
+msgstr "Buscar"
+
+#: landing/templates/members_directory.html:72
+msgid "Nombre de empresa..."
+msgstr "Nome da empresa..."
+
+#: landing/templates/members_directory.html:79
+#: landing/templates/members_directory.html:162
+msgid "Región"
+msgstr "Região"
+
+#: landing/templates/members_directory.html:108
+#: landing/templates/members_directory.html:163
+msgid "Actividad"
+msgstr "Atividade"
+
+#: landing/templates/members_directory.html:110
+msgid "Todas las actividades"
+msgstr "Todas as atividades"
+
+#: landing/templates/members_directory.html:111
+#: landing/templates/members_directory.html:179
+#: landing/templates/members_directory.html:224
+#: landing/templates/members_directory.html:269
+#: landing/templates/members_directory.html:314
+#: landing/templates/members_directory.html:359
+#: landing/templates/members_directory.html:404
+msgid "Aserradero"
+msgstr "Serraria"
+
+#: landing/templates/members_directory.html:112
+msgid "Remanufactura"
+msgstr "Remanufatura"
+
+#: landing/templates/members_directory.html:113
+msgid "Biomasa y energía"
+msgstr "Biomassa e energia"
+
+#: landing/templates/members_directory.html:114
+msgid "Transporte forestal"
+msgstr "Transporte florestal"
+
+#: landing/templates/members_directory.html:115
+msgid "Servicios forestales"
+msgstr "Serviços florestais"
+
+#: landing/templates/members_directory.html:116
+msgid "Viveros"
+msgstr "Viveiros"
+
+#: landing/templates/members_directory.html:117
+msgid "Construcción en madera"
+msgstr "Construção em madeira"
+
+#: landing/templates/members_directory.html:123
+#: templates/snippets/home/header.html:58
+msgid "Certificaciones"
+msgstr "Certificações"
+
+#: landing/templates/members_directory.html:147
+msgid "Limpiar filtros"
+msgstr "Limpar filtros"
+
+#: landing/templates/members_directory.html:157
+msgid "Mostrando"
+msgstr "Mostrando"
+
+#: landing/templates/members_directory.html:157
+msgid "de"
+msgstr "de"
+
+#: landing/templates/members_directory.html:157
+msgid "empresas"
+msgstr "empresas"
+
+#: landing/templates/members_directory.html:159
+msgid "Ordenar por:"
+msgstr "Ordenar por:"
+
+#: landing/templates/members_directory.html:161
+msgid "Nombre A-Z"
+msgstr "Nome A-Z"
+
+#: landing/templates/members_directory.html:164
+msgid "Más recientes"
+msgstr "Mais recentes"
+
+#: landing/templates/members_directory.html:180
+#: landing/templates/members_directory.html:225
+#: landing/templates/members_directory.html:270
+#: landing/templates/members_directory.html:315
+#: landing/templates/members_directory.html:360
+#: landing/templates/members_directory.html:405
+msgid "Biobío"
+msgstr "Biobío"
+
+#: landing/templates/members_directory.html:191
+#: landing/templates/members_directory.html:236
+#: landing/templates/members_directory.html:281
+#: landing/templates/members_directory.html:326
+#: landing/templates/members_directory.html:371
+#: landing/templates/members_directory.html:416
+msgid ""
+"Aserradero especializado en pino radiata con más de 20 años de experiencia."
+msgstr "Serraria especializada em pinus radiata com mais de 20 anos de experiência."
+
+#: landing/templates/members_directory.html:195
+#: landing/templates/members_directory.html:240
+#: landing/templates/members_directory.html:285
+#: landing/templates/members_directory.html:330
+#: landing/templates/members_directory.html:375
+#: landing/templates/members_directory.html:420
+msgid "Certificación PEFC"
+msgstr "Certificação PEFC"
+
+#: landing/templates/members_directory.html:199
+#: landing/templates/members_directory.html:244
+#: landing/templates/members_directory.html:289
+#: landing/templates/members_directory.html:334
+#: landing/templates/members_directory.html:379
+#: landing/templates/members_directory.html:424
+msgid "30 empleados"
+msgstr "30 funcionários"
+
+#: landing/templates/members_directory.html:203
+#: landing/templates/members_directory.html:248
+#: landing/templates/members_directory.html:293
+#: landing/templates/members_directory.html:338
+#: landing/templates/members_directory.html:383
+#: landing/templates/members_directory.html:428
+msgid "Mercado nacional"
+msgstr "Mercado nacional"
+
+#: landing/templates/members_directory.html:446
+msgid "Navegación de páginas"
+msgstr "Navegação de páginas"
+
+#: pymemadweb/settings.py:113
+msgid "Español"
+msgstr "Espanhol"
+
+#: pymemadweb/settings.py:114
+msgid "English"
+msgstr "Inglês"
+
+#: pymemadweb/settings.py:115
+msgid "Português"
+msgstr "Português"
+
+#: templates/base.html:178
+msgid "Loading..."
+msgstr "Carregando..."
+
+#: templates/base.html:232
+msgid "Fortalecemos y representamos a las PyMEs madereras de Chile"
+msgstr "Fortalecemos e representamos as PMEs madeireiras do Chile"
+
+#: templates/base.html:235
+msgid ""
+"Somos la voz del sector forestal PyME en 4 regiones, representando sus "
+"intereses ante grandes empresas y autoridades, promoviendo prácticas "
+"sostenibles y generando oportunidades de desarrollo para nuestros asociados."
+msgstr ""
+"Somos a voz do setor florestal PME em 4 regiões, representando seus "
+"interesses perante grandes empresas e autoridades, promovendo práticas "
+"sustentáveis e gerando oportunidades de desenvolvimento para nossos associados."
+
+#: templates/base.html:253
+msgid "Últimas Noticias"
+msgstr "Últimas Notícias"
+
+#: templates/base.html:255
+msgid "Ver todas"
+msgstr "Ver todas"
+
+#: templates/base.html:266
+msgid "Territorios seguros"
+msgstr "Territórios seguros"
+
+#: templates/base.html:269 templates/base.html:295
+#: templates/snippets/home/footer.html:66
+#: templates/snippets/home/header.html:48
+msgid "Noticias"
+msgstr "Notícias"
+
+#: templates/base.html:274
+msgid ""
+"Construyendo territorios más seguros: El compromiso de las PyMEs madereras"
+msgstr "Construindo territórios mais seguros: O compromisso das PMEs madeireiras"
+
+#: templates/base.html:278
+msgid ""
+"El invierno es el momento perfecto para prepararnos ante los incendios "
+"forestales del verano. Esta aparente paradoja tiene una lógica..."
+msgstr ""
+"O inverno é o momento perfeito para nos prepararmos para os incêndios "
+"florestais do verão. Este aparente paradoxo tem uma lógica..."
+
+#: templates/base.html:283 templates/base.html:309 templates/base.html:335
+msgid "Leer más"
+msgstr "Ler mais"
+
+#: templates/base.html:292
+msgid "Mesa de Fomento"
+msgstr "Mesa de Fomento"
+
+#: templates/base.html:300
+msgid ""
+"PymeMad participa activamente en Mesa de Fomento a la Industria Forestal en "
+"Valdivia"
+msgstr ""
+"PymeMad participa ativamente na Mesa de Fomento à Indústria Florestal em "
+"Valdivia"
+
+#: templates/base.html:304
+msgid ""
+"La organización gremial reafirma su compromiso con el desarrollo forestal "
+"sostenible durante la séptima sesión realizada en las dependencias..."
+msgstr ""
+"A organização sindical reafirma seu compromisso com o desenvolvimento florestal "
+"sustentável durante a sétima sessão realizada nas dependências..."
+
+#: templates/base.html:318
+msgid "Guivar transforma"
+msgstr "Guivar transforma"
+
+#: templates/base.html:321
+msgid "Somos PymeMad"
+msgstr "Somos PymeMad"
+
+#: templates/base.html:326
+msgid ""
+"Guivar transforma: Innovación, equidad de género y servicio en el corazón "
+"del Valle del Itata"
+msgstr ""
+"Guivar transforma: Inovação, equidade de gênero e serviço no coração "
+"do Vale do Itata"
+
+#: templates/base.html:330
+msgid ""
+"La empresa liderada por Lorena Vargas se ha consolidado como un referente en "
+"sostenibilidad y diversificación productiva, integrando orientación..."
+msgstr ""
+"A empresa liderada por Lorena Vargas se consolidou como referência em "
+"sustentabilidade e diversificação produtiva, integrando orientação..."
+
+#: templates/base.html:346
+msgid "Nuestros Pilares Estratégicos"
+msgstr "Nossos Pilares Estratégicos"
+
+#: templates/base.html:347
+msgid "Los fundamentos que guían nuestro trabajo por las PyMEs madereras"
+msgstr "Os fundamentos que guiam nosso trabalho pelas PMEs madeireiras"
+
+#: templates/base.html:357
+msgid "Representación"
+msgstr "Representação"
+
+#: templates/base.html:358
+msgid ""
+"Somos la voz de las PyMEs ante autoridades y grandes empresas, defendiendo "
+"intereses y promoviendo políticas justas."
+msgstr ""
+"Somos a voz das PMEs perante autoridades e grandes empresas, defendendo "
+"interesses e promovendo políticas justas."
+
+#: templates/base.html:370
+msgid "Desarrollo"
+msgstr "Desenvolvimento"
+
+#: templates/base.html:371
+msgid ""
+"Impulsamos el crecimiento mediante capacitación, tecnología y acceso a "
+"nuevos mercados."
+msgstr ""
+"Impulsamos o crescimento através de capacitação, tecnologia e acesso a "
+"novos mercados."
+
+#: templates/base.html:384
+msgid ""
+"Promovemos el manejo responsable de recursos forestales cuidando el futuro."
+msgstr "Promovemos o manejo responsável de recursos florestais cuidando do futuro."
+
+#: templates/base.html:397
+msgid ""
+"Fomentamos alianzas estratégicas entre PyMEs para proyectos de mayor "
+"envergadura."
+msgstr ""
+"Fomentamos alianças estratégicas entre PMEs para projetos de maior "
+"envergadura."
+
+#: templates/base.html:425
+msgid "Nuestro Impacto en Números"
+msgstr "Nosso Impacto em Números"
+
+#: templates/base.html:426
+msgid "El respaldo de un gremio sólido y en constante crecimiento"
+msgstr "O apoio de um sindicato sólido e em constante crescimento"
+
+#: templates/base.html:432
+msgid "Empresas Asociadas"
+msgstr "Empresas Associadas"
+
+#: templates/base.html:438
+msgid "Regiones Activas"
+msgstr "Regiões Ativas"
+
+#: templates/base.html:444
+msgid "Años de Trayectoria"
+msgstr "Anos de Trajetória"
+
+#: templates/base.html:450
+msgid "Empleos Directos"
+msgstr "Empregos Diretos"
+
+#: templates/base.html:463
+msgid "Servicios para Asociados"
+msgstr "Serviços para Associados"
+
+#: templates/base.html:470
+msgid "PymeMad Academy"
+msgstr "PymeMad Academy"
+
+#: templates/base.html:471
+msgid ""
+"Plataforma de capacitación online con cursos, certificaciones y webinars"
+msgstr "Plataforma de capacitação online com cursos, certificações e webinars"
+
+#: templates/base.html:472 templates/base.html:483 templates/base.html:494
+#: templates/base.html:505
+msgid "Ingresar"
+msgstr "Acessar"
+
+#: templates/base.html:481
+msgid "Asesoría en Línea"
+msgstr "Assessoria Online"
+
+#: templates/base.html:482
+msgid ""
+"Consultas legales, tributarias y comerciales con expertos del sector forestal"
+msgstr "Consultas jurídicas, tributárias e comerciais com especialistas do setor florestal"
+
+#: templates/base.html:492
+msgid "Marketplace B2B"
+msgstr "Marketplace B2B"
+
+#: templates/base.html:493
+msgid ""
+"Plataforma exclusiva para comercializar productos entre empresas asociadas"
+msgstr "Plataforma exclusiva para comercializar produtos entre empresas associadas"
+
+#: templates/base.html:503
+msgid "Biblioteca Digital"
+msgstr "Biblioteca Digital"
+
+#: templates/base.html:504
+msgid "Normativas, estudios de mercado, actas y documentos del sector"
+msgstr "Normativas, estudos de mercado, atas e documentos do setor"
+
+#: templates/base.html:515
+msgid "Más de 100 empresas confían en nosotros"
+msgstr "Mais de 100 empresas confiam em nós"
+
+#: templates/base.html:516
+msgid ""
+"PyMEs madereras que juntas generan empleo para miles de familias chilenas"
+msgstr "PMEs madeireiras que juntas geram emprego para milhares de famílias chilenas"
+
+#: templates/base.html:522
+msgid "Presencia en 4 Regiones"
+msgstr "Presença em 4 Regiões"
+
+#: templates/base.html:529
+msgid "Especializada en madera nativa y Pino Oregón"
+msgstr "Especializada em madeira nativa e Pinus Oregon"
+
+#: templates/base.html:538
+msgid "Producción de Pino y Nativo, zona Pucón"
+msgstr "Produção de Pinus e Nativo, zona Pucón"
+
+#: templates/base.html:547
+msgid "Aserraderos grandes, orientados a exportación"
+msgstr "Serrarias grandes, orientadas à exportação"
+
+#: templates/base.html:556
+msgid "Pino para construcción y mercado nacional"
+msgstr "Pinus para construção e mercado nacional"
+
+#: templates/base.html:590
+msgid "Ver directorio completo"
+msgstr "Ver diretório completo"
+
+#: templates/base.html:600
+msgid "Beneficios de ser parte de PymeMad"
+msgstr "Benefícios de fazer parte da PymeMad"
+
+#: templates/base.html:602
+msgid ""
+"Fortalecemos tu empresa con herramientas concretas, representación efectiva "
+"y una red de apoyo que impulsa el crecimiento sostenible del sector."
+msgstr ""
+"Fortalecemos sua empresa com ferramentas concretas, representação efetiva "
+"e uma rede de apoio que impulsiona o crescimento sustentável do setor."
+
+#: templates/base.html:615
+msgid "Representación Gremial"
+msgstr "Representação Sindical"
+
+#: templates/base.html:618
+msgid ""
+"Tu voz unificada ante autoridades y grandes empresas del sector forestal."
+msgstr "Sua voz unificada perante autoridades e grandes empresas do setor florestal."
+
+#: templates/base.html:625
+msgid "Representación institucional"
+msgstr "Representação institucional"
+
+#: templates/base.html:626
+msgid "Voz unificada ante gobierno y principales actores del sector"
+msgstr "Voz unificada perante governo e principais atores do setor"
+
+#: templates/base.html:634
+msgid "Incidencia política"
+msgstr "Incidência política"
+
+#: templates/base.html:635
+msgid "Participación en Mesa Biministerial y propuestas legislativas"
+msgstr "Participação em Mesa Biministerial e propostas legislativas"
+
+#: templates/base.html:643
+msgid "Gestión comercial"
+msgstr "Gestão comercial"
+
+#: templates/base.html:644
+msgid "Facilitación de negociaciones para condiciones equitativas"
+msgstr "Facilitação de negociações para condições equitativas"
+
+#: templates/base.html:652
+msgid "Resolución de conflictos"
+msgstr "Resolução de conflitos"
+
+#: templates/base.html:653
+msgid "Mediación y apoyo en situaciones comerciales complejas"
+msgstr "Mediação e apoio em situações comerciais complexas"
+
+#: templates/base.html:678
+msgid "Desarrollo y Fortalecimiento Empresarial"
+msgstr "Desenvolvimento e Fortalecimento Empresarial"
+
+#: templates/base.html:681
+msgid ""
+"Impulsa tu crecimiento con herramientas concretas y apoyo especializado."
+msgstr "Impulsione seu crescimento com ferramentas concretas e apoio especializado."
+
+#: templates/base.html:688
+msgid "Capacitación continua"
+msgstr "Capacitação contínua"
+
+#: templates/base.html:689
+msgid "PymeMad Academy con cursos y certificaciones especializadas"
+msgstr "PymeMad Academy com cursos e certificações especializadas"
+
+#: templates/base.html:698
+msgid "Marketplace B2B y ruedas de negocios exclusivas"
+msgstr "Marketplace B2B e rodadas de negócios exclusivas"
+
+#: templates/base.html:706
+msgid "Asesoría técnica"
+msgstr "Assessoria técnica"
+
+#: templates/base.html:707
+msgid "Apoyo especializado en procesos y tecnología"
+msgstr "Apoio especializado em processos e tecnologia"
+
+#: templates/base.html:715
+msgid "Acceso a financiamiento"
+msgstr "Acesso a financiamento"
+
+#: templates/base.html:716
+msgid "Gestión de recursos y subsidios para PyMEs"
+msgstr ""
+
+#: templates/base.html:735
+msgid "Comunicación y Posicionamiento Sectorial"
+msgstr ""
+
+#: templates/base.html:738
+msgid ""
+"Visibiliza tu empresa y fortalece la identidad del sector PyME forestal."
+msgstr ""
+
+#: templates/base.html:745
+msgid "Revista Digital PymeMad"
+msgstr ""
+
+#: templates/base.html:746
+msgid "Publicación trimestral destacando casos de éxito"
+msgstr ""
+
+#: templates/base.html:754
+msgid "Plataforma digital"
+msgstr ""
+
+#: templates/base.html:755
+msgid "Directorio empresarial y vitrina comercial online"
+msgstr ""
+
+#: templates/base.html:763
+msgid "Promoción sostenible"
+msgstr ""
+
+#: templates/base.html:764
+msgid "Certificaciones ambientales y prácticas responsables"
+msgstr ""
+
+#: templates/base.html:772
+msgid "Presencia en medios"
+msgstr ""
+
+#: templates/base.html:773
+msgid "Difusión de logros y participación en eventos del sector"
+msgstr ""
+
+#: templates/base.html:798
+msgid "Red de Colaboración y Apoyo"
+msgstr ""
+
+#: templates/base.html:801
+msgid ""
+"Forma parte de una comunidad activa que comparte conocimientos y "
+"oportunidades."
+msgstr ""
+
+#: templates/base.html:809
+msgid "Conexión con más de 100 empresas del sector"
+msgstr ""
+
+#: templates/base.html:817
+msgid "Proyectos conjuntos"
+msgstr ""
+
+#: templates/base.html:818
+msgid "Consorcios para acceder a grandes contratos"
+msgstr ""
+
+#: templates/base.html:826
+msgid "Intercambio de experiencias"
+msgstr ""
+
+#: templates/base.html:827
+msgid "Mejores prácticas y soluciones compartidas"
+msgstr ""
+
+#: templates/base.html:835
+msgid "Apoyo regional"
+msgstr ""
+
+#: templates/base.html:836
+msgid "Presencia activa en 4 regiones del país"
+msgstr ""
+
+#: templates/base.html:849 templates/snippets/home/header.html:15
+#: templates/snippets/home/header.html:68
+msgid "Únete a PymeMad"
+msgstr ""
+
+#: templates/snippets/home/footer.html:12
+msgid ""
+"Asociación gremial que representa a las pequeñas y medianas empresas del "
+"sector forestal en Chile."
+msgstr ""
+
+#: templates/snippets/home/footer.html:17
+#: templates/snippets/home/header.html:30
+msgid "Nosotros"
+msgstr ""
+
+#: templates/snippets/home/footer.html:20
+#: templates/snippets/home/header.html:32
+msgid "¿Quiénes somos?"
+msgstr ""
+
+#: templates/snippets/home/footer.html:23
+#: templates/snippets/home/header.html:33
+msgid "Misión y Visión"
+msgstr ""
+
+#: templates/snippets/home/footer.html:37
+#: templates/snippets/home/header.html:42
+msgid "Beneficios"
+msgstr ""
+
+#: templates/snippets/home/footer.html:40
+msgid "Hazte Socio"
+msgstr ""
+
+#: templates/snippets/home/footer.html:45
+#: templates/snippets/home/footer.html:70
+#: templates/snippets/home/header.html:62
+msgid "Contacto"
+msgstr ""
+
+#: templates/snippets/home/footer.html:67
+msgid "Revista"
+msgstr ""
+
+#: templates/snippets/home/footer.html:68
+#: templates/snippets/home/header.html:54
+msgid "Recursos"
+msgstr ""
+
+#: templates/snippets/home/footer.html:69
+#: templates/snippets/home/header.html:57
+msgid "Normativas"
+msgstr ""
+
+#: templates/snippets/home/footer.html:90
+msgid "Política de privacidad"
+msgstr ""
+
+#: templates/snippets/home/footer.html:92
+msgid "Todos los derechos reservados."
+msgstr ""
+
+#: templates/snippets/home/header.html:34
+msgid "Objetivos"
+msgstr ""
+
+#: templates/snippets/home/header.html:41
+msgid "Directorio de Socios"
+msgstr ""
+
+#: templates/snippets/home/header.html:43
+msgid "¿Cómo asociarse?"
+msgstr ""
+
+#: templates/snippets/home/header.html:44
+msgid "Formulario de Postulación"
+msgstr ""
+
+#: templates/snippets/home/header.html:51
+msgid "Revista Digital"
+msgstr ""
+
+#: templates/snippets/home/header.html:56
+msgid "Documentos"
+msgstr ""

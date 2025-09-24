@@ -1,0 +1,141 @@
+# CODEOWNERS para PyMemad
+# Este archivo define los propietarios del código que serán automáticamente
+# asignados como revisores cuando se creen Pull Requests
+#
+# Formato: [patrón] @usuario @equipo
+# Los patrones más específicos tienen prioridad sobre los más generales
+
+# ==============================================================================
+# PROPIETARIOS GLOBALES
+# ==============================================================================
+# Por defecto, el propietario principal revisa todos los cambios
+* @yllorca
+
+# ==============================================================================
+# CONFIGURACIÓN Y ARQUITECTURA
+# ==============================================================================
+# Configuración crítica del proyecto
+/pymemadweb/settings.py @yllorca
+/pymemadweb/celery.py @yllorca
+/pymemadweb/wsgi.py @yllorca
+/pymemadweb/asgi.py @yllorca
+/.env* @yllorca
+/requirements*.txt @yllorca
+/docker-compose*.yml @yllorca
+/Dockerfile* @yllorca
+
+# Seguridad y middleware
+/pymemadweb/middleware.py @yllorca
+/pymemadweb/redis_security.py @yllorca
+/pymemadweb/storages.py @yllorca
+
+# ==============================================================================
+# INFRAESTRUCTURA Y DEVOPS
+# ==============================================================================
+# Kubernetes y despliegue
+/k8s/ @yllorca
+/.github/ @yllorca
+/nginx/ @yllorca
+
+# ==============================================================================
+# APLICACIONES DJANGO
+# ==============================================================================
+# Core - Funcionalidad central
+/apps/core/ @yllorca @Hello-World-SpA/developers
+
+# Panel de administración
+/apps/panel/ @yllorca @Hello-World-SpA/developers
+
+# Landing y páginas públicas
+/apps/landing/ @Hello-World-SpA/developers
+
+# Gestión de usuarios y autenticación
+/apps/accounts/ @yllorca
+
+# Noticias y contenido
+/apps/news/ @Hello-World-SpA/developers
+
+# Scrapers y recolección de datos
+/apps/scrapers/ @yllorca
+
+# Comunicaciones
+/apps/communications/ @Hello-World-SpA/developers
+
+# Miembros
+/apps/members/ @Hello-World-SpA/developers
+
+# Documentos
+/apps/documents/ @Hello-World-SpA/developers
+
+# Facturación
+/apps/billing/ @yllorca
+
+# Gobernanza
+/apps/governance/ @Hello-World-SpA/developers
+
+# Estrategia
+/apps/strategy/ @Hello-World-SpA/developers
+
+# ==============================================================================
+# SCRIPTS Y AUTOMATIZACIÓN
+# ==============================================================================
+# Scripts de monitoreo y scraping
+/scripts/pymemad_*.py @yllorca
+/scripts/check_s3.py @yllorca
+/scripts/transcribe_*.py @yllorca
+
+# ==============================================================================
+# FRONTEND Y ASSETS
+# ==============================================================================
+# Templates
+/templates/ @Hello-World-SpA/developers
+
+# Archivos estáticos
+/static/ @Hello-World-SpA/developers
+
+# ==============================================================================
+# DOCUMENTACIÓN
+# ==============================================================================
+/docs/ @Hello-World-SpA/developers
+/*.md @Hello-World-SpA/developers
+/LICENSE @yllorca
+
+# ==============================================================================
+# DATOS Y FIXTURES
+# ==============================================================================
+/fixtures/ @yllorca
+
+# ==============================================================================
+# ARCHIVOS DE MIGRACIÓN
+# ==============================================================================
+# Las migraciones necesitan revisión cuidadosa
+**/migrations/*.py @yllorca
+
+# ==============================================================================
+# TESTS
+# ==============================================================================
+**/tests/ @Hello-World-SpA/developers
+**/test_*.py @Hello-World-SpA/developers
+**/*_test.py @Hello-World-SpA/developers
+
+# ==============================================================================
+# MODELOS DE DATOS
+# ==============================================================================
+# Los modelos son críticos y necesitan revisión especial
+**/models.py @yllorca
+**/models/ @yllorca
+
+# ==============================================================================
+# APIS Y SERIALIZADORES
+# ==============================================================================
+**/serializers.py @yllorca @Hello-World-SpA/developers
+**/api.py @yllorca @Hello-World-SpA/developers
+**/viewsets.py @yllorca @Hello-World-SpA/developers
+
+# ==============================================================================
+# ARCHIVOS CRÍTICOS DE CONFIGURACIÓN
+# ==============================================================================
+.gitignore @yllorca
+.dockerignore @yllorca
+package.json @Hello-World-SpA/developers
+package-lock.json @Hello-World-SpA/developers

@@ -1,0 +1,572 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Directorio de Socios - PymeMad Nacional" %}{% endblock %}
+{% block description %}{% trans "Conoce a las más de 100 empresas PyMEs madereras que forman parte de PymeMad en las regiones del Maule, Biobío, La Araucanía y Los Ríos." %}{% endblock %}
+
+{% block content %}
+    <!-- Hero con imagen de fondo -->
+    <section id="directory" class="position-relative bg-dark py-5">
+        <!-- Imagen de fondo con jarallax -->
+        <div class="jarallax position-absolute top-0 start-0 w-100 h-100" data-jarallax data-speed="0.4">
+            <div class="jarallax-img" style="background-image: url({% static 'assets/img/about/about.webp' %});"></div>
+        </div>
+
+        <!-- Overlay para mejorar legibilidad -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.6); z-index: 1;"></div>
+
+        <!-- Contenido -->
+        <div class="container position-relative z-2 py-5" data-bs-theme="dark">
+            <div class="row py-5">
+                <div class="col-lg-10 col-xl-9">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="pt-lg-3 pb-lg-4 pb-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                            </li>
+                            <li class="breadcrumb-item">{% trans "Socios" %}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{% trans "Directorio" %}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-2 text-white pb-2 pb-sm-3">{% trans "Directorio de Empresas Asociadas" %}</h1>
+                    <p class="fs-xl text-white mb-4">{% trans "Más de 100 empresas PyMEs madereras comprometidas con el desarrollo sostenible del sector forestal en Chile." %}</p>
+                    <ul class="list-unstyled d-flex flex-wrap mb-0">
+                        <li class="d-flex text-white py-1 me-4">
+                            <i class="ai-check-alt text-primary lead me-2"></i>
+                            {% trans "100+ empresas asociadas" %}
+                        </li>
+                        <li class="d-flex text-white py-1 me-4">
+                            <i class="ai-check-alt text-primary lead me-2"></i>
+                            {% trans "4 regiones activas" %}
+                        </li>
+                        <li class="d-flex text-white py-1 me-4">
+                            <i class="ai-check-alt text-primary lead me-2"></i>
+                            {% trans "5,000+ empleos directos" %}
+                        </li>
+                        <li class="d-flex text-white py-1">
+                            <i class="ai-check-alt text-primary lead me-2"></i>
+                            {% trans "15+ rubros forestales" %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros y Directorio -->
+    <section class="container py-5">
+        <!-- Filtros -->
+        <div class="row mb-5">
+            <div class="col-lg-3">
+                <div class="card border-0 shadow-sm mb-4 mb-lg-0">
+                    <div class="card-body">
+                        <h3 class="h5 mb-3">{% trans "Filtrar empresas" %}</h3>
+
+                        <!-- Búsqueda -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold" for="search">{% trans "Buscar" %}</label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control" id="search" placeholder="{% trans 'Nombre de empresa...' %}">
+                                <i class="ai-search position-absolute top-50 end-0 translate-middle-y me-3"></i>
+                            </div>
+                        </div>
+
+                        <!-- Filtro por Región -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">{% trans "Región" %}</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="maule" checked>
+                                <label class="form-check-label" for="maule">
+                                    {% trans "Región del Maule" %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="biobio" checked>
+                                <label class="form-check-label" for="biobio">
+                                    {% trans "Región del Biobío" %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="araucania" checked>
+                                <label class="form-check-label" for="araucania">
+                                    {% trans "Región de La Araucanía" %}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="losrios" checked>
+                                <label class="form-check-label" for="losrios">
+                                    {% trans "Región de Los Ríos" %}
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Filtro por Actividad -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">{% trans "Actividad" %}</label>
+                            <select class="form-select">
+                                <option value="">{% trans "Todas las actividades" %}</option>
+                                <option value="aserradero">{% trans "Aserradero" %}</option>
+                                <option value="remanufactura">{% trans "Remanufactura" %}</option>
+                                <option value="biomasa">{% trans "Biomasa y energía" %}</option>
+                                <option value="transporte">{% trans "Transporte forestal" %}</option>
+                                <option value="servicios">{% trans "Servicios forestales" %}</option>
+                                <option value="viveros">{% trans "Viveros" %}</option>
+                                <option value="construccion">{% trans "Construcción en madera" %}</option>
+                            </select>
+                        </div>
+
+                        <!-- Filtro por Certificación -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">{% trans "Certificaciones" %}</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="fsc">
+                                <label class="form-check-label" for="fsc">
+                                    FSC
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="pefc">
+                                <label class="form-check-label" for="pefc">
+                                    PEFC
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="iso">
+                                <label class="form-check-label" for="iso">
+                                    ISO
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Botón limpiar filtros -->
+                        <button class="btn btn-outline-secondary w-100">
+                            <i class="ai-refresh-cw me-2"></i>
+                            {% trans "Limpiar filtros" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grid de socios -->
+            <div class="col-lg-9">
+                <!-- Contador y ordenamiento -->
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <p class="mb-0">{% trans "Mostrando" %} <strong>24</strong> {% trans "de" %} <strong>112</strong> {% trans "empresas" %}</p>
+                    <div class="d-flex align-items-center">
+                        <label class="form-label text-nowrap mb-0 me-2" for="sort">{% trans "Ordenar por:" %}</label>
+                        <select class="form-select" id="sort" style="width: auto;">
+                            <option value="name">{% trans "Nombre A-Z" %}</option>
+                            <option value="region">{% trans "Región" %}</option>
+                            <option value="activity">{% trans "Actividad" %}</option>
+                            <option value="newest">{% trans "Más recientes" %}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid de cards -->
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+
+                    <!-- Card 1: Aserradero ejemplo -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card 2: Remanufactura -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card 3: Biomasa -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card 4: Transporte -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card 5: Construcción -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Card 6: Vivero -->
+                    <div class="col">
+                        <a href="#" class="card-flip">
+                            <div class="card-flip-inner">
+                                <div class="card-flip-front" style="background-image: url({% static 'assets/img/members/member01.webp' %});">
+                                    <div class="d-flex flex-column h-100" data-bs-theme="light">
+                                        <div class="p-3">
+                                            <span class="badge bg-primary mb-2">{% trans "Aserradero" %}</span>
+                                            <span class="badge bg-info">{% trans "Biobío" %}</span>
+                                        </div>
+                                        <div class="mt-auto p-4">
+                                            <h2 class="fs-lg fw-normal text-white mb-1">Maderas Los Pinos</h2>
+                                            <p class="text-white-75 fs-sm mb-0">Los Ángeles, Biobío</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-flip-back bg-secondary">
+                                    <div class="d-flex flex-column h-100 p-4 pb-5">
+                                        <h3 class="h5 mb-3">Maderas Los Pinos</h3>
+                                        <p class="fs-sm text-muted mb-3">{% trans "Aserradero especializado en pino radiata con más de 20 años de experiencia." %}</p>
+                                        <ul class="list-unstyled fs-sm mb-3">
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-check-alt text-primary me-2"></i>
+                                                <span>{% trans "Certificación PEFC" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-user-group text-primary me-2"></i>
+                                                <span>{% trans "30 empleados" %}</span>
+                                            </li>
+                                            <li class="d-flex align-items-center mb-2">
+                                                <i class="ai-home text-primary me-2"></i>
+                                                <span>{% trans "Mercado nacional" %}</span>
+                                            </li>
+                                        </ul>
+                                        <div class="text-end mt-auto">
+                                            <div class="btn btn-sm btn-icon btn-outline-primary rounded-circle">
+                                                <i class="ai-arrow-right"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+
+                </div>
+
+                <!-- Paginación -->
+                <nav aria-label="{% trans 'Navegación de páginas' %}" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="ai-chevron-left"></i>
+                            </a>
+                        </li>
+                        <li class="page-item active" aria-current="page">
+                            <span class="page-link">1</span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">4</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">5</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="ai-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </section>
+
+    <!-- Beneficios Lista Estructurada -->
+    {% include 'snippets/landing/benefits_section.html' %}
+
+    <!-- Preguntas Frecuentes Sección Socios -->
+    <section id="como-asociarse" class="container my-5">
+        <!-- Título de sección -->
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2 text-center mb-5 pb-3">
+                <h2 class="h1 mb-3">{% trans "¿Cómo ser parte de PymeMad?" %}</h2>
+                <p class="fs-xl text-muted">
+                    {% trans "Todo lo que necesitas saber para formar parte de la red de pequeñas y medianas empresas madereras más importante de Chile." %}
+                </p>
+            </div>
+        </div>
+
+        <div class="accordion" id="accordionSocios">
+
+            <!-- Pregunta 1 -->
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingAsociarse">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAsociarse" aria-expanded="true" aria-controls="collapseAsociarse">
+                        ¿Cómo puedo asociarme a PymeMad?
+                    </button>
+                </h3>
+                <div class="accordion-collapse collapse show" id="collapseAsociarse" aria-labelledby="headingAsociarse" data-bs-parent="#accordionSocios">
+                    <div class="accordion-body fs-sm">
+                        Para asociarte a PymeMad debes ser una pequeña o mediana empresa del sector maderero con operaciones en las regiones del Maule, Biobío, La Araucanía o Los Ríos. El proceso es simple: completa el formulario de postulación en línea, adjunta los documentos solicitados (RUT empresa, certificado de iniciación de actividades) y espera la aprobación del directorio regional. Una vez aprobada tu solicitud, recibirás información sobre las cuotas sociales y beneficios.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2 -->
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingRequisitos">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseRequisitos" aria-expanded="false" aria-controls="collapseRequisitos">
+                        ¿Qué requisitos debo cumplir para ser socio?
+                    </button>
+                </h3>
+                <div class="accordion-collapse collapse" id="collapseRequisitos" aria-labelledby="headingRequisitos" data-bs-parent="#accordionSocios">
+                    <div class="accordion-body fs-sm">
+                        Los requisitos principales son: ser una PyME del sector forestal o maderero (aserraderos, remanufactura, biomasa, transporte forestal, servicios forestales, viveros o construcción en madera), tener ventas anuales entre 2.400 y 100.000 UF, estar legalmente constituida con iniciación de actividades, y tener domicilio en alguna de las cuatro regiones donde opera PymeMad (Maule, Biobío, La Araucanía o Los Ríos).
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3 -->
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingBeneficios">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseBeneficios" aria-expanded="false" aria-controls="collapseBeneficios">
+                        ¿Cuáles son los beneficios de asociarme?
+                    </button>
+                </h3>
+                <div class="accordion-collapse collapse" id="collapseBeneficios" aria-labelledby="headingBeneficios" data-bs-parent="#accordionSocios">
+                    <div class="accordion-body fs-sm">
+                        Como socio de PymeMad accedes a: representación gremial ante autoridades y grandes empresas forestales, participación en mesas de negociación sectorial, capacitación técnica especializada, asesoría legal y tributaria, networking con más de 100 empresas del sector, información actualizada del mercado forestal, apoyo en certificaciones forestales, acceso a fondos de fomento y proyectos colaborativos, y visibilidad en nuestra revista trimestral y plataformas digitales.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 4 -->
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingCuotas">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCuotas" aria-expanded="false" aria-controls="collapseCuotas">
+                        ¿Cuál es el valor de las cuotas sociales?
+                    </button>
+                </h3>
+                <div class="accordion-collapse collapse" id="collapseCuotas" aria-labelledby="headingCuotas" data-bs-parent="#accordionSocios">
+                    <div class="accordion-body fs-sm">
+                        Las cuotas sociales se definen según el tamaño de tu empresa y la región a la que perteneces. El valor mensual oscila entre 0,5 y 2 UF mensuales. Los socios activos reciben descuentos en publicidad en nuestra revista, acceso preferencial a capacitaciones y pueden postular a fondos de fortalecimiento gremial. Para conocer el valor exacto según tu empresa, contacta al presidente de tu región.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 5 -->
+            <div class="accordion-item">
+                <h3 class="accordion-header" id="headingContacto">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseContacto" aria-expanded="false" aria-controls="collapseContacto">
+                        ¿A quién contacto según mi región?
+                    </button>
+                </h3>
+                <div class="accordion-collapse collapse" id="collapseContacto" aria-labelledby="headingContacto" data-bs-parent="#accordionSocios">
+                    <div class="accordion-body fs-sm">
+                        Cada región tiene un presidente y directorio local. En el <strong>Maule</strong> contacta a Sebastián Erenchun, en <strong>Biobío-Ñuble</strong> a Víctor Sandoval, en <strong>La Araucanía</strong> a Rocío Lagos, y en <strong>Los Ríos</strong> a Fernando Hales. También puedes escribir directamente a contacto@pymemad.cl o llamar a nuestra oficina central. Te derivaremos con el representante de tu región para iniciar el proceso de incorporación. Para ver el directorio completo con información de contacto, visita nuestra <a href="{% url 'landing:about' %}#directorio">sección de directorio</a>.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CTA para nuevos socios -->
+    {% include 'snippets/landing/cta_section.html' %}
+
+{% endblock %}

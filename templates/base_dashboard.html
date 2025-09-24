@@ -1,0 +1,380 @@
+{% extends 'base_master.html' %}
+{% load static %}
+
+{% comment %}
+Template base para el área administrativa/dashboard
+Incluye sidebar, header específico del dashboard, etc.
+{% endcomment %}
+
+<!-- Agregar clase bg-secondary al body para dashboard -->
+{% block body_attributes %}class="bg-secondary"{% endblock %}
+
+<!-- Agregar theme switcher para dashboard -->
+{% block theme_switcher %}
+    <script src="{% static 'assets/js/theme-switcher.js' %}"></script>
+{% endblock %}
+
+<!-- No necesitamos algunos vendors del landing -->
+{% block vendor_styles %}
+    <!-- Solo los necesarios para dashboard -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.5/css/jquery.dataTables.css" />
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+
+
+{% endblock %}
+
+<!-- Estilos específicos del dashboard -->
+{% block inline_styles %}
+    /* Fix para headings en modo oscuro */
+    [data-bs-theme="dark"] h1,
+    [data-bs-theme="dark"] h2,
+    [data-bs-theme="dark"] h3,
+    [data-bs-theme="dark"] h4,
+    [data-bs-theme="dark"] h5,
+    [data-bs-theme="dark"] h6,
+    [data-bs-theme="dark"] .h1,
+    [data-bs-theme="dark"] .h2,
+    [data-bs-theme="dark"] .h3,
+    [data-bs-theme="dark"] .h4,
+    [data-bs-theme="dark"] .h5,
+    [data-bs-theme="dark"] .h6 {
+    color: var(--bs-heading-color, var(--bs-body-color));
+    }
+
+    /* Asegurar que los párrafos y textos también cambien */
+    [data-bs-theme="dark"] p,
+    [data-bs-theme="dark"] .text-body {
+    color: var(--bs-body-color);
+    }
+
+    /* Fix específico para elementos que puedan tener color heredado */
+    [data-bs-theme="dark"] .card h1,
+    [data-bs-theme="dark"] .card h2,
+    [data-bs-theme="dark"] .card h3,
+    [data-bs-theme="dark"] .card h4,
+    [data-bs-theme="dark"] .card h5,
+    [data-bs-theme="dark"] .card h6,
+    [data-bs-theme="dark"] .card .h1,
+    [data-bs-theme="dark"] .card .h2,
+    [data-bs-theme="dark"] .card .h3,
+    [data-bs-theme="dark"] .card .h4,
+    [data-bs-theme="dark"] .card .h5,
+    [data-bs-theme="dark"] .card .h6 {
+    color: inherit;
+    }
+
+    /* Ajustes adicionales para elementos del dashboard */
+    [data-bs-theme="dark"] .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+    }
+
+    [data-bs-theme="dark"] .nav-link:hover,
+    [data-bs-theme="dark"] .nav-link.active {
+    color: #fff;
+    }
+
+    [data-bs-theme="dark"] .text-body-secondary {
+    color: rgba(255, 255, 255, 0.6) !important;
+    }
+
+    /* Logo switching for dark mode - CORREGIDO */
+    [data-bs-theme="dark"] .dark-mode-hidden {
+    display: none !important;
+    }
+
+    [data-bs-theme="dark"] .dark-mode-visible {
+    display: block !important;
+    }
+
+    /* Ajustes para el navbar más compacto */
+    .navbar {
+    min-height: 60px;
+    }
+
+    .navbar-brand {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    }
+
+    .navbar-brand img {
+    height: 45px;
+    width: auto;
+    }
+
+    /* Optimización del espacio del dashboard */
+    @media (min-width: 1200px) {
+    .container-fluid .container-xxl {
+    max-width: 100%;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    }
+    }
+
+    @media (min-width: 1400px) {
+    .container-fluid .container-xxl {
+    max-width: 100%;
+    padding-left: 3rem;
+    padding-right: 3rem;
+    }
+    }
+
+    /* Ajuste para pantallas pequeñas */
+    @media (max-width: 576px) {
+    .navbar-brand img {
+    height: 40px;
+    }
+
+    .navbar-brand .fw-bold {
+    font-size: 1rem !important;
+    }
+    }
+
+    /* Optimización adicional del contenido principal */
+    .main-content-area {
+    padding-left: 0;
+    padding-right: 0;
+    }
+
+    @media (min-width: 992px) {
+    .main-content-area {
+    padding-left: 1rem;
+    }
+    }
+{% endblock inline_styles %}
+
+{% block main_content %}
+    <!-- Dashboard Header -->
+    <header class="navbar navbar-expand-lg fixed-top bg-light shadow-sm py-2">
+        <div class="container-fluid px-3 px-lg-4">
+            <!-- Logo con menos padding -->
+            <a class="navbar-brand d-flex align-items-center pe-sm-2" href="{% url 'dashboard:dashboard' %}">
+            <span class="me-2">
+                <!-- Logo Normal (para tema claro) -->
+                <img src="{% static 'assets/img/dashboard/logo_pymemad.png' %}"
+                     alt="PymeMad Logo"
+                     width="45"
+                     height="45"
+                     class="d-block dark-mode-hidden">
+
+                <!-- Logo Invertido (para tema oscuro) -->
+                <img src="{% static 'assets/img/dashboard/logo_pymemad_inverter.png' %}"
+                     alt="PymeMad Logo"
+                     width="45"
+                     height="45"
+                     class="d-none dark-mode-visible">
+            </span>
+            </a>
+
+            <!-- Theme switcher con menos margen -->
+            <div class="form-check form-switch mode-switch order-lg-2 me-2 me-lg-3 ms-auto" data-bs-toggle="mode">
+                <input class="form-check-input" type="checkbox" id="theme-mode">
+                <label class="form-check-label" for="theme-mode">
+                    <i class="ai-sun fs-lg"></i>
+                </label>
+                <label class="form-check-label" for="theme-mode">
+                    <i class="ai-moon fs-lg"></i>
+                </label>
+            </div>
+
+            <!-- User menu con menos padding -->
+            <div class="dropdown nav d-none d-sm-block order-lg-3">
+                <a class="nav-link d-flex align-items-center p-0" href="#" data-bs-toggle="dropdown">
+                    <img class="border rounded-circle" src="{% static 'assets/img/avatar/yllorca.webp' %}" width="36" alt="{{ user.get_full_name }}">
+                    <div class="ps-2">
+                        <div class="fs-xs lh-1 opacity-60">Hola,</div>
+                        <div class="fs-sm dropdown-toggle">{{ user.first_name|default:user.username }}</div>
+                    </div>
+                </a>
+                <div class="dropdown-menu dropdown-menu-end my-1">
+                    <a class="dropdown-item" href="#">
+                        <i class="ai-user fs-lg opacity-70 me-2"></i>Mi Perfil
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="ai-settings fs-lg opacity-70 me-2"></i>Configuración
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                        <i class="ai-logout fs-lg opacity-70 me-2"></i>Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile menu toggle -->
+            <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Page content with sidebar -->
+    <div class="container-fluid py-5 mt-4 mt-lg-5">
+        <div class="container-xxl">
+            <div class="row">
+                <!-- Sidebar (offcanvas on screens < 992px) -->
+                <aside class="col-lg-2 col-xl-2 pe-lg-3 mt-n3">
+                    <div class="position-lg-sticky top-0">
+                        <div class="d-none d-lg-block" style="padding-top: 25px;"></div>
+                        {% block sidebar %}
+                            <div class="offcanvas-lg offcanvas-start" id="sidebarAccount">
+                                <button class="btn-close position-absolute top-0 end-0 mt-3 me-3 d-lg-none" type="button" data-bs-dismiss="offcanvas" data-bs-target="#sidebarAccount" aria-label="Close"></button>
+                                <div class="offcanvas-body sidebar-compact">
+                                    {#                                <div class="pb-2 pb-lg-0 mb-4 mb-lg-5">#}
+                                    {#                                    <img class="d-block rounded-circle mb-2" src="{% static 'assets/img/avatar/01.jpg' %}" width="80" alt="{{ user.get_full_name }}">#}
+                                    {#                                    <h3 class="h5 mb-1">{{ user.get_full_name|default:user.username }}</h3>#}
+                                    {#                                    <p class="fs-sm text-body-secondary mb-0">{{ user.email }}</p>#}
+                                    {#                                </div>#}
+                                    <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
+                                        <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Panel Principal</h4>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'dashboard:dashboard' %}">
+                                            <i class="ai-home fs-5 opacity-60 me-2"></i>
+                                            Dashboard
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'members' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:members' %}">
+                                            <i class="ai-user-group fs-5 opacity-60 me-2"></i>
+                                            Socios
+                                        </a>
+{#                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'comunicaciones' in request.resolver_match.url_name %}active{% endif %}" href="#">#}
+{#                                            <i class="ai-messages fs-5 opacity-60 me-2"></i>#}
+{#                                            Comunicaciones#}
+{#                                        </a>#}
+{#                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'revista' in request.resolver_match.url_name %}active{% endif %}" href="#">#}
+{#                                            <i class="ai-file-text fs-5 opacity-60 me-2"></i>#}
+{#                                            Revista Digital#}
+{#                                        </a>#}
+                                    </nav>
+                                    <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
+                                        <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Finanzas</h4>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'billing' in request.resolver_match.url_name or 'facturacion' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:billing' %}">
+                                            <i class="ai-file-text fs-5 opacity-60 me-2"></i>
+                                            Facturación
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'expenses' in request.resolver_match.url_name or 'egresos' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:expenses' %}">
+                                            <i class="ai-circle-arrow-down fs-5 opacity-60 me-2"></i>
+                                            Gastos y Egresos
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'balance' in request.resolver_match.url_name or 'estado-resultados' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:balance' %}">
+                                            <i class="ai-bar-chart-1 fs-5 opacity-60 me-2"></i>
+                                            Balance y Estados
+                                        </a>
+                                    </nav>
+                                    <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
+                                        <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Estrategia</h4>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'plan' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:plan' %}">
+                                            <i class="ai-trending-up fs-5 opacity-60 me-2"></i>
+                                            Plan Estratégico
+                                        </a>
+                                    </nav>
+                                    <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
+                                        <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Contenido</h4>
+                                        <a class="nav-link fw-semibold py-2 px-0 d-flex align-items-center {% if 'post' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'tag' in request.resolver_match.url_name or 'comment' in request.resolver_match.url_name %}active{% endif %}" 
+                                           href="#" 
+                                           data-bs-toggle="collapse" 
+                                           data-bs-target="#noticiasSubmenu" 
+                                           aria-expanded="{% if 'post' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'tag' in request.resolver_match.url_name or 'comment' in request.resolver_match.url_name %}true{% else %}false{% endif %}">
+                                            <i class="ai-file-text fs-5 opacity-60 me-2"></i>
+                                            Noticias
+                                            <i class="ai-chevron-down fs-base ms-auto"></i>
+                                        </a>
+                                        <div class="collapse {% if 'post' in request.resolver_match.url_name or 'category' in request.resolver_match.url_name or 'tag' in request.resolver_match.url_name or 'comment' in request.resolver_match.url_name %}show{% endif %}" id="noticiasSubmenu">
+                                            <nav class="nav flex-column ms-4">
+                                                <a class="nav-link fw-medium py-1 px-0 {% if 'post' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:post-list' %}">
+                                                    <i class="ai-list fs-base opacity-60 me-2"></i>
+                                                    <small>Ver Todas</small>
+                                                </a>
+                                                <a class="nav-link fw-medium py-1 px-0 {% if 'category' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:category-list' %}">
+                                                    <i class="ai-folder-plus fs-base opacity-60 me-2"></i>
+                                                    <small>Categorías</small>
+                                                </a>
+                                                <a class="nav-link fw-medium py-1 px-0 {% if 'tag' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:tag-list' %}">
+                                                    <i class="ai-tag fs-base opacity-60 me-2"></i>
+                                                    <small>Etiquetas</small>
+                                                </a>
+                                                <a class="nav-link fw-medium py-1 px-0 {% if 'comment' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'dashboard:comment-list' %}">
+                                                    <i class="ai-message-plus fs-base opacity-60 me-2"></i>
+                                                    <small>Comentarios</small>
+                                                </a>
+                                            </nav>
+                                        </div>
+                                    </nav>
+                                    <nav class="nav flex-column pb-2 pb-lg-4 mb-1">
+                                        <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">Administración</h4>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'proyectos' in request.resolver_match.url_name %}active{% endif %}" href="#">
+                                            <i class="ai-briefcase fs-5 opacity-60 me-2"></i>
+                                            Proyectos
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'eventos' in request.resolver_match.url_name %}active{% endif %}" href="#">
+                                            <i class="ai-calendar fs-5 opacity-60 me-2"></i>
+                                            Eventos
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'documentos' in request.resolver_match.url_name %}active{% endif %}" href="#">
+                                            <i class="ai-folder fs-5 opacity-60 me-2"></i>
+                                            Documentos
+                                        </a>
+                                        <a class="nav-link fw-semibold py-2 px-0 {% if 'configuracion' in request.resolver_match.url_name %}active{% endif %}" href="#">
+                                            <i class="ai-settings fs-5 opacity-60 me-2"></i>
+                                            Configuración
+                                        </a>
+                                    </nav>
+                                    <nav class="nav flex-column">
+                                        <a class="nav-link fw-semibold py-2 px-0" href="#">
+                                            <i class="ai-logout fs-5 opacity-60 me-2"></i>
+                                            Cerrar Sesión
+                                        </a>
+                                    </nav>
+                                </div>
+                            </div>
+                        {% endblock sidebar %}
+                    </div>
+                </aside>
+
+                <!-- Main content -->
+                <div class="col-lg-10 col-xl-10 main-content-area">
+                    {% block dashboard_content %}
+                        <!-- El contenido específico de cada página del dashboard va aquí -->
+                    {% endblock dashboard_content %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider for dark mode only -->
+    <hr class="d-none d-dark-mode-block">
+
+    <!-- Sidebar toggle button -->
+    <button class="d-lg-none btn btn-sm fs-sm btn-primary w-100 rounded-0 fixed-bottom" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarAccount">
+        <i class="ai-menu me-2"></i>
+        Account menu
+    </button>
+{% endblock main_content %}
+
+<!-- No necesitamos el footer en el dashboard -->
+{% block back_to_top %}
+    <!-- Opcional: puedes mantener o quitar el botón back to top -->
+    {{ block.super }}
+{% endblock %}
+
+{% block vendor_scripts %}
+    {{ block.super }}
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+
+     <!-- Flatpickr for date range -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
+
+    <!--   Editor Quill JS   -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
+
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- JavaScript (después de jQuery) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+     <!-- Convertir Markdown a HTML -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

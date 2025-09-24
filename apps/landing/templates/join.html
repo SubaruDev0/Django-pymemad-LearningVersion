@@ -1,0 +1,790 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Hazte Socio - PymeMad" %}{% endblock %}
+{% block description %}{% trans "Únete a PymeMad y forma parte de la red de PyMEs madereras más importante de Chile. Proceso simple y beneficios exclusivos." %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Form sections */
+    .wizard-section {
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .wizard-section.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Benefits cards */
+    .benefit-card {
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+        border-color: var(--ar-primary);
+        transform: translateY(-5px);
+    }
+
+    .benefit-icon {
+        width: 60px;
+        height: 60px;
+        background-color: rgba(var(--ar-primary-rgb), 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+
+    /* File upload */
+    .file-upload-area {
+        border: 2px dashed #dee2e6;
+        border-radius: 0.5rem;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .file-upload-area:hover {
+        border-color: var(--ar-primary);
+        background-color: rgba(var(--ar-primary-rgb), 0.05);
+    }
+
+    .file-upload-area.dragover {
+        border-color: var(--ar-primary);
+        background-color: rgba(var(--ar-primary-rgb), 0.1);
+    }
+
+    /* Custom step modifications */
+    .steps.steps-horizontal-lg .step .step-number {
+        margin-bottom: 0;
+    }
+
+    @media (max-width: 991px) {
+        .steps .step .step-body {
+            text-align: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section id="join-hero" class="position-relative bg-dark py-5">
+        <div class="jarallax position-absolute top-0 start-0 w-100 h-100" data-jarallax data-speed="0.4">
+            <div class="jarallax-img" style="background-image: url({% static 'assets/img/about/about.webp' %});"></div>
+        </div>
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.6); z-index: 1;"></div>
+
+        <div class="container position-relative z-2 py-5" data-bs-theme="dark">
+            <div class="row py-5">
+                <div class="col-lg-10 col-xl-9">
+                    <nav aria-label="breadcrumb">
+                        <ol class="pt-lg-3 pb-lg-4 pb-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{% trans "Hazte Socio" %}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-2 text-white pb-2 pb-sm-3">{% trans "Únete a PymeMad" %}</h1>
+                    <p class="fs-xl text-white mb-4">
+                        {% trans "Forma parte de la red de PyMEs madereras más importante de Chile. Juntos somos más fuertes." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wizard Steps -->
+    <section class="bg-secondary py-5">
+        <div class="container">
+            <!-- Steps usando los estilos nativos del template -->
+            <div class="steps steps-horizontal-lg">
+                <!-- Step 1 -->
+                <div class="step active" data-step="1">
+                    <div class="step-number">
+                        <div class="step-number-inner">01</div>
+                    </div>
+                    <div class="step-body">
+                        <h5 class="mb-2">{% trans "Requisitos" %}</h5>
+                        <p class="mb-0 fs-sm">{% trans "Verifica que cumples con los requisitos" %}</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step" data-step="2">
+                    <div class="step-number">
+                        <div class="step-number-inner">02</div>
+                    </div>
+                    <div class="step-body">
+                        <h5 class="mb-2">{% trans "Datos Empresa" %}</h5>
+                        <p class="mb-0 fs-sm">{% trans "Información de tu empresa" %}</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step" data-step="3">
+                    <div class="step-number">
+                        <div class="step-number-inner">03</div>
+                    </div>
+                    <div class="step-body">
+                        <h5 class="mb-2">{% trans "Representante" %}</h5>
+                        <p class="mb-0 fs-sm">{% trans "Datos del representante legal" %}</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step" data-step="4">
+                    <div class="step-number">
+                        <div class="step-number-inner">04</div>
+                    </div>
+                    <div class="step-body">
+                        <h5 class="mb-2">{% trans "Documentos" %}</h5>
+                        <p class="mb-0 fs-sm">{% trans "Adjunta los documentos requeridos" %}</p>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step" data-step="5">
+                    <div class="step-number">
+                        <div class="step-number-inner">05</div>
+                    </div>
+                    <div class="step-body">
+                        <h5 class="mb-2">{% trans "Confirmación" %}</h5>
+                        <p class="mb-0 fs-sm">{% trans "Revisa y envía tu postulación" %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wizard Content -->
+    <section class="py-5">
+        <div class="container">
+            <form id="joinForm" class="needs-validation" method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+            <!-- Step 1: Requisitos -->
+            <div class="wizard-section active" data-section="1">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="h3 text-center mb-4">{% trans "Requisitos para ser Socio" %}</h2>
+                        <p class="text-center text-muted mb-5">
+                            {% trans "Verifica que tu empresa cumple con los requisitos para unirse a PymeMad" %}
+                        </p>
+
+                        <!-- Requisitos -->
+                        <div class="card mb-4">
+                            <div class="card-body p-4">
+                                <h3 class="h5 mb-4">{% trans "Para asociarte debes:" %}</h3>
+                                <ul class="list-unstyled">
+                                    <li class="d-flex align-items-start mb-3">
+                                        <i class="ai-check-circle text-success me-3 mt-1"></i>
+                                        <span>{% trans "Ser una pequeña o mediana empresa del sector maderero" %}</span>
+                                    </li>
+                                    <li class="d-flex align-items-start mb-3">
+                                        <i class="ai-check-circle text-success me-3 mt-1"></i>
+                                        <span>{% trans "Tener operaciones en las regiones del Maule, Biobío, La Araucanía o Los Ríos" %}</span>
+                                    </li>
+                                    <li class="d-flex align-items-start mb-3">
+                                        <i class="ai-check-circle text-success me-3 mt-1"></i>
+                                        <span>{% trans "Contar con iniciación de actividades vigente" %}</span>
+                                    </li>
+                                    <li class="d-flex align-items-start">
+                                        <i class="ai-check-circle text-success me-3 mt-1"></i>
+                                        <span>{% trans "Comprometerse con los valores y objetivos de PymeMad" %}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Confirmación -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="acceptRequirements" required>
+                            <label class="form-check-label" for="acceptRequirements">
+                                {% trans "Confirmo que mi empresa cumple con todos los requisitos mencionados" %}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Datos de la Empresa -->
+            <div class="wizard-section" data-section="2">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="h3 text-center mb-4">{% trans "Información de la Empresa" %}</h2>
+                        <p class="text-center text-muted mb-5">
+                            {% trans "Ingresa los datos de tu empresa" %}
+                        </p>
+
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <label class="form-label" for="businessName">{% trans "Razón Social" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="businessName" name="business_name" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa la razón social" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="rut">{% trans "RUT Empresa" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="rut" name="rut" placeholder="12.345.678-9" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa un RUT válido" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="companySize">{% trans "Tamaño de la empresa" %} *</label>
+                                <select class="form-select form-select-lg" id="companySize" name="company_size" required>
+                                    <option value="">{% trans "Selecciona..." %}</option>
+                                    <option value="small">{% trans "Pequeña (UF 2.400 - 25.000)" %}</option>
+                                    <option value="medium">{% trans "Mediana (UF 25.000 - 100.000)" %}</option>
+                                    <option value="large">{% trans "Grande (más de UF 100.000)" %}</option>
+                                </select>
+                                <div class="invalid-feedback">{% trans "Por favor selecciona el tamaño" %}</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="economicActivity">{% trans "Actividad Económica Principal" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="economicActivity" name="economic_activity"
+                                       placeholder="{% trans 'Ej: Aserrado y cepillado de madera' %}" required>
+                                <div class="invalid-feedback">{% trans "Por favor describe la actividad principal" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="foundationDate">{% trans "Fecha de creación" %} *</label>
+                                <input type="date" class="form-control form-control-lg" id="foundationDate" name="foundation_date" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa la fecha" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="workers">{% trans "N° de trabajadores directos" %} *</label>
+                                <input type="number" class="form-control form-control-lg" id="workers" name="workers" min="1" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa el número de trabajadores" %}</div>
+                            </div>
+
+{#                            <div class="col-md-6">#}
+{#                                <label class="form-label" for="exports">{% trans "¿La empresa exporta?" %} *</label>#}
+{#                                <select class="form-select form-select-lg" id="exports" name="exports" required>#}
+{#                                    <option value="">{% trans "Selecciona..." %}</option>#}
+{#                                    <option value="yes">{% trans "Sí" %}</option>#}
+{#                                    <option value="no">{% trans "No" %}</option>#}
+{#                                    <option value="planning">{% trans "Planea exportar" %}</option>#}
+{#                                </select>#}
+{#                                <div class="invalid-feedback">{% trans "Por favor selecciona una opción" %}</div>#}
+{#                            </div>#}
+
+{#                            <div class="col-md-6" id="exportCountriesDiv" style="display: none;">#}
+{#                                <label class="form-label" for="exportCountries">{% trans "Países de exportación" %}</label>#}
+{#                                <input type="text" class="form-control form-control-lg" id="exportCountries" name="export_countries"#}
+{#                                       placeholder="{% trans 'Ej: Estados Unidos, México, Brasil' %}">#}
+{#                            </div>#}
+
+                            <div class="col-12">
+                                <label class="form-label" for="address">{% trans "Dirección" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="address" name="address" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa la dirección" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="region">{% trans "Región" %} *</label>
+                                <select class="form-select form-select-lg" id="region" name="region" required>
+                                    <option value="">{% trans "Selecciona..." %}</option>
+                                    <option value="arica">Región de Arica y Parinacota</option>
+                                    <option value="tarapaca">Región de Tarapacá</option>
+                                    <option value="antofagasta">Región de Antofagasta</option>
+                                    <option value="atacama">Región de Atacama</option>
+                                    <option value="coquimbo">Región de Coquimbo</option>
+                                    <option value="valparaiso">Región de Valparaíso</option>
+                                    <option value="ohiggins">Región del Libertador Gral. Bernardo O'Higgins</option>
+                                    <option value="maule">Región del Maule</option>
+                                    <option value="nuble">Región de Ñuble</option>
+                                    <option value="biobio">Región del Biobío</option>
+                                    <option value="araucania">Región de la Araucanía</option>
+                                    <option value="losrios">Región de Los Ríos</option>
+                                    <option value="loslagos">Región de Los Lagos</option>
+                                    <option value="aysen">Región Aisén del Gral. Carlos Ibáñez del Campo</option>
+                                    <option value="magallanes">Región de Magallanes y de la Antártica Chilena</option>
+                                    <option value="metropolitana">Región Metropolitana de Santiago</option>
+                                </select>
+                                <div class="invalid-feedback">{% trans "Por favor selecciona la región" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="city">{% trans "Ciudad" %} *</label>
+                                <select class="form-select form-select-lg" id="city" name="city" required disabled>
+                                    <option value="">{% trans "Primero selecciona una región" %}</option>
+                                </select>
+                                <div class="invalid-feedback">{% trans "Por favor selecciona la ciudad" %}</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="otherAssociation">{% trans "¿Pertenece a otra asociación gremial?" %}</label>
+                                <input type="text" class="form-control form-control-lg" id="otherAssociation" name="other_association"
+                                       placeholder="{% trans 'Si aplica, indique cuál' %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: Representante Legal -->
+            <div class="wizard-section" data-section="3">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="h3 text-center mb-4">{% trans "Datos del Representante Legal" %}</h2>
+                        <p class="text-center text-muted mb-5">
+                            {% trans "Información de contacto principal" %}
+                        </p>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label" for="legalName">{% trans "Nombre Completo" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="legalName" name="legal_name" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa el nombre" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="legalRut">{% trans "RUT" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="legalRut" name="legal_rut"
+                                       placeholder="12.345.678-9" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa el RUT" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="position">{% trans "Cargo" %} *</label>
+                                <input type="text" class="form-control form-control-lg" id="position" name="position"
+                                       placeholder="{% trans 'Ej: Gerente General' %}" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa el cargo" %}</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="phone">{% trans "Teléfono" %} *</label>
+                                <input type="tel" class="form-control form-control-lg" id="phone" name="phone"
+                                       placeholder="+56 9 1234 5678" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa el teléfono" %}</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="email">{% trans "Correo Electrónico" %} *</label>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email" required>
+                                <div class="invalid-feedback">{% trans "Por favor ingresa un email válido" %}</div>
+                            </div>
+                        </div>
+
+                        <hr class="my-5">
+
+                        <h3 class="h5 mb-4">{% trans "Datos de Contacto Adicional (Opcional)" %}</h3>
+                        <p class="text-muted mb-4">{% trans "Asistente o persona de contacto alternativo" %}</p>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label" for="assistantName">{% trans "Nombre" %}</label>
+                                <input type="text" class="form-control form-control-lg" id="assistantName" name="assistant_name">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="assistantRut">{% trans "RUT" %}</label>
+                                <input type="text" class="form-control form-control-lg" id="assistantRut" name="assistant_rut"
+                                       placeholder="12.345.678-9">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="assistantPosition">{% trans "Cargo" %}</label>
+                                <input type="text" class="form-control form-control-lg" id="assistantPosition" name="assistant_position">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label" for="assistantPhone">{% trans "Teléfono" %}</label>
+                                <input type="tel" class="form-control form-control-lg" id="assistantPhone" name="assistant_phone">
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label" for="assistantEmail">{% trans "Correo Electrónico" %}</label>
+                                <input type="email" class="form-control form-control-lg" id="assistantEmail" name="assistant_email">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Documentos -->
+            <div class="wizard-section" data-section="4">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="h3 text-center mb-4">{% trans "Documentación Requerida" %}</h2>
+                        <p class="text-center text-muted mb-5">
+                            {% trans "Adjunta los documentos necesarios para completar tu postulación" %}
+                        </p>
+
+                        <!-- RUT Empresa -->
+                        <div class="mb-4">
+                            <label class="form-label">{% trans "RUT de la Empresa" %} *</label>
+                            <div class="file-upload-area" onclick="document.getElementById('rutFile').click()">
+                                <input type="file" id="rutFile" name="rut_file" class="d-none" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <i class="ai-upload fs-1 text-muted mb-3"></i>
+                                <p class="mb-2">{% trans "Arrastra aquí o haz clic para subir" %}</p>
+                                <p class="fs-sm text-muted mb-0">{% trans "PDF, JPG o PNG (máx. 5MB)" %}</p>
+                                <div id="rutFileName" class="mt-3 text-success"></div>
+                            </div>
+                            <div class="invalid-feedback">{% trans "Por favor adjunta el RUT de la empresa" %}</div>
+                        </div>
+
+                        <!-- Certificado Iniciación Actividades -->
+                        <div class="mb-4">
+                            <label class="form-label">{% trans "Certificado de Iniciación de Actividades" %} *</label>
+                            <div class="file-upload-area" onclick="document.getElementById('certFile').click()">
+                                <input type="file" id="certFile" name="cert_file" class="d-none" accept=".pdf,.jpg,.jpeg,.png" required>
+                                <i class="ai-file-text fs-1 text-muted mb-3"></i>
+                                <p class="mb-2">{% trans "Arrastra aquí o haz clic para subir" %}</p>
+                                <p class="fs-sm text-muted mb-0">{% trans "PDF, JPG o PNG (máx. 5MB)" %}</p>
+                                <div id="certFileName" class="mt-3 text-success"></div>
+                            </div>
+                            <div class="invalid-feedback">{% trans "Por favor adjunta el certificado" %}</div>
+                        </div>
+
+                        <!-- Documento Adicional (Opcional) -->
+                        <div class="mb-4">
+                            <label class="form-label">{% trans "Documento Adicional (Opcional)" %}</label>
+                            <div class="file-upload-area" onclick="document.getElementById('extraFile').click()">
+                                <input type="file" id="extraFile" name="extra_file" class="d-none" accept=".pdf,.jpg,.jpeg,.png">
+                                <i class="ai-paperclip fs-1 text-muted mb-3"></i>
+                                <p class="mb-2">{% trans "Arrastra aquí o haz clic para subir" %}</p>
+                                <p class="fs-sm text-muted mb-0">{% trans "Cualquier documento adicional relevante" %}</p>
+                                <div id="extraFileName" class="mt-3 text-success"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Confirmación -->
+            <div class="wizard-section" data-section="5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="text-center mb-5">
+                            <i class="ai-check-circle text-success" style="font-size: 5rem;"></i>
+                            <h2 class="h3 mt-4 mb-3">{% trans "¡Casi listo!" %}</h2>
+                            <p class="text-muted">
+                                {% trans "Revisa que toda la información esté correcta antes de enviar tu postulación" %}
+                            </p>
+                        </div>
+
+                        <!-- Resumen de datos -->
+                        <div class="card mb-4">
+                            <div class="card-body p-4">
+                                <h3 class="h5 mb-4">{% trans "Resumen de su solicitud" %}</h3>
+                                <div id="summaryContent">
+                                    <!-- Se llenará dinámicamente con JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Términos y condiciones -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="acceptTerms" required>
+                            <label class="form-check-label" for="acceptTerms">
+                                {% trans "Acepto los" %}
+                                <a href="#" class="text-primary">{% trans "términos y condiciones" %}</a>
+                                {% trans "y la" %}
+                                <a href="#" class="text-primary">{% trans "política de privacidad" %}</a>
+                                {% trans "de PymeMad" %}
+                            </label>
+                        </div>
+
+                        <div class="form-check mb-5">
+                            <input class="form-check-input" type="checkbox" id="acceptNewsletter">
+                            <label class="form-check-label" for="acceptNewsletter">
+                                {% trans "Deseo recibir información sobre actividades y beneficios de PymeMad" %}
+                            </label>
+                        </div>
+
+                        <!-- Información adicional -->
+                        <div class="alert alert-primary">
+                            <h4 class="alert-heading h6">{% trans "¿Qué sucede después?" %}</h4>
+                            <p class="mb-2">{% trans "1. Recibirás un email de confirmación con tu número de postulación" %}</p>
+                            <p class="mb-2">{% trans "2. El directorio regional revisará tu solicitud (máximo 5 días hábiles)" %}</p>
+                            <p class="mb-0">{% trans "3. Te contactaremos para informarte sobre la aprobación y próximos pasos" %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div class="row justify-content-center mt-5">
+                <div class="col-lg-8">
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-lg btn-outline-secondary" id="prevBtn" style="display: none;">
+                            <i class="ai-arrow-left me-2"></i>
+                            {% trans "Anterior" %}
+                        </button>
+                        <button type="button" class="btn btn-lg btn-primary ms-auto" id="nextBtn">
+                            {% trans "Siguiente" %}
+                            <i class="ai-arrow-right ms-2"></i>
+                        </button>
+                        <button type="submit" class="btn btn-lg btn-primary ms-auto" id="submitBtn" style="display: none;">
+                            <i class="ai-send me-2"></i>
+                            {% trans "Enviar Postulación" %}
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Wizard functionality
+    let currentStep = 1;
+    const totalSteps = 5;
+    const form = document.getElementById('joinForm');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const submitBtn = document.getElementById('submitBtn');
+
+    // Update wizard progress
+    function updateWizard() {
+        // Update steps
+        document.querySelectorAll('.step').forEach(step => {
+            const stepNum = parseInt(step.dataset.step);
+            step.classList.remove('active');
+
+            if (stepNum <= currentStep) {
+                step.classList.add('active');
+            }
+        });
+
+        // Update sections
+        document.querySelectorAll('.wizard-section').forEach(section => {
+            section.classList.remove('active');
+            if (parseInt(section.dataset.section) === currentStep) {
+                section.classList.add('active');
+            }
+        });
+
+        // Update buttons
+        prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+        nextBtn.style.display = currentStep === totalSteps ? 'none' : 'block';
+        submitBtn.style.display = currentStep === totalSteps ? 'block' : 'none';
+
+        // Update summary on last step
+        if (currentStep === totalSteps) {
+            updateSummary();
+        }
+    }
+
+    // Validate current section
+    function validateSection() {
+        const currentSection = document.querySelector(`.wizard-section[data-section="${currentStep}"]`);
+        const inputs = currentSection.querySelectorAll('input[required], select[required]');
+        let isValid = true;
+
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                isValid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+            }
+        });
+
+        return isValid;
+    }
+
+    // Navigation
+    nextBtn.addEventListener('click', () => {
+        if (validateSection() && currentStep < totalSteps) {
+            currentStep++;
+            updateWizard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            updateWizard();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    });
+
+    // File upload handling
+    function handleFileUpload(inputId, displayId) {
+        const input = document.getElementById(inputId);
+        const display = document.getElementById(displayId);
+
+        input.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                display.textContent = `✓ ${file.name}`;
+                display.style.display = 'block';
+            }
+        });
+    }
+
+    handleFileUpload('rutFile', 'rutFileName');
+    handleFileUpload('certFile', 'certFileName');
+    handleFileUpload('extraFile', 'extraFileName');
+
+    // Drag and drop
+    document.querySelectorAll('.file-upload-area').forEach(area => {
+        area.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            area.classList.add('dragover');
+        });
+
+        area.addEventListener('dragleave', () => {
+            area.classList.remove('dragover');
+        });
+
+        area.addEventListener('drop', (e) => {
+            e.preventDefault();
+            area.classList.remove('dragover');
+
+            const input = area.querySelector('input[type="file"]');
+            if (e.dataTransfer.files.length > 0) {
+                input.files = e.dataTransfer.files;
+                input.dispatchEvent(new Event('change'));
+            }
+        });
+    });
+
+    // Update summary
+    function updateSummary() {
+        const summaryContent = document.getElementById('summaryContent');
+        const formData = new FormData(form);
+
+        let summaryHTML = `
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <strong>{% trans "Razón Social" %}:</strong><br>
+                    ${formData.get('business_name') || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>{% trans "RUT" %}:</strong><br>
+                    ${formData.get('rut') || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>{% trans "Representante Legal" %}:</strong><br>
+                    ${formData.get('legal_name') || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>{% trans "Email" %}:</strong><br>
+                    ${formData.get('email') || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>{% trans "Región" %}:</strong><br>
+                    ${document.getElementById('region').selectedOptions[0]?.text || '-'}
+                </div>
+                <div class="col-md-6">
+                    <strong>{% trans "Documentos" %}:</strong><br>
+                    ${document.getElementById('rutFile').files.length > 0 ? '✓ RUT adjunto' : '✗ Falta RUT'}<br>
+                    ${document.getElementById('certFile').files.length > 0 ? '✓ Certificado adjunto' : '✗ Falta certificado'}
+                </div>
+            </div>
+        `;
+
+        summaryContent.innerHTML = summaryHTML;
+    }
+
+    // Form submission
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!validateSection()) {
+            return;
+        }
+
+        // Aquí iría la lógica de envío del formulario
+        // Por ahora, solo mostramos un mensaje de éxito
+        alert('{% trans "¡Postulación enviada exitosamente!" %}');
+    });
+
+    // Chile regions and cities data
+    const chileData = {
+        "arica": ["Arica", "Camarones", "Putre", "General Lagos"],
+        "tarapaca": ["Iquique", "Alto Hospicio", "Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"],
+        "antofagasta": ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal", "Calama", "Ollagüe", "San Pedro de Atacama", "Tocopilla", "María Elena"],
+        "atacama": ["Copiapó", "Caldera", "Tierra Amarilla", "Chañaral", "Diego de Almagro", "Vallenar", "Alto del Carmen", "Freirina", "Huasco"],
+        "coquimbo": ["La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña", "Illapel", "Canela", "Los Vilos", "Salamanca", "Ovalle", "Combarbalá", "Monte Patria", "Punitaqui", "Río Hurtado"],
+        "valparaiso": ["Valparaíso", "Casablanca", "Concón", "Juan Fernández", "Puchuncaví", "Quintero", "Viña del Mar", "Isla de Pascua", "Los Andes", "Calle Larga", "Rinconada", "San Esteban", "La Ligua", "Cabildo", "Papudo", "Petorca", "Zapallar", "Quillota", "Calera", "Hijuelas", "La Cruz", "Nogales", "San Antonio", "Algarrobo", "Cartagena", "El Quisco", "El Tabo", "Santo Domingo", "San Felipe", "Catemu", "Llaillay", "Panquehue", "Putaendo", "Santa María", "Quilpué", "Limache", "Olmué", "Villa Alemana"],
+        "ohiggins": ["Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente", "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", "Paredones", "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"],
+        "maule": ["Talca", "Constitución", "Curepto", "Empedrado", "Maule", "Pelarco", "Pencahue", "Río Claro", "San Clemente", "San Rafael", "Cauquenes", "Chanco", "Pelluhue", "Curicó", "Hualañé", "Licantén", "Molina", "Rauco", "Romeral", "Sagrada Familia", "Teno", "Vichuquén", "Linares", "Colbún", "Longaví", "Parral", "Retiro", "San Javier", "Villa Alegre", "Yerbas Buenas"],
+        "nuble": ["Cobquecura", "Coelemu", "Ninhue", "Portezuelo", "Quirihue", "Ránquil", "Treguaco", "Bulnes", "Chillán Viejo", "Chillán", "El Carmen", "Pemuco", "Pinto", "Quillón", "San Ignacio", "Yungay", "Coihueco", "Ñiquén", "San Carlos", "San Fabián", "San Nicolás"],
+        "biobio": ["Concepción", "Coronel", "Chiguayante", "Florida", "Hualqui", "Lota", "Penco", "San Pedro de la Paz", "Santa Juana", "Talcahuano", "Tomé", "Hualpén", "Lebu", "Arauco", "Cañete", "Contulmo", "Curanilahue", "Los Álamos", "Tirúa", "Los Ángeles", "Antuco", "Cabrero", "Laja", "Mulchén", "Nacimiento", "Negrete", "Quilaco", "Quilleco", "San Rosendo", "Santa Bárbara", "Tucapel", "Yumbel", "Alto Biobío"],
+        "araucania": ["Temuco", "Carahue", "Cunco", "Curarrehue", "Freire", "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial", "Padre las Casas", "Perquenco", "Pitrufquén", "Pucón", "Saavedra", "Teodoro Schmidt", "Toltén", "Vilcún", "Villarrica", "Cholchol", "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay", "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén", "Victoria"],
+        "losrios": ["Valdivia", "Corral", "Lanco", "Los Lagos", "Máfil", "Mariquina", "Paillaco", "Panguipulli", "La Unión", "Futrono", "Lago Ranco", "Río Bueno"],
+        "loslagos": ["Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Llanquihue", "Maullín", "Puerto Varas", "Castro", "Ancud", "Chonchi", "Curaco de Vélez", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Quinchao", "Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo", "Chaitén", "Futaleufú", "Hualaihué", "Palena"],
+        "aysen": ["Coihaique", "Lago Verde", "Aisén", "Cisnes", "Guaitecas", "Cochrane", "O'Higgins", "Tortel", "Chile Chico", "Río Ibáñez"],
+        "magallanes": ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio", "Cabo de Hornos", "Antártica", "Porvenir", "Primavera", "Timaukel", "Natales", "Torres del Paine"],
+        "metropolitana": ["Santiago", "Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", "Renca", "San Joaquín", "San Miguel", "San Ramón", "Vitacura", "Puente Alto", "Pirque", "San José de Maipo", "Colina", "Lampa", "Tiltil", "San Bernardo", "Buin", "Calera de Tango", "Paine", "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro", "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"]
+    };
+
+    // Region change handler
+    document.getElementById('region').addEventListener('change', function() {
+        const selectedRegion = this.value;
+        const citySelect = document.getElementById('city');
+
+        // Clear current options
+        citySelect.innerHTML = '';
+
+        if (selectedRegion && chileData[selectedRegion]) {
+            // Enable city select
+            citySelect.disabled = false;
+
+            // Add default option
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '{% trans "Selecciona una ciudad..." %}';
+            citySelect.appendChild(defaultOption);
+
+            // Add cities for selected region
+            chileData[selectedRegion].forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+        } else {
+            // Disable city select
+            citySelect.disabled = true;
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = '{% trans "Primero selecciona una región" %}';
+            citySelect.appendChild(defaultOption);
+        }
+    });
+
+    // Export option handler
+    document.getElementById('exports').addEventListener('change', function() {
+        const exportCountriesDiv = document.getElementById('exportCountriesDiv');
+        if (this.value === 'yes') {
+            exportCountriesDiv.style.display = 'block';
+            document.getElementById('exportCountries').setAttribute('required', 'required');
+        } else {
+            exportCountriesDiv.style.display = 'none';
+            document.getElementById('exportCountries').removeAttribute('required');
+        }
+    });
+
+    // Initialize
+    updateWizard();
+</script>
+{% endblock %}

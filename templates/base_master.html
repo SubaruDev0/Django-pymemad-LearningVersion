@@ -1,0 +1,221 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
+{% get_available_languages as AVAILABLE_LANGUAGES %}
+{% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE }}" {% block html_attributes %}{% endblock %}>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover">
+
+    <!-- SEO meta tags -->
+    <title>{% block title %}PymeMad Nacional -Asociación Gremial de Pequeños y Medianos Industriales de la Madera{% endblock title %}</title>
+    <meta name="description" content="{% block description %}PymeMad representa a más de 60 PyMEs madereras en Chile, promoviendo el desarrollo sostenible del sector maderero en 4 regiones del país.{% endblock description %}">
+    <meta name="author" content="Hello World SpA">
+
+    {% block seo_tags %}
+    <!-- Canonical y Hreflang -->
+    {% block canonical %}{% endblock canonical %}
+    {% block hreflang %}{% endblock hreflang %}
+    {% block seo %}{% endblock seo %}
+    {% endblock seo_tags %}
+
+    <!-- Webmanifest + Favicon / App icons -->
+    <link rel="manifest" href="{% url 'manifest' %}">
+    <link rel="icon" type="image/png" href="{% static 'assets/app-icons/icon-32x32.png' %}" sizes="32x32">
+    <link rel="apple-touch-icon" href="{% static 'assets/app-icons/icon-180x180.png' %}">
+
+    {% block theme_switcher %}
+    <!-- Theme switcher (color modes) - Solo para dashboard -->
+    {% endblock theme_switcher %}
+
+    <!-- Import Google font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet" id="google-font">
+
+    <!-- Vendor styles -->
+    {% block vendor_styles %}
+    <link rel="stylesheet" media="screen" href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}">
+    <link rel="stylesheet" media="screen" href="{% static 'assets/vendor/aos/dist/aos.css' %}">
+    {% endblock vendor_styles %}
+
+    <!-- Font icons -->
+    <link rel="stylesheet" href="{% static 'assets/icons/around-icons.min.css' %}">
+
+    <!-- Theme styles + Bootstrap -->
+    <link rel="stylesheet" media="screen" href="{% static 'assets/css/theme.min.css' %}">
+
+    <!-- Theme Custom styles -->
+    <link rel="stylesheet" media="screen" href="{% static 'assets/css/front/custom.css' %}">
+
+    <!-- Custom Styles -->
+    {% block extra_css %}{% endblock extra_css %}
+
+    <!-- Page loading styles -->
+    <style>
+        .page-loading {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all .4s .2s ease-in-out;
+            transition: all .4s .2s ease-in-out;
+            background-color: #fff;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+        [data-bs-theme="dark"] .page-loading {
+            background-color: #121519;
+        }
+        .page-loading.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .page-loading-inner {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%);
+            -webkit-transition: opacity .2s ease-in-out;
+            transition: opacity .2s ease-in-out;
+            opacity: 0;
+        }
+        .page-loading.active > .page-loading-inner {
+            opacity: 1;
+        }
+        .page-loading-inner > span {
+            display: block;
+            font-family: "Inter", sans-serif;
+            font-size: 1rem;
+            font-weight: normal;
+            color: #6f788b;
+        }
+        [data-bs-theme="dark"] .page-loading-inner > span {
+            color: #fff;
+            opacity: .6;
+        }
+        .page-spinner {
+            display: inline-block;
+            width: 2.75rem;
+            height: 2.75rem;
+            margin-bottom: .75rem;
+            vertical-align: text-bottom;
+            background-color: #d7dde2;
+            border-radius: 50%;
+            opacity: 0;
+            -webkit-animation: spinner .75s linear infinite;
+            animation: spinner .75s linear infinite;
+        }
+        [data-bs-theme="dark"] .page-spinner {
+            background-color: rgba(255,255,255,.25);
+        }
+        @-webkit-keyframes spinner {
+            0% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+        @keyframes spinner {
+            0% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                -webkit-transform: none;
+                transform: none;
+            }
+        }
+
+        /* Custom PymeMad Styles */
+        :root {
+            --pymemad-primary: #2B5F2F;
+            --pymemad-secondary: #8BC34A;
+            --pymemad-light: #F5F7FA;
+        }
+
+        {% block inline_styles %}{% endblock inline_styles %}
+    </style>
+
+    <!-- Page loading scripts -->
+    <script>
+        (function () {
+            window.onload = function () {
+                const preloader = document.querySelector('.page-loading')
+                preloader.classList.remove('active')
+                setTimeout(function () {
+                    preloader.remove()
+                }, 1500)
+            }
+        })()
+    </script>
+
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+
+<!-- Body with dynamic classes -->
+<body {% block body_attributes %}{% endblock body_attributes %}>
+
+    <!-- Page loading spinner -->
+    <div class="page-loading active">
+        <div class="page-loading-inner">
+            <div class="page-spinner"></div>
+            <span>{% trans "Loading..." %}</span>
+        </div>
+    </div>
+
+    <!-- Page wrapper -->
+    <main class="page-wrapper">
+        {% block main_content %}
+        <!-- This block will be overridden by child templates -->
+        {% endblock main_content %}
+    </main>
+
+    <!-- Back to top button -->
+    {% block back_to_top %}
+    <a class="btn-scroll-top" href="#top" data-scroll aria-label="Scroll back to top">
+        <svg viewBox="0 0 40 40" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="19" fill="none" stroke="currentColor" stroke-width="1.5" stroke-miterlimit="10"></circle>
+        </svg>
+        <i class="ai-arrow-up"></i>
+    </a>
+    {% endblock back_to_top %}
+
+    <!-- Vendor scripts: JS libraries and plugins -->
+{% block vendor_scripts %}
+    <script src="{% static 'assets/vendor/jarallax/dist/jarallax.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+    <script src="{% static 'assets/vendor/aos/dist/aos.js' %}"></script>
+
+    <!-- Bootstrap + Theme scripts -->
+    <script src="{% static 'assets/js/theme.min.js' %}"></script>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- sweetalert2 scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% endblock vendor_scripts %}
+
+    <!-- Custom scripts -->
+    <script src="{% static 'assets/js/front/common.js' %}"></script>
+
+    <!-- Custom JS Block -->
+    {% block extra_js %}{% endblock extra_js %}
+</body>
+</html>

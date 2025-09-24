@@ -1,0 +1,28 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+
+{% block title %}PymeMad Nacional - Fortalecemos las PyMEs Madereras de Chile{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    {% include 'snippets/landing/hero_home_section.html' %}
+
+    <!-- Noticias -->
+    {% include 'snippets/landing/news_home_section.html' %}
+
+    <!-- Pilares Estratégicos -->
+   {% include 'snippets/landing/strategic_pillars_section.html' %}
+
+    <!-- Estadísticas -->
+    {% include 'snippets/landing/statistics_section.html' %}
+
+    <!-- Servicios para Asociados -->
+    {% include 'snippets/landing/services_home_section.html' %}
+
+    <!-- Empresas Asociadas -->
+    {% include 'snippets/landing/companies_home_section.html' %}
+
+    <!-- Beneficios Lista Estructurada -->
+    {% include 'snippets/landing/benefits_section.html' %}
+
+{% endblock content %}

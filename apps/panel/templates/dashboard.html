@@ -1,0 +1,736 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Dashboard - PymeMad Nacional{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .bg-primary.bg-opacity-10 {
+            background-color: rgba(26, 95, 63, 0.1) !important;
+        }
+
+        .bg-success.bg-opacity-10 {
+            background-color: rgba(76, 175, 80, 0.1) !important;
+        }
+
+        .bg-warning.bg-opacity-10 {
+            background-color: rgba(255, 152, 0, 0.1) !important;
+        }
+
+        .bg-info.bg-opacity-10 {
+            background-color: rgba(33, 150, 243, 0.1) !important;
+        }
+
+        .bg-danger.bg-opacity-10 {
+            background-color: rgba(244, 67, 54, 0.1) !important;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .activity-icon i {
+            z-index: 2;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .btn-link {
+            text-decoration: none !important;
+        }
+
+        .btn-link:hover,
+        .btn-link:focus,
+        .btn-link:active {
+            text-decoration: none !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
+        .badge-status {
+            font-weight: 500;
+            padding: 0.35em 0.65em;
+        }
+
+        .table-actions .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .alert-item {
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .alert-critical {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .alert-info {
+            background-color: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .region-metrics {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pt-4 pb-2 pb-sm-4">
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="h2 mb-0">Dashboard</h2>
+            <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary">
+                    <i class="ai-download me-1"></i>Exportar
+                </button>
+                <button class="btn btn-sm btn-primary" onclick="updateDashboard()">
+                    <i class="ai-refresh me-1"></i>Actualizar
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="row g-4 mb-4">
+            <!-- Socios Activos -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                                <i class="ai-user-group"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-success" id="total-socios">{{ total_socios|default:"78" }}</div>
+                                <div class="stat-label">Socios Activos</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>+5 este mes
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Financiero -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                                <i class="ai-dollar"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-info" id="balance">{{ balance|default:"$15.1M" }}</div>
+                                <div class="stat-label">Balance Financiero</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>21.8% margen
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagos Pendientes -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                                <i class="ai-triangle-alert"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-warning" id="pagos-pendientes">{{ pagos_pendientes|default:"$5.8M" }}</div>
+                                <div class="stat-label">Pagos Pendientes</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-danger">
+                                <i class="ai-alert-circle me-1"></i>23 vencidos
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan Estratégico -->
+            <div class="col-sm-6 col-xl-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                                <i class="ai-target"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-primary" id="plan-progreso">{{ plan_progreso|default:"83.9%" }}</div>
+                                <div class="stat-label">Plan Estratégico</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>+5.2% vs meta
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Row -->
+        <div class="row g-4">
+            <!-- Alertas y Actividad Reciente -->
+            <div class="col-lg-8">
+                <!-- Estado Financiero Chart -->
+                <div class="card border-0 mb-4">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h3 class="h5 mb-0">Estado Financiero</h3>
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" data-period="mes">Mes</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="trimestre">Trimestre</button>
+                                <button type="button" class="btn btn-outline-secondary" data-period="año">Año</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="financialChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="card border-0 mb-4">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h3 class="h5 mb-0">Actividad Reciente</h3>
+                            <a href="#" class="btn btn-link">Ver todo</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-list">
+                            <!-- Activity Item -->
+                            <div class="activity-item d-flex align-items-start">
+                                <div class="activity-icon bg-success bg-opacity-10 text-success me-3">
+                                    <i class="ai-dollar"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Pago recibido</h6>
+                                            <p class="text-muted small mb-0">Maderas San José - Cuota mensual: $450,000</p>
+                                        </div>
+                                        <small class="text-muted">Hace 2 horas</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity Item -->
+                            <div class="activity-item d-flex align-items-start">
+                                <div class="activity-icon bg-primary bg-opacity-10 text-primary me-3">
+                                    <i class="ai-user-plus"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Nueva solicitud de socio</h6>
+                                            <p class="text-muted small mb-0">Maderas del Pacífico - Región Los Ríos</p>
+                                        </div>
+                                        <small class="text-muted">Hace 5 horas</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity Item -->
+                            <div class="activity-item d-flex align-items-start">
+                                <div class="activity-icon bg-info bg-opacity-10 text-info me-3">
+                                    <i class="ai-book"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Capacitación iniciada</h6>
+                                            <p class="text-muted small mb-0">Secado de Madera - 45 participantes en Biobío</p>
+                                        </div>
+                                        <small class="text-muted">Hoy 09:00</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Activity Item -->
+                            <div class="activity-item d-flex align-items-start">
+                                <div class="activity-icon bg-warning bg-opacity-10 text-warning me-3">
+                                    <i class="ai-file-text"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="mb-1">Acta de reunión disponible</h6>
+                                            <p class="text-muted small mb-0">Reunión Directorio - Decisiones estratégicas Q4</p>
+                                        </div>
+                                        <small class="text-muted">Ayer</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Próximos Eventos -->
+                <div class="card border-0">
+                    <div class="card-header bg-transparent border-0">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h3 class="h5 mb-0">Próximos Eventos y Actividades</h3>
+                            <a href="#" class="btn btn-sm btn-link">Ver calendario</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle" id="eventsTable">
+                                <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Actividad</th>
+                                    <th>Región</th>
+                                    <th>Responsable</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>15 Ago</td>
+                                    <td><strong>Asamblea General Ordinaria</strong></td>
+                                    <td>Nacional</td>
+                                    <td>Directorio</td>
+                                    <td><span class="badge badge-status bg-warning">Preparación</span></td>
+                                    <td class="table-actions">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            <i class="ai-edit-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>20 Ago</td>
+                                    <td><strong>Mesa de Trabajo CMPC</strong></td>
+                                    <td>Nacional</td>
+                                    <td>M. Esquerre</td>
+                                    <td><span class="badge badge-status bg-info">Agendado</span></td>
+                                    <td class="table-actions">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            <i class="ai-edit-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>25 Ago</td>
+                                    <td><strong>Instalación Sensores IoT</strong></td>
+                                    <td>Araucanía</td>
+                                    <td>R. Lagos</td>
+                                    <td><span class="badge badge-status bg-primary">En curso</span></td>
+                                    <td class="table-actions">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            <i class="ai-edit-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>01 Sep</td>
+                                    <td><strong>Lanzamiento Revista PymeMad</strong></td>
+                                    <td>Nacional</td>
+                                    <td>Y. Llorca</td>
+                                    <td><span class="badge badge-status bg-secondary">Pendiente</span></td>
+                                    <td class="table-actions">
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                           <i class="ai-edit-alt"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones Rápidas y Estado Regional -->
+            <div class="col-lg-4">
+                <!-- Acciones Rápidas -->
+                <div class="card border-0 mb-4">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h3 class="h5 mb-0">Acciones Rápidas</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a href="#" class="btn btn-primary">
+                                <i class="ai-user-plus me-2"></i>Nuevo Socio
+                            </a>
+                            <a href="#" class="btn btn-outline-primary">
+                                <i class="ai-dollar-sign me-2"></i>Registrar Pago
+                            </a>
+                            <a href="#" class="btn btn-outline-secondary">
+                                <i class="ai-file-text me-2"></i>Generar Certificado
+                            </a>
+                            <a href="#" class="btn btn-outline-secondary">
+                                <i class="ai-bar-chart-2 me-2"></i>Ver Reportes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alertas Críticas -->
+                <div class="card border-0 mb-4">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h3 class="h5 mb-0">
+                                <i class="ai-bell text-danger me-2"></i>Alertas Críticas
+                            </h3>
+                            <a href="#" class="btn btn-link">Ver todas</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert-item alert-critical">
+                            <i class="ai-triangle-alert"></i>
+                            <div>
+                                <strong>5 cuotas vencidas</strong>
+                                <div class="small">Más de 60 días de retraso</div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert-item alert-warning">
+                            <i class="ai-clock"></i>
+                            <div>
+                                <strong>Los Ríos - Presupuesto</strong>
+                                <div class="small">99% ejecutado</div>
+                            </div>
+                        </div>
+                        
+                        <div class="alert-item alert-info">
+                            <i class="ai-calendar"></i>
+                            <div>
+                                <strong>Asamblea General</strong>
+                                <div class="small">En 15 días - Preparación en curso</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Estado por Región -->
+                <div class="card border-0">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h3 class="h5 mb-0">Estado por Región</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Biobío/Ñuble</strong>
+                                <span class="badge bg-success">Activa</span>
+                            </div>
+                            <div class="region-metrics">
+                                <span class="badge bg-secondary">35 socios</span>
+                                <span class="badge bg-secondary">87% al día</span>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Maule</strong>
+                                <span class="badge bg-warning">Alerta</span>
+                            </div>
+                            <div class="region-metrics">
+                                <span class="badge bg-secondary">25 socios</span>
+                                <span class="badge bg-secondary">75% al día</span>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Araucanía</strong>
+                                <span class="badge bg-success">Activa</span>
+                            </div>
+                            <div class="region-metrics">
+                                <span class="badge bg-secondary">15 socios</span>
+                                <span class="badge bg-secondary">93% al día</span>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <strong>Los Ríos</strong>
+                                <span class="badge bg-danger">Crítico</span>
+                            </div>
+                            <div class="region-metrics">
+                                <span class="badge bg-secondary">20 socios</span>
+                                <span class="badge bg-secondary">65% al día</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Plan Estratégico 2025 -->
+                <div class="card border-0 mt-4">
+                    <div class="card-header bg-transparent border-0 pb-0">
+                        <h3 class="h5 mb-0">Plan Estratégico 2025</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small class="text-muted">Objetivos Cumplidos</small>
+                                <strong>6/10</strong>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar bg-success" style="width: 60%" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="small">
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-check text-success me-2"></i>
+                                <span>Web institucional lanzada</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-check text-success me-2"></i>
+                                <span>Revista digital publicada</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-check text-success me-2"></i>
+                                <span>Sistema de socios implementado</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-check text-success me-2"></i>
+                                <span>Certificación ISO 9001</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-refresh text-warning me-2"></i>
+                                <span>Capacitaciones técnicas (60%)</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-refresh text-warning me-2"></i>
+                                <span>Expansión regional (40%)</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-clock text-muted me-2"></i>
+                                <span>Feria regional PymeMad</span>
+                            </div>
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="ai-clock text-muted me-2"></i>
+                                <span>Plataforma IoT sensores</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function() {
+            // Función para actualizar estadísticas
+            function updateDashboard() {
+                // Aquí puedes agregar una llamada AJAX para actualizar los datos
+                console.log('Actualizando dashboard...');
+                
+                // Simular actualización con animación
+                $('.stat-value').each(function() {
+                    $(this).fadeOut(200).fadeIn(200);
+                });
+            }
+
+            // Función para animar los valores numéricos
+            function animateValue(id, start, end, duration = 1000) {
+                if (start === end) return;
+
+                const range = end - start;
+                const increment = end > start ? 1 : -1;
+                const stepTime = Math.abs(Math.floor(duration / range));
+                const element = document.getElementById(id);
+                let current = start;
+
+                const timer = setInterval(function() {
+                    current += increment;
+                    if (element) {
+                        element.textContent = current;
+                    }
+                    if (current === end) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
+
+            // Actualizar dashboard automáticamente cada 60 segundos
+            setInterval(updateDashboard, 60000);
+
+            // Hacer la función global para el botón
+            window.updateDashboard = updateDashboard;
+
+            // Inicializar gráfico financiero
+            const ctx = document.getElementById('financialChart');
+            if (ctx) {
+                const financialChart = new Chart(ctx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'],
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: [18.2, 19.5, 18.9, 19.8, 20.1, 19.6, 20.2, 20.0],
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Egresos',
+                            data: [12.1, 11.8, 12.5, 12.3, 12.8, 12.1, 12.4, 12.4],
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Balance',
+                            data: [6.1, 7.7, 6.4, 7.5, 7.3, 7.5, 7.8, 7.6],
+                            borderColor: '#1a5f3f',
+                            backgroundColor: 'rgba(26, 95, 63, 0.1)',
+                            borderWidth: 2,
+                            fill: false,
+                            tension: 0.4,
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let value = context.parsed.y;
+                                        return context.dataset.label + ': $' + value.toFixed(1) + 'M';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + value + 'M';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Manejo de botones de período
+                $('.btn-group[role="group"] button').on('click', function() {
+                    $('.btn-group[role="group"] button').removeClass('active');
+                    $(this).addClass('active');
+                    
+                    const period = $(this).data('period');
+                    // Aquí puedes actualizar los datos del gráfico según el período seleccionado
+                    console.log('Período seleccionado:', period);
+                });
+            }
+        });
+    </script>
+{% endblock %}

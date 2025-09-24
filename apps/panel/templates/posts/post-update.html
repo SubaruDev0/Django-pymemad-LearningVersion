@@ -1,0 +1,1136 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ title_navbar }} - {{ block.super }}{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        /* Tab improvements específicos para post-update */
+        .nav-tabs .nav-link {
+            font-weight: 500;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--bs-primary);
+        }
+
+        /* Form improvements específicos para post-update */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Image preview específico para post-update */
+        .img-preview-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .img-preview-container .remove-image {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* AI Section específico para post-update */
+        [data-bs-theme="dark"] .ai-section {
+            background: rgba(255,255,255,0.03);
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pb-2 pb-sm-4">
+        <!-- Page Header -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="{{ breadcrumb_item_url }}">{{ breadcrumb_item }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ title_navbar }}</li>
+            </ol>
+        </nav>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 mb-0">{{ title_navbar }}</h1>
+                <p class="text-muted mb-0">Edita y gestiona el contenido completo del artículo</p>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="button" id="clear-cache-btn" class="btn btn-sm btn-outline-warning">
+                    <i class="ai-refresh-cw me-1"></i>Limpiar Cache
+                </button>
+                <a href="{{ breadcrumb_item_url }}" class="btn btn-sm btn-outline-secondary">
+                    <i class="ai-arrow-left me-1"></i>Volver
+                </a>
+            </div>
+        </div>
+
+        <!-- Hidden fields for JS -->
+        <input type="hidden" id="post_id" value="{{ post_id }}">
+
+        <!-- Main Content -->
+        <div class="card border-0">
+
+            <div class="card-header">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#summary-tab" type="button" role="tab">
+                            <i class="ai-file-text me-2"></i>Resumen
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#general-tab" type="button" role="tab">
+                            <i class="ai-edit me-2"></i>Información General
+                        </button>
+                    </li>
+{#                    <li class="nav-item" role="presentation">#}
+{#                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#media-tab" type="button" role="tab">#}
+{#                            <i class="ai-image me-2"></i>Multimedia#}
+{#                        </button>#}
+{#                    </li>#}
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#comments-tab" type="button" role="tab">
+                            <i class="ai-message-circle me-2"></i>Comentarios
+                            {% if object.comments.count > 0 %}
+                                <span class="badge bg-primary ms-1">{{ object.comments.count }}</span>
+                            {% endif %}
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="ai-tab-button" data-bs-toggle="tab" data-bs-target="#ai-tab" type="button" role="tab">
+                            <i class="ai-cpu me-2"></i>AI Assistant
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <!-- Tab content -->
+                <div class="tab-content pt-4">
+                    <!-- Summary Tab -->
+                    <div class="tab-pane fade show active" id="summary-tab" role="tabpanel">
+                        <div class="row g-4">
+                            <!-- Post Information Card -->
+                            <div class="col-md-6">
+                                <div class="card info-card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-transparent">
+                                        <h5 class="card-title mb-0">
+                                            <i class="ai-info-circle me-2 text-primary"></i>Información del Post
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row" width="40%">ID:</th>
+                                                <td><code>#{{ object.id }}</code></td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Título:</th>
+                                                <td>{{ title_es|truncatechars:50 }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Autor:</th>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <img src="{% static 'assets/img/avatar/yllorca.webp' %}"
+                                                             class="rounded-circle me-2"
+                                                             width="24" height="24"
+                                                             alt="{{ object.author }}">
+                                                        {{ object.author }}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Categoría:</th>
+                                                <td>
+                                                    {% if object.category %}
+                                                        <span class="badge bg-secondary">{{ object.category.name }}</span>
+                                                    {% else %}
+                                                        <span class="text-muted">Sin categoría</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Estado:</th>
+                                                <td>
+                                                    {% if object.status == 'PUBLISHED' %}
+                                                        <span class="badge bg-success">Publicado</span>
+                                                    {% elif object.status == 'DRAFT' %}
+                                                        <span class="badge bg-warning">Borrador</span>
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">{{ object.get_status_display }}</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Idiomas:</th>
+                                                <td>
+                                                    {% for lang in available_languages.split %}
+                                                        <span class="badge bg-info me-1">{{ lang|upper }}</span>
+                                                    {% endfor %}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Statistics Card -->
+                            <div class="col-md-6">
+                                <div class="card info-card h-100 border-0 shadow-sm">
+                                    <div class="card-header bg-transparent">
+                                        <h5 class="card-title mb-0">
+                                            <i class="ai-bar-chart-2 me-2 text-success"></i>Estadísticas
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table table-borderless">
+                                            <tbody>
+                                            <tr>
+                                                <th scope="row" width="50%">Fecha Publicación:</th>
+                                                <td>
+                                                    {% if object.publish %}
+                                                        {{ object.publish|date:"d/m/Y H:i" }}
+                                                    {% else %}
+                                                        <span class="text-muted">No publicado</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Fecha Creación:</th>
+                                                <td>{{ object.created_at|date:"d/m/Y H:i" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Última Actualización:</th>
+                                                <td>{{ object.updated_at|date:"d/m/Y H:i" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Comentarios:</th>
+                                                <td>
+                                                    <span class="badge bg-primary">{{ object.comments.count }}</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Meta SEO Auto:</th>
+                                                <td>
+                                                    {% if auto_generate_meta %}
+                                                        <span class="badge bg-success">Activado</span>
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">Desactivado</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="mt-4">
+                            <h5 class="mb-3">Acciones Rápidas</h5>
+                            <div class="d-flex gap-2 flex-wrap">
+                                {% if object.status == 'PUBLISHED' and object.slug %}
+                                    <a href="{{ object.get_absolute_url }}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                        <i class="ai-external-link me-1"></i>Ver Post
+                                    </a>
+                                {% endif %}
+                                <button type="button" class="btn btn-sm btn-outline-info" id="edit-content-btn">
+                                <i class="ai-edit me-1"></i>Editar Contenido
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-success" id="generate-translations-quick">
+                                    <i class="ai-globe me-1"></i>Generar Traducciones
+                                </button>
+                                {% if object.status == 'DRAFT' %}
+                                    <button type="button" class="btn btn-sm btn-outline-success" id="publish-now">
+                                        <i class="ai-check-circle me-1"></i>Publicar Ahora
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- General Information Tab -->
+                    <div class="tab-pane fade" id="general-tab" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Editar Contenido del Post</h5>
+                            <button id="generateTranslatePostBtn" class="btn btn-primary">
+                                <i class="ai-globe me-2"></i>Generar Traducciones
+                            </button>
+                        </div>
+
+                        <!-- Post Form -->
+                        <form method="POST" id="postForm" enctype="multipart/form-data" action="{{ form_action }}">
+                            {% csrf_token %}
+
+                            <!-- Hidden fields for Quill content -->
+                            <input type="hidden" id="id_body_es" name="body_es" value="{{ form.body_es.value|default_if_none:'' }}">
+                            <input type="hidden" id="id_body_en" name="body_en" value="{{ form.body_en.value|default_if_none:'' }}">
+                            <input type="hidden" id="id_body_pt" name="body_pt" value="{{ form.body_pt.value|default_if_none:'' }}">
+
+                            <!-- Language Tabs -->
+                            <ul class="nav nav-tabs mb-4" id="languageTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="spanish-tab" data-bs-toggle="tab" data-bs-target="#spanish" type="button" role="tab">
+                                        <span class="language-indicator {% if form.title_es.value %}has-content{% else %}no-content{% endif %}"></span>
+                                        🇪🇸 Español
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="english-tab" data-bs-toggle="tab" data-bs-target="#english" type="button" role="tab">
+                                        <span class="language-indicator {% if form.title_en.value %}has-content{% else %}no-content{% endif %}"></span>
+                                        🇬🇧 Inglés
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="portuguese-tab" data-bs-toggle="tab" data-bs-target="#portuguese" type="button" role="tab">
+                                        <span class="language-indicator {% if form.title_pt.value %}has-content{% else %}no-content{% endif %}"></span>
+                                        🇧🇷 Portugués
+                                    </button>
+                                </li>
+                            </ul>
+
+                            <!-- Language Tab Content -->
+                            <div class="tab-content" id="languageTabsContent">
+                                <!-- Spanish Content -->
+                                <div class="tab-pane fade show active" id="spanish" role="tabpanel">
+                                    <div class="form-group">
+                                        <label for="{{ form.title_es.id_for_label }}" class="form-label">
+                                            {{ form.title_es.label }}
+                                        </label>
+                                        {{ form.title_es }}
+                                        {% if form.title_es.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.title_es.errors }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="body-quill-editor-es" class="form-label">{{ form.body_es.label }}</label>
+                                        <div id="body-quill-editor-es" class="quill-editor" data-name="body_es">
+                                            {{ form.body_es.value|default_if_none:""|safe }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- English Content -->
+                                <div class="tab-pane fade" id="english" role="tabpanel">
+                                    <div class="form-group">
+                                        <label for="{{ form.title_en.id_for_label }}" class="form-label">
+                                            {{ form.title_en.label }}
+                                        </label>
+                                        {{ form.title_en }}
+                                        {% if form.title_en.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.title_en.errors }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="body-quill-editor-en" class="form-label">{{ form.body_en.label }}</label>
+                                        <div id="body-quill-editor-en" class="quill-editor" data-name="body_en">
+                                            {{ form.body_en.value|default_if_none:""|safe }}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Portuguese Content -->
+                                <div class="tab-pane fade" id="portuguese" role="tabpanel">
+                                    <div class="form-group">
+                                        <label for="{{ form.title_pt.id_for_label }}" class="form-label">
+                                            {{ form.title_pt.label }}
+                                        </label>
+                                        {{ form.title_pt }}
+                                        {% if form.title_pt.errors %}
+                                            <div class="invalid-feedback d-block">{{ form.title_pt.errors }}</div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="body-quill-editor-pt" class="form-label">{{ form.body_pt.label }}</label>
+                                        <div id="body-quill-editor-pt" class="quill-editor" data-name="body_pt">
+                                            {{ form.body_pt.value|default_if_none:""|safe }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- General Information -->
+                            <h4 class="mb-4">Información General</h4>
+
+                            <div class="row">
+                                {% for field in form %}
+                                    {% if field.name not in 'title_es body_es title_en body_en title_pt body_pt' %}
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                {% if field.field.widget.input_type != 'hidden' %}
+                                                    <label for="{{ field.id_for_label }}" class="form-label">
+                                                        {{ field.label }}
+                                                    </label>
+                                                {% endif %}
+
+                                                {% if field.name == 'img_featured' and object.img_featured %}
+                                                    <div class="mb-3">
+                                                        <div class="img-preview-container">
+                                                            <img src="{{ object.img_featured.url }}"
+                                                                 alt="{{ object.title }}"
+                                                                 class="img-thumbnail"
+                                                                 style="max-height: 200px;">
+                                                            <span class="remove-image" title="Eliminar imagen actual">
+                                                                <i class="ai-x"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+
+                                                {{ field }}
+
+                                                {% if field.errors %}
+                                                    <div class="invalid-feedback d-block">{{ field.errors }}</div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- Campo de tags del formulario separado -->
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="id_tags" class="form-label">
+                                            Etiquetas
+                                        </label>
+                                        {{ tags_form.tags }}
+                                        {% if tags_form.tags.errors %}
+                                            <div class="invalid-feedback d-block">{{ tags_form.tags.errors }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="d-flex justify-content-end gap-2 mt-5">
+                                <a href="{{ breadcrumb_item_url }}" class="btn btn-outline-secondary">
+                                    <i class="ai-x me-2"></i>Cancelar
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="ai-save me-2"></i>{{ button_text }}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Media Tab -->
+{#                    <div class="tab-pane fade" id="media-tab" role="tabpanel">#}
+{#                        <h5 class="mb-4">Gestión de Multimedia</h5>#}
+{#                        <div class="alert alert-info">#}
+{#                            <i class="ai-info-circle me-2"></i>#}
+{#                            Próximamente: Podrás gestionar imágenes adicionales y galerías para tu post.#}
+{#                        </div>#}
+{#                    </div>#}
+
+                    <!-- Comments Tab -->
+                    <div class="tab-pane fade" id="comments-tab" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Gestión de Comentarios</h5>
+                            <div>
+                                <span class="badge bg-success me-2">Publicados: <span id="active-comments-count">0</span></span>
+                                <span class="badge bg-warning">Pendientes: <span id="pending-comments-count">0</span></span>
+                            </div>
+                        </div>
+
+                        {% if comments %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Autor</th>
+                                            <th>Comentario</th>
+                                            <th>Fecha</th>
+                                            <th>Estado</th>
+                                            <th class="text-end">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="comments-tbody">
+                                        {% for comment in comments %}
+                                        <tr data-comment-id="{{ comment.id }}" class="comment-row">
+                                            <td>
+                                                <div>
+                                                    <strong>{{ comment.name }}</strong><br>
+                                                    <small class="text-muted">{{ comment.email }}</small>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="comment-body" style="max-width: 400px;">
+                                                    {{ comment.body|truncatechars:150 }}
+                                                    {% if comment.body|length > 150 %}
+                                                        <a href="#" class="view-full-comment" data-comment-id="{{ comment.id }}">Ver más</a>
+                                                    {% endif %}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <small>{{ comment.created_at|date:"d/m/Y H:i" }}</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-{% if comment.active %}success{% else %}warning{% endif %} comment-status">
+                                                    {% if comment.active %}Publicado{% else %}Pendiente{% endif %}
+                                                </span>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    {% if not comment.active %}
+                                                        <button type="button" class="btn btn-success approve-comment"
+                                                                data-comment-id="{{ comment.id }}"
+                                                                title="Aprobar">
+                                                            <i class="ai-check"></i>
+                                                        </button>
+                                                    {% else %}
+                                                        <button type="button" class="btn btn-warning reject-comment"
+                                                                data-comment-id="{{ comment.id }}"
+                                                                title="Rechazar">
+                                                            <i class="ai-x"></i>
+                                                        </button>
+                                                    {% endif %}
+                                                    <button type="button" class="btn btn-info edit-comment"
+                                                            data-comment-id="{{ comment.id }}"
+                                                            title="Editar">
+                                                        <i class="ai-edit"></i>
+                                                    </button>
+                                                    <button type="button" class="btn btn-danger delete-comment"
+                                                            data-comment-id="{{ comment.id }}"
+                                                            title="Eliminar">
+                                                        <i class="ai-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="ai-message-circle fs-1 text-muted mb-3 d-block"></i>
+                                <p class="text-muted">No hay comentarios en este post todavía.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- AI Tab -->
+                    <div class="tab-pane fade" id="ai-tab" role="tabpanel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="mb-0">Asistente de IA para Contenido</h5>
+                            <button id="generateNewPostBtn" class="btn btn-primary" data-action="#">
+                                <i class="ai-cpu me-2"></i>Generar Propuesta
+                            </button>
+                        </div>
+
+                        <div class="container">
+                            <form method="POST" id="ai-post-form">
+                                {% csrf_token %}
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="ai_prompt" class="form-label">Prompt para el Asistente</label>
+                                            <textarea class="form-control"
+                                                      id="ai_prompt"
+                                                      name="ai_prompt"
+                                                      rows="4"
+                                                      placeholder="Describe el tipo de contenido que deseas generar...">{{ form_ai.ai_prompt.value|default_if_none:'' }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label for="ai_new_post-quill-editor" class="form-label">Contenido Generado por IA</label>
+                                            <div id="ai_new_post-quill-editor" class="quill-editor" data-name="ai_new_post" style="min-height: 400px;">
+                                                {{ form_ai.ai_new_post.value|default_if_none:""|safe }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex justify-content-end gap-2 mt-4">
+                                            <button id="copy_btn" type="button" class="btn btn-outline-primary">
+                                                <i class="ai-copy me-2"></i>Copiar al Editor Principal
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comment Edit Modal -->
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCommentModalLabel">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCommentForm">
+                        <input type="hidden" id="edit-comment-id" name="comment_id">
+                        <div class="mb-3">
+                            <label for="edit-comment-name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="edit-comment-name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-comment-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="edit-comment-email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-comment-body" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="edit-comment-body" name="body" rows="5" required></textarea>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="edit-comment-active" name="active">
+                            <label class="form-check-label" for="edit-comment-active">
+                                Publicado
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCommentBtn">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Comment Modal -->
+    <div class="modal fade" id="viewCommentModal" tabindex="-1" aria-labelledby="viewCommentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewCommentModalLabel">Comentario Completo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="full-comment-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+    <!-- Datos iniciales para JavaScript -->
+    <script type="text/javascript">
+        // Pasar datos del backend a JavaScript
+        {% if tags_json %}
+            var initialPostTagsData = {{ tags_json|safe }};
+        {% else %}
+            var initialPostTagsData = [];
+        {% endif %}
+
+        // Configuración con URLs generadas por Django
+        var postUpdateConfig = {
+            postId: "{{ post_id }}",  // Asegúrate de que esté entre comillas
+            postStatus: "{{ post_status }}",  // Asegúrate de que esté entre comillas
+            generateTranslationsUrl: "{% url 'dashboard:post-generate-translations' %}",
+            generateAIContentUrl: "{% url 'dashboard:post-generate-ai-content' %}",
+            checkAITaskUrl: "{% url 'dashboard:post-check-ai-task' %}",
+            clearCacheUrl: "{% url 'dashboard:post-clear-cache'%}",
+            regenerateMetaUrl: "{% url 'dashboard:post-regenerate-meta' pk=post_id %}",
+            commentManageUrl: "/{{ current_language }}/dashboard/comment/"  // URL con prefijo de idioma
+        };
+
+        // Datos de comentarios
+        var commentsData = {{ comments|safe|default:"[]" }};
+    </script>
+    <!-- Script principal -->
+    <script src="{% static 'assets/js/front/post-update.js' %}"></script>
+
+    <!-- Script para gestión de comentarios con SweetAlert2 -->
+    <script>
+        $(document).ready(function() {
+        // Actualizar contadores de comentarios
+        function updateCommentCounts() {
+            let activeCount = 0;
+            let pendingCount = 0;
+
+            $('.comment-row').each(function() {
+                const badge = $(this).find('.comment-status');
+                if (badge.text().trim() === 'Publicado') {
+                    activeCount++;
+                } else {
+                    pendingCount++;
+                }
+            });
+
+            $('#active-comments-count').text(activeCount);
+            $('#pending-comments-count').text(pendingCount);
+        }
+
+        // Inicializar contadores
+        updateCommentCounts();
+
+        // Aprobar comentario
+        $(document).on('click', '.approve-comment', function() {
+            const commentId = $(this).data('comment-id');
+            const button = $(this);
+
+            Swal.fire({
+                title: '¿Aprobar comentario?',
+                text: 'Este comentario será visible públicamente',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, aprobar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: postUpdateConfig.commentManageUrl + commentId + '/',
+                        method: 'PUT',
+                        data: JSON.stringify({ action: 'approve' }),
+                        contentType: 'application/json',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                const row = button.closest('tr');
+                                row.find('.comment-status')
+                                    .removeClass('bg-warning')
+                                    .addClass('bg-success')
+                                    .text('Publicado');
+
+                                button.removeClass('btn-success approve-comment')
+                                    .addClass('btn-warning reject-comment')
+                                    .attr('title', 'Rechazar')
+                                    .html('<i class="ai-x"></i>');
+
+                                updateCommentCounts();
+
+                                Swal.fire({
+                                    title: '¡Aprobado!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'No se pudo aprobar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        // Rechazar comentario
+        $(document).on('click', '.reject-comment', function() {
+            const commentId = $(this).data('comment-id');
+            const button = $(this);
+
+            Swal.fire({
+                title: '¿Rechazar comentario?',
+                text: 'El comentario no será visible públicamente',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ffc107',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, rechazar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: postUpdateConfig.commentManageUrl + commentId + '/',
+                        method: 'PUT',
+                        data: JSON.stringify({ action: 'reject' }),
+                        contentType: 'application/json',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                const row = button.closest('tr');
+                                row.find('.comment-status')
+                                    .removeClass('bg-success')
+                                    .addClass('bg-warning')
+                                    .text('Pendiente');
+
+                                button.removeClass('btn-warning reject-comment')
+                                    .addClass('btn-success approve-comment')
+                                    .attr('title', 'Aprobar')
+                                    .html('<i class="ai-check"></i>');
+
+                                updateCommentCounts();
+
+                                Swal.fire({
+                                    title: 'Rechazado',
+                                    text: response.message,
+                                    icon: 'info',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'No se pudo rechazar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        // Editar comentario
+        $(document).on('click', '.edit-comment', function() {
+            const commentId = $(this).data('comment-id');
+
+            // Mostrar loading
+            Swal.fire({
+                title: 'Cargando...',
+                text: 'Obteniendo datos del comentario',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: postUpdateConfig.commentManageUrl + commentId + '/',
+                method: 'GET',
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                },
+                success: function(response) {
+                    Swal.close();
+
+                    if (response.success) {
+                        const comment = response.comment;
+                        $('#edit-comment-id').val(comment.id);
+                        $('#edit-comment-name').val(comment.name);
+                        $('#edit-comment-email').val(comment.email);
+                        $('#edit-comment-body').val(comment.body);
+                        $('#edit-comment-active').prop('checked', comment.active);
+
+                        $('#editCommentModal').modal('show');
+                    }
+                },
+                error: function(xhr) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'No se pudo cargar el comentario',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            });
+        });
+
+        // Guardar cambios del comentario
+        $('#saveCommentBtn').click(function() {
+            const commentId = $('#edit-comment-id').val();
+
+            // Validar campos requeridos
+            const name = $('#edit-comment-name').val().trim();
+            const email = $('#edit-comment-email').val().trim();
+            const body = $('#edit-comment-body').val().trim();
+
+            if (!name || !email || !body) {
+                Swal.fire({
+                    title: 'Campos requeridos',
+                    text: 'Por favor complete todos los campos',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                Swal.fire({
+                    title: 'Email inválido',
+                    text: 'Por favor ingrese un correo electrónico válido',
+                    icon: 'warning',
+                    confirmButtonText: 'Aceptar'
+                });
+                return;
+            }
+
+            // Crear FormData correctamente
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('email', email);
+            formData.append('body', body);
+            // Enviar 'on' si está marcado, cadena vacía si no
+            formData.append('active', $('#edit-comment-active').is(':checked') ? 'on' : '');
+
+            // Mostrar loading
+            Swal.fire({
+                title: 'Guardando...',
+                text: 'Actualizando el comentario',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                willOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            $.ajax({
+                url: postUpdateConfig.commentManageUrl + commentId + '/',
+                method: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRFToken': getCSRFToken()
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#editCommentModal').modal('hide');
+
+                        // Actualizar la fila del comentario
+                        const row = $(`tr[data-comment-id="${commentId}"]`);
+                        row.find('td:eq(0) strong').text(response.comment.name);
+                        row.find('td:eq(0) small').text(response.comment.email);
+
+                        // Actualizar el texto del comentario
+                        const bodyText = response.comment.body;
+                        let bodyHtml = bodyText;
+                        if (bodyText.length > 150) {
+                            bodyHtml = bodyText.substring(0, 150) + '... <a href="#" class="view-full-comment" data-comment-id="' + commentId + '">Ver más</a>';
+                        }
+                        row.find('.comment-body').html(bodyHtml);
+
+                        // Actualizar estado y botones
+                        const statusBadge = row.find('.comment-status');
+                        const actionButton = row.find('.btn-success, .btn-warning').first();
+
+                        if (response.comment.active) {
+                            statusBadge.removeClass('bg-warning').addClass('bg-success').text('Publicado');
+                            actionButton.removeClass('btn-success approve-comment')
+                                .addClass('btn-warning reject-comment')
+                                .attr('title', 'Rechazar')
+                                .html('<i class="ai-x"></i>');
+                        } else {
+                            statusBadge.removeClass('bg-success').addClass('bg-warning').text('Pendiente');
+                            actionButton.removeClass('btn-warning reject-comment')
+                                .addClass('btn-success approve-comment')
+                                .attr('title', 'Aprobar')
+                                .html('<i class="ai-check"></i>');
+                        }
+
+                        // Actualizar el objeto commentsData si existe
+                        if (typeof commentsData !== 'undefined') {
+                            const commentIndex = commentsData.findIndex(c => c.id === commentId);
+                            if (commentIndex !== -1) {
+                                commentsData[commentIndex] = {
+                                    ...commentsData[commentIndex],
+                                    name: response.comment.name,
+                                    email: response.comment.email,
+                                    body: response.comment.body,
+                                    active: response.comment.active
+                                };
+                            }
+                        }
+
+                        updateCommentCounts();
+
+                        Swal.fire({
+                            title: '¡Actualizado!',
+                            text: response.message,
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Error response:', xhr.responseJSON);
+
+                    let errorMessage = 'Error al actualizar el comentario';
+
+                    if (xhr.responseJSON) {
+                        if (xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+
+                        // Si hay errores de validación específicos
+                        if (xhr.responseJSON.errors) {
+                            const errors = JSON.parse(xhr.responseJSON.errors);
+                            const errorMessages = [];
+
+                            for (const field in errors) {
+                                if (errors[field]) {
+                                    errorMessages.push(`${field}: ${errors[field][0].message}`);
+                                }
+                            }
+
+                            if (errorMessages.length > 0) {
+                                errorMessage = errorMessages.join('<br>');
+                            }
+                        }
+                    }
+
+                    Swal.fire({
+                        title: 'Error',
+                        html: errorMessage,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            });
+        });
+
+        // Eliminar comentario
+        $(document).on('click', '.delete-comment', function() {
+            const commentId = $(this).data('comment-id');
+            const row = $(this).closest('tr');
+            const commentName = row.find('td:eq(0) strong').text();
+
+            Swal.fire({
+                title: '¿Eliminar comentario?',
+                html: `¿Estás seguro de que deseas eliminar el comentario de <strong>${commentName}</strong>?<br>Esta acción no se puede deshacer.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Mostrar loading
+                    Swal.fire({
+                        title: 'Eliminando...',
+                        text: 'Procesando la solicitud',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        willOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: postUpdateConfig.commentManageUrl + commentId + '/',
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        success: function(response) {
+                            if (response.success) {
+                                row.fadeOut(300, function() {
+                                    $(this).remove();
+                                    updateCommentCounts();
+
+                                    // Si no quedan comentarios, mostrar mensaje vacío
+                                    if ($('.comment-row').length === 0) {
+                                        $('#comments-tbody').closest('.table-responsive').replaceWith(
+                                            '<div class="text-center py-5">' +
+                                            '<i class="ai-message-circle fs-1 text-muted mb-3 d-block"></i>' +
+                                            '<p class="text-muted">No hay comentarios en este post todavía.</p>' +
+                                            '</div>'
+                                        );
+                                    }
+                                });
+
+                                Swal.fire({
+                                    title: '¡Eliminado!',
+                                    text: response.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                    showConfirmButton: false
+                                });
+                            }
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'No se pudo eliminar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    });
+                }
+            });
+        });
+
+        // Ver comentario completo
+        $(document).on('click', '.view-full-comment', function(e) {
+            e.preventDefault();
+            const commentId = $(this).data('comment-id');
+
+            if (typeof commentsData !== 'undefined') {
+                const comment = commentsData.find(c => c.id === commentId);
+
+                if (comment) {
+                    const createdAt = new Date(comment.created_at);
+                    const formattedDate = createdAt.toLocaleDateString('es-ES', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+
+                    $('#full-comment-content').html(
+                        '<div class="mb-3"><strong>De:</strong> ' + comment.name + ' (' + comment.email + ')</div>' +
+                        '<div class="mb-3"><strong>Fecha:</strong> ' + formattedDate + '</div>' +
+                        '<div><strong>Comentario:</strong><br>' + comment.body.replace(/\n/g, '<br>') + '</div>'
+                    );
+                    $('#viewCommentModal').modal('show');
+                }
+            }
+        });
+    }); // Cierre del $(document).ready()
+    </script>
+{% endblock %}
+
+

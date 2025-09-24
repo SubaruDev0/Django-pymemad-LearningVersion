@@ -1,0 +1,563 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Quiénes Somos - PymeMad Nacional" %}{% endblock %}
+{% block description %}{% trans "Conoce a PymeMad Nacional, la asociación gremial que representa a más de 100 PyMEs madereras en 4 regiones de Chile, promoviendo el desarrollo sostenible del sector forestal." %}{% endblock %}
+
+{% block content %}
+<!-- Hero con imagen de fondo -->
+<section id="quienes-somos" class="position-relative bg-dark py-5">
+    <!-- Imagen de fondo con jarallax -->
+    <div class="jarallax position-absolute top-0 start-0 w-100 h-100" data-jarallax data-speed="0.4">
+        <div class="jarallax-img" style="background-image: url({% static 'assets/img/about/about.webp' %});"></div>
+    </div>
+
+    <!-- Overlay para mejorar legibilidad -->
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.6); z-index: 1;"></div>
+
+    <!-- Contenido -->
+    <div class="container position-relative z-2 py-5" data-bs-theme="dark">
+        <div class="row py-5">
+            <div class="col-lg-10 col-xl-9">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb">
+                    <ol class="pt-lg-3 pb-lg-4 pb-2 breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{% trans "Quiénes Somos" %}</li>
+                    </ol>
+                </nav>
+
+                <h1 class="display-2 text-white pb-2 pb-sm-3">{% trans "Somos la voz del sector PyME maderero en Chile" %}</h1>
+                <ul class="list-unstyled d-flex flex-wrap mb-0">
+                    <li class="d-flex text-white py-1 me-4">
+                        <i class="ai-check-alt text-primary lead me-2"></i>
+                        {% trans "Más de 100 empresas asociadas" %}
+                    </li>
+                    <li class="d-flex text-white py-1 me-4">
+                        <i class="ai-check-alt text-primary lead me-2"></i>
+                        {% trans "Presencia en 4 regiones" %}
+                    </li>
+                    <li class="d-flex text-white py-1">
+                        <i class="ai-check-alt text-primary lead me-2"></i>
+                        {% trans "15+ años de trayectoria" %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quiénes Somos sin imagen destacada -->
+<section id="nuestra-historia" class="container py-5">
+    <div class="row pt-2 pt-sm-3 pt-md-4 pt-lg-5">
+        <div class="col-md-6 col-lg-5">
+            <div class="fs-sm text-uppercase mb-3">{% trans "Nuestra Historia" %}</div>
+            <h2 class="display-6">{% trans "Representamos y fortalecemos a las PyMEs madereras desde 2009" %}</h2>
+        </div>
+        <div class="col-md-6 col-xl-5 offset-lg-1 offset-xl-2 pt-1 pt-sm-2 pt-md-5">
+            <p class="fs-xl">{% trans "PymeMad Nacional A.G. es la asociación gremial que representa a más de 100 pequeñas y medianas empresas del sector forestal en Chile, con presencia activa en las regiones del Maule, Biobío, La Araucanía y Los Ríos." %}</p>
+            <p class="fs-xl">{% trans "Nacimos con el propósito de proteger y poner en valor el ecosistema de la PyME maderera, actuando como la voz unificada del sector ante autoridades gubernamentales y grandes empresas de la industria." %}</p>
+            <p class="fs-xl mb-0">{% trans "Promovemos el desarrollo sostenible, la innovación tecnológica y las mejores prácticas comerciales, generando oportunidades concretas de crecimiento para nuestros asociados mientras cuidamos el futuro de nuestros bosques." %}</p>
+        </div>
+    </div>
+</section>
+
+<!-- Misión y Visión -->
+<section id="mision-vision" class="pt-5 mt-md-2 mt-xl-4 mt-xxl-5">
+    <div class="container pt-2 pt-sm-4 pt-lg-5 mt-xxl-2">
+        <div class="row g-4">
+            <!-- Misión -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-secondary rounded-5 h-100">
+                    <div class="card-body p-lg-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-target text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Nuestra Misión" %}</h3>
+                        </div>
+                        <p class="fs-lg mb-0">{% trans "Ser la voz representativa del sector maderero en las regiones de Biobío, Ñuble, Maule, La Araucanía y Los Ríos, promoviendo el desarrollo sostenible y el uso adecuado de los recursos forestales, protegiendo el medio ambiente y contribuyendo al crecimiento económico de las comunidades locales." %}</p>
+                        <p class="fs-lg mt-3 mb-0 text-primary fw-semibold">{% trans "Somos el pilar de un sector unido y en constante evolución, donde las pequeñas y medianas empresas juegan un rol fundamental en la construcción del futuro de Chile." %}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visión -->
+            <div class="col-lg-6">
+                <div class="card border-0 bg-primary bg-opacity-10 rounded-5 h-100">
+                    <div class="card-body p-lg-5">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                <i class="ai-emoji-happy text-primary fs-3"></i>
+                            </div>
+                            <h3 class="h2 mb-0">{% trans "Nuestra Visión" %}</h3>
+                        </div>
+                        <p class="fs-lg mb-0">{% trans "Desarrollar un sector pyme maderero fortalecido y unido en todas las regiones donde operamos, que trabaje de manera colaborativa, extendiendo su influencia tanto en el mercado nacional como internacional." %}</p>
+                        <p class="fs-lg mt-3 mb-0">{% trans "Al mismo tiempo, educar y sensibilizar a la sociedad sobre la importancia de la industria forestal, sus aportes a la economía y su impacto positivo en el entorno social y ecológico." %}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Valores -->
+<section id="valores" class="container pt-5 mt-2 mt-xl-4 mt-xxl-5">
+    <div class="text-center mb-5">
+        <div class="fs-sm text-uppercase mb-3">{% trans "Nuestros Principios" %}</div>
+        <h2 class="display-6">{% trans "Valores que nos guían" %}</h2>
+    </div>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+        <!-- Colaboración -->
+        <div class="col">
+            <div class="text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-flex mb-3">
+                    <i class="ai-user-group text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h4 class="h5 mb-2">{% trans "Colaboración" %}</h4>
+                <p class="fs-sm mb-0">{% trans "Fomentamos el trabajo conjunto entre las pymes, creando redes de apoyo y desarrollo." %}</p>
+            </div>
+        </div>
+
+        <!-- Sostenibilidad -->
+        <div class="col">
+            <div class="text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-flex mb-3">
+                    <i class="ai-refresh text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h4 class="h5 mb-2">{% trans "Sostenibilidad" %}</h4>
+                <p class="fs-sm mb-0">{% trans "Promovemos un desarrollo forestal responsable, que respete el medio ambiente y las comunidades." %}</p>
+            </div>
+        </div>
+
+        <!-- Innovación -->
+        <div class="col">
+            <div class="text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-flex mb-3">
+                    <i class="ai-bulb text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h4 class="h5 mb-2">{% trans "Innovación" %}</h4>
+                <p class="fs-sm mb-0">{% trans "Buscamos soluciones creativas y tecnológicas para mejorar la competitividad del sector." %}</p>
+            </div>
+        </div>
+
+        <!-- Compromiso Social -->
+        <div class="col">
+            <div class="text-center">
+                <div class="bg-primary bg-opacity-10 rounded-circle p-4 d-inline-flex mb-3">
+                    <i class="ai-heart text-primary" style="font-size: 2.5rem;"></i>
+                </div>
+                <h4 class="h5 mb-2">{% trans "Compromiso Social" %}</h4>
+                <p class="fs-sm mb-0">{% trans "Impulsamos el bienestar de las familias y comunidades que dependen de la industria forestal." %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Objetivos Estratégicos -->
+<section id="objetivos" class="bg-secondary py-5 mt-2 mt-xl-4 mt-xxl-5">
+    <div class="container pt-3 pt-sm-4 pt-lg-5 mt-xl-2 mt-xxl-3">
+        <div class="fs-sm text-uppercase mb-3">{% trans "Plan Estratégico" %}</div>
+        <h2 class="display-6 pb-3 mb-lg-4">{% trans "Objetivos que nos mueven" %}</h2>
+
+        <div class="swiper" data-swiper-options='{
+            "spaceBetween": 24,
+            "pagination": {
+                "el": ".swiper-pagination",
+                "clickable": true
+            },
+            "breakpoints": {
+                "576": { "slidesPerView": 2 },
+                "992": { "slidesPerView": 3 }
+            }
+        }'>
+            <div class="swiper-wrapper">
+                <!-- Objetivo 1 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">1</span>
+                            </div>
+                            <h3 class="h4">{% trans "Incorporación Total" %}</h3>
+                            <p class="mb-0">{% trans "Asegurar que todas las empresas madereras de nuestras regiones formen parte de la asociación, fortaleciendo la representación gremial." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 2 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">2</span>
+                            </div>
+                            <h3 class="h4">{% trans "Fortalecimiento Empresarial" %}</h3>
+                            <p class="mb-0">{% trans "Promover la estabilidad y desarrollo continuo de las pymes asociadas, brindando apoyo en capacitación y recursos." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 3 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">3</span>
+                            </div>
+                            <h3 class="h4">{% trans "Representación Efectiva" %}</h3>
+                            <p class="mb-0">{% trans "Ser la voz de las pymes ante entidades públicas y privadas, gestionando políticas favorables para el sector." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 4 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">4</span>
+                            </div>
+                            <h3 class="h4">{% trans "Oportunidades de Negocio" %}</h3>
+                            <p class="mb-0">{% trans "Identificar y promover oportunidades comerciales a nivel nacional e internacional para nuestros asociados." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 5 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">5</span>
+                            </div>
+                            <h3 class="h4">{% trans "Colaboración Sectorial" %}</h3>
+                            <p class="mb-0">{% trans "Establecer alianzas estratégicas dentro del sector maderero para potenciar el crecimiento colectivo." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 6 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">6</span>
+                            </div>
+                            <h3 class="h4">{% trans "Impacto Social" %}</h3>
+                            <p class="mb-0">{% trans "Asegurar que el desarrollo sea socialmente responsable, generando empleo local y bienestar comunitario." %}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Objetivo 7 -->
+                <div class="swiper-slide h-auto">
+                    <div class="card border-0 bg-white rounded-5 h-100">
+                        <div class="card-body p-4">
+                            <div class="bg-primary text-white rounded-circle p-2 d-inline-flex mb-3">
+                                <span class="fs-4 fw-bold px-2">7</span>
+                            </div>
+                            <h3 class="h4">{% trans "Consolidación a Largo Plazo" %}</h3>
+                            <p class="mb-0">{% trans "Velar por la sostenibilidad económica, ecológica y social del sector forestal pyme a largo plazo." %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="swiper-pagination position-relative bottom-0 mt-2 pt-4 d-lg-none"></div>
+        </div>
+    </div>
+</section>
+
+<!-- Cómo trabajamos (Estrategias) -->
+<section id="estrategias" class="container pt-5 mt-1 mt-sm-2 mt-xl-4 mt-xxl-5">
+    <div class="row align-items-center pt-2 pt-sm-3 pt-md-4 pt-lg-5 mt-xl-2 mt-xxl-3">
+        <div class="col-md-6 col-xl-5 pb-3 pb-md-0 mb-4 mb-md-0">
+            <div class="ratio ratio-1x1 d-flex align-items-center position-relative rounded-circle overflow-hidden bg-size-cover mx-auto" style="max-width: 530px; background-image: url({% static 'assets/img/about/about01.webp' %});">
+                <div class="bg-black position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                <div class="position-relative z-2 p-4" data-bs-theme="dark">
+                    <div class="text-center mx-auto" style="max-width: 275px;">
+                        <span class="d-block text-body fs-sm text-uppercase mb-3">{% trans "Nuestro Método" %}</span>
+                        <h2 class="display-6 mb-0">{% trans "Estrategias para el éxito" %}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-xl-5 offset-xl-1">
+            <div class="ps-md-4 ps-xl-0">
+                <div class="steps steps-hoverable">
+                    <div class="step py-3 py-xl-4">
+                        <div class="step-number">
+                            <div class="step-number-inner">01</div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="h5 pb-1 mb-2">{% trans "Fortalecimiento Institucional" %}</h3>
+                            <p class="mb-0">{% trans "Campañas de visibilidad y participación en ferias nacionales e internacionales, destacando productos forestales sostenibles." %}</p>
+                        </div>
+                    </div>
+                    <div class="step py-3 py-xl-4">
+                        <div class="step-number">
+                            <div class="step-number-inner">02</div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="h5 pb-1 mb-2">{% trans "Capacitación y Asesoría" %}</h3>
+                            <p class="mb-0">{% trans "Programas continuos en bioenergía, innovación y comercialización internacional con apoyo técnico especializado." %}</p>
+                        </div>
+                    </div>
+                    <div class="step py-3 py-xl-4">
+                        <div class="step-number">
+                            <div class="step-number-inner">03</div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="h5 pb-1 mb-2">{% trans "Incidencia Política" %}</h3>
+                            <p class="mb-0">{% trans "Participación activa en mesas de trabajo gubernamentales para crear políticas favorables al sector PyME forestal." %}</p>
+                        </div>
+                    </div>
+                    <div class="step py-3 py-xl-4">
+                        <div class="step-number">
+                            <div class="step-number-inner">04</div>
+                        </div>
+                        <div class="step-body">
+                            <h3 class="h5 pb-1 mb-2">{% trans "Negocios Asociativos" %}</h3>
+                            <p class="mb-0">{% trans "Fomento de consorcios entre pymes para acceder a contratos mayores y proyectos colaborativos." %}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Directorio -->
+<section id="directorio" class="py-5 mt-2 mt-xl-4 mt-xxl-5">
+    <div class="container pt-3 pt-sm-4 pt-lg-5 mt-xl-2 mt-xxl-3">
+        <div class="fs-sm text-uppercase mb-3">{% trans "Nuestro Equipo" %}</div>
+        <h2 class="display-6 pb-3 mb-lg-4">{% trans "Directorio PymeMad" %}</h2>
+
+        <!-- Tabs de navegación -->
+        <ul class="nav nav-tabs justify-content-center mb-4" role="tablist">
+            <li class="nav-item me-2">
+                <a href="#nacional" class="nav-link active" data-bs-toggle="tab" role="tab">{% trans "Nacional" %}</a>
+            </li>
+            <li class="nav-item me-2">
+                <a href="#maule" class="nav-link" data-bs-toggle="tab" role="tab">{% trans "Región del Maule" %}</a>
+            </li>
+            <li class="nav-item me-2">
+                <a href="#biobio" class="nav-link" data-bs-toggle="tab" role="tab">{% trans "Región del Biobío" %}</a>
+            </li>
+            <li class="nav-item me-2">
+                <a href="#araucania" class="nav-link" data-bs-toggle="tab" role="tab">{% trans "Región de La Araucanía" %}</a>
+            </li>
+            <li class="nav-item">
+                <a href="#losrios" class="nav-link" data-bs-toggle="tab" role="tab">{% trans "Región de Los Ríos" %}</a>
+            </li>
+        </ul>
+
+        <!-- Tab content -->
+        <div class="tab-content">
+            <!-- Directorio Nacional -->
+            <div class="tab-pane fade show active" id="nacional" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Presidente Nacional -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Michel Esquerré">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Michel Esquerré Dal Borgo</h3>
+                                    <p class="text-body mb-3">{% trans "Presidente Nacional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Vicepresidente Nacional -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Vicepresidente">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Juan Pérez González</h3>
+                                    <p class="text-body mb-3">{% trans "Vicepresidente Nacional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Secretario Nacional -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Secretario">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">María Silva Rojas</h3>
+                                    <p class="text-body mb-3">{% trans "Secretaria General" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tesorero Nacional -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Tesorero">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Carlos Muñoz Díaz</h3>
+                                    <p class="text-body mb-3">{% trans "Tesorero Nacional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directorio Región del Maule -->
+            <div class="tab-pane fade" id="maule" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Presidente Regional Maule -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Presidente Maule">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Pedro Martínez Silva</h3>
+                                    <p class="text-body mb-3">{% trans "Presidente Regional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Más miembros del Maule... -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Secretario Maule">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Ana González Pérez</h3>
+                                    <p class="text-body mb-3">{% trans "Secretaria Regional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Directorio Región del Biobío -->
+            <div class="tab-pane fade" id="biobio" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Presidente Regional Biobío -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Presidente Biobío">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Roberto Flores Soto</h3>
+                                    <p class="text-body mb-3">{% trans "Presidente Regional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Más miembros del Biobío... -->
+                </div>
+            </div>
+
+            <!-- Directorio Región de La Araucanía -->
+            <div class="tab-pane fade" id="araucania" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Presidente Regional Araucanía -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Presidente Araucanía">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Patricia Vargas Núñez</h3>
+                                    <p class="text-body mb-3">{% trans "Presidenta Regional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Más miembros de La Araucanía... -->
+                </div>
+            </div>
+
+            <!-- Directorio Región de Los Ríos -->
+            <div class="tab-pane fade" id="losrios" role="tabpanel">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Presidente Regional Los Ríos -->
+                    <div class="col">
+                        <div class="card card-hover border-0 rounded-5 overflow-hidden">
+                            <img src="{% static 'assets/img/about/member/member.webp' %}" alt="Presidente Los Ríos">
+                            <div class="position-absolute top-0 start-0 w-100 h-100 opacity-0">
+                                <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                                <div class="card-body d-flex flex-column justify-content-end h-100 position-relative z-2 text-center" data-bs-theme="dark">
+                                    <h3 class="h5 mb-1">Luis González Meza</h3>
+                                    <p class="text-body mb-3">{% trans "Presidente Regional" %}</p>
+                                    <div class="d-flex justify-content-center">
+                                        <a class="btn btn-icon btn-sm btn-light btn-linkedin rounded-circle mx-2" href="#" aria-label="LinkedIn">
+                                            <i class="ai-linkedin"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Más miembros de Los Ríos... -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Final -->
+{% include 'snippets/landing/cta_section.html' %}
+{% endblock %}

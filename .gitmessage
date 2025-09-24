@@ -1,0 +1,50 @@
+# <tipo>: <título del cambio (máx 50 caracteres)>
+
+# |<----   Máximo 50 caracteres   ---->|
+
+
+# Explica POR QUÉ este cambio es necesario (no solo QUÉ cambió)
+# |<----   Máximo 72 caracteres por línea   ---->|
+
+
+# Proporciona enlaces o referencias a tickets, PRs, issues, etc.
+# Refs: #123
+# Ver también: #456, #789
+
+
+# --- PLANTILLA DE COMMIT ---
+# Tipos permitidos:
+#   feat     : Nueva funcionalidad
+#   fix      : Corrección de bug
+#   docs     : Cambios en documentación
+#   style    : Formateo, punto y comas faltantes, etc (no afecta código)
+#   refactor : Refactorización del código
+#   perf     : Mejoras de rendimiento
+#   test     : Agregar tests faltantes
+#   chore    : Cambios en el proceso de build o herramientas auxiliares
+#   ci       : Cambios en configuración de CI/CD
+#   security : Correcciones de seguridad
+#   deps     : Actualización de dependencias
+#
+# Ejemplo de buen commit message:
+# --------------------------------
+# feat: agregar autenticación con Redis para sesiones
+#
+# Se implementó Redis como backend de sesiones para mejorar el
+# rendimiento y permitir escalamiento horizontal. Esto resuelve
+# el problema de pérdida de sesiones al reiniciar el servidor.
+#
+# - Configurado Redis como SESSION_ENGINE
+# - Agregado REDIS_BASE_URL a las variables de entorno
+# - Actualizado requirements.txt con redis==4.5.1
+#
+# Refs: #234
+# --------------------------------
+#
+# Recuerda:
+# - Usa verbos en imperativo: "agregar" no "agregado" ni "agrega"
+# - Primera línea: resumen conciso
+# - Segunda línea: dejar en blanco
+# - Líneas siguientes: explicación detallada del por qué
+# - Incluye lista de cambios principales si son varios
+# - Referencia issues o tickets relacionados

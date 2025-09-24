@@ -1,0 +1,48 @@
+<!-- snippets/news/last-news.html -->
+{% load static i18n blog_extras %}
+
+<div class="row">
+    {% for post in latest_posts %}
+        <div class="col-md-4 mb-4">
+            <article class="card h-100 border-0 shadow-sm">
+                {% get_post_image_url post as post_image %}
+                {% if post_image %}
+                    <img class="card-img-top" src="{{ post_image }}" alt="{{ post.title }}">
+                {% else %}
+                    <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="ai-file-text fs-1 text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    {% if post.category %}
+                        <span class="badge bg-primary mb-2">{{ post.category.name }}</span>
+                    {% endif %}
+                    <h5 class="card-title">
+                        <a href="{% post_link_url post %}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h5>
+                    <p class="card-text text-muted">
+                        {{ post|get_excerpt:20 }}
+                    </p>
+                    <div class="d-flex align-items-center">
+                        <small class="text-muted">
+                            <i class="ai-calendar me-1"></i>
+                            {{ post.publish|date:"d M Y" }}
+                        </small>
+                        {% if post.author %}
+                            <small class="text-muted ms-auto">
+                                <i class="ai-user me-1"></i>
+                                {{ post.author.get_full_name|default:post.author.username }}
+                            </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        </div>
+    {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">{% trans "No hay noticias disponibles en este momento." %}</p>
+        </div>
+    {% endfor %}
+</div>

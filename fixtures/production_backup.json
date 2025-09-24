@@ -1,0 +1,807 @@
+[
+  {
+    "model": "landing.post",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-09-10T19:23:18.052Z",
+      "updated_at": "2025-09-10T19:25:14.170Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-06-18T23:48:00Z",
+      "img_featured": "posts/c7a99f27.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 2,
+    "fields": {
+      "created_at": "2025-09-10T19:32:52.400Z",
+      "updated_at": "2025-09-10T23:52:00.553Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-03T22:37:00Z",
+      "img_featured": "posts/7c377f9a.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 3,
+    "fields": {
+      "created_at": "2025-09-10T19:44:18.904Z",
+      "updated_at": "2025-09-10T23:41:31.200Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-09T04:03:00Z",
+      "img_featured": "posts/69f755f3.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 4,
+    "fields": {
+      "created_at": "2025-09-10T19:51:42.708Z",
+      "updated_at": "2025-09-10T23:41:30.490Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-11T23:43:00Z",
+      "img_featured": "posts/c6259f62.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 5,
+    "fields": {
+      "created_at": "2025-09-10T19:58:06.607Z",
+      "updated_at": "2025-09-10T23:44:30.033Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-14T21:00:00Z",
+      "img_featured": "posts/03b13eab.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 6,
+    "fields": {
+      "created_at": "2025-09-10T22:04:28.610Z",
+      "updated_at": "2025-09-10T23:46:36.526Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-16T01:24:00Z",
+      "img_featured": "posts/b2a83b4d.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 7,
+    "fields": {
+      "created_at": "2025-09-10T22:07:27.945Z",
+      "updated_at": "2025-09-10T23:54:27.530Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-18T22:51:00Z",
+      "img_featured": "posts/e50900e9.png",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 8,
+    "fields": {
+      "created_at": "2025-09-10T22:10:37.833Z",
+      "updated_at": "2025-09-11T10:15:57.307Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-26T00:10:00Z",
+      "img_featured": "posts/3de397bc.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 9,
+    "fields": {
+      "created_at": "2025-09-10T22:16:47.140Z",
+      "updated_at": "2025-09-11T10:28:28.818Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-31T17:27:00Z",
+      "img_featured": "posts/966cd74c.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 10,
+    "fields": {
+      "created_at": "2025-09-10T22:18:57.247Z",
+      "updated_at": "2025-09-11T10:30:29.956Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-31T18:05:00Z",
+      "img_featured": "posts/f1697dba.png",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 11,
+    "fields": {
+      "created_at": "2025-09-10T22:23:16.818Z",
+      "updated_at": "2025-09-11T10:28:09.122Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-08-20T23:49:00Z",
+      "img_featured": "posts/212bc59d.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 12,
+    "fields": {
+      "created_at": "2025-09-10T22:31:23.748Z",
+      "updated_at": "2025-09-11T12:26:17.188Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-08-30T00:19:00Z",
+      "img_featured": "posts/78c2fbdd.png",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 13,
+    "fields": {
+      "created_at": "2025-09-10T22:34:19.614Z",
+      "updated_at": "2025-09-11T10:26:21.111Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-09-02T00:56:00Z",
+      "img_featured": "posts/59fc4773.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 14,
+    "fields": {
+      "created_at": "2025-09-10T22:40:19.675Z",
+      "updated_at": "2025-09-11T10:29:34.204Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-09-02T01:04:00Z",
+      "img_featured": "posts/f200311c.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.post",
+    "pk": 15,
+    "fields": {
+      "created_at": "2025-09-10T22:47:40.315Z",
+      "updated_at": "2025-09-10T23:55:50.641Z",
+      "author": [
+        "yllorca"
+      ],
+      "publish": "2025-07-22T03:14:00Z",
+      "img_featured": "posts/3d810a56.jpg",
+      "status": "PUBLISHED",
+      "category": 1,
+      "auto_generate_meta": true,
+      "tags": []
+    }
+  },
+  {
+    "model": "landing.category",
+    "pk": 1,
+    "fields": {
+      "created_at": "2025-09-10T19:14:21.642Z",
+      "updated_at": "2025-09-10T19:14:21.642Z",
+      "name": "Nacional",
+      "slug": "nacional"
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 1,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad Nacional y CMPC fortalecen alianza en encuentro sobre innovación y oportunidades para PyMEs madereras",
+      "slug": "pymemad-nacional-y-cmpc-fortalecen-alianza-en-encuentro-sobre-innovacion-y-oportunidades-para-pymes-madereras",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>La jornada se realizó en la planta Aislacor, ubicada en la ex planta Bellavista Oveja Tomé, con foco en mercados internacionales y encadenamientos productivos.</strong></li></ol><p>Tomé, 18 de junio de 2025 - Un importante encuentro entre PymeMad Nacional A.G. y CMPC se llevó a cabo esta mañana en las instalaciones de la planta Aislacor, ubicada en lo que fuera la histórica planta Bellavista Oveja Tomé. La jornada, que se extendió de 10:00 a 13:00 horas, reunió a representantes de ambas organizaciones para abordar temas estratégicos para el desarrollo del sector PyME maderero nacional, con especial énfasis en innovación, mercados internacionales y encadenamientos productivos.</p><p><strong>Agenda de trabajo colaborativo</strong></p><p>El encuentro contempló presentaciones especializadas de ejecutivos de CMPC sobre temas clave para el sector:</p><p><strong>Ferias europeas e innovación:</strong> Se analizaron las oportunidades que representan las ferias internacionales para las PyMEs madereras industriales, compartiendo tendencias globales que pueden ser aprovechadas por los pequeños y medianos empresarios del rubro.</p><p><strong>Mercado de la madera:</strong> Se presentó un análisis del panorama actual, identificando tanto los riesgos como las oportunidades que enfrentan las PyMEs en el contexto nacional e internacional.</p><p><strong>Encadenamientos productivos</strong>: Se expusieron los avances concretos en materia de colaboración entre CMPC y las empresas asociadas a PymeMad, mostrando casos de éxito y proyecciones futuras.</p><p><strong>Recorrido por instalaciones</strong></p><p>La jornada culminó con una visita guiada por las instalaciones de la planta Aislacor, liderada por Michel Esquerré. \"Este tipo de encuentros son fundamentales para construir puentes reales entre las grandes empresas y las PyMEs del sector”, señaló Esquerré durante el recorrido.</p><p><strong>Fortaleciendo el sector maderero PyME</strong></p><p>El encuentro se enmarca en los esfuerzos de PymeMad Nacional por generar espacios de diálogo y colaboración efectiva con las grandes empresas forestales, buscando mejorar las condiciones de desarrollo para las pequeñas y medianas empresas que representan miles de empleos en comunas rurales a lo largo del país.</p><p>La actividad refuerza el compromiso de ambas organizaciones por trabajar en conjunto hacia un sector forestal más integrado, competitivo y sostenible, donde las PyMEs jueguen un rol protagónico en la cadena de valor de la madera.</p><p>&nbsp;</p>",
+      "meta_description": "Alianza estratégica entre PymeMad Nacional y CMPC para impulsar innovación y mercados internacionales en el sector maderero de PyMEs. Encuentro en planta...",
+      "master": 1
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 2,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Nacional and CMPC Strengthen Alliance in Meeting on Innovation and Opportunities for Timber SMEs",
+      "slug": "pymemad-nacional-and-cmpc-strengthen-alliance-in-meeting-on-innovation-and-opportunities-for-timber-smes",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The event took place at the Aislacor plant, located at the former Bellavista Oveja Tomé plant, focusing on international markets and productive linkages.</strong></li></ol><p>Tomé, June 18, 2025 - An important meeting between PymeMad Nacional A.G. and CMPC was held this morning at the facilities of the Aislacor plant, located at the historic former Bellavista Oveja Tomé plant. The event, which ran from 10:00 to 13:00 hours, brought together representatives from both organizations to address strategic topics for the development of the national timber SME sector, with special emphasis on innovation, international markets, and productive linkages.</p><p><strong>Collaborative Work Agenda</strong></p><p>The meeting included specialized presentations by CMPC executives on key topics for the sector:</p><p><strong>European Fairs and Innovation:</strong>Opportunities represented by international fairs for industrial timber SMEs were analyzed, sharing global trends that can be leveraged by small and medium-sized entrepreneurs in the industry.</p><p><strong>Timber Market:</strong>An analysis of the current landscape was presented, identifying both risks and opportunities faced by SMEs in the national and international context.</p><p><strong>Productive Linkages</strong>Concrete progress in collaboration between CMPC and companies associated with PymeMad was showcased, highlighting success stories and future projections.</p><p><strong>Facility Tour</strong></p><p>The event concluded with a guided tour of the Aislacor plant facilities, led by Michel Esquerré. \"These types of meetings are essential for building real bridges between large companies and SMEs in the sector,\" Esquerré noted during the tour.</p><p><strong>Strengthening the Timber SME Sector</strong></p><p>The meeting is part of PymeMad Nacional's efforts to create spaces for dialogue and effective collaboration with large forestry companies, aiming to improve development conditions for small and medium-sized enterprises that represent thousands of jobs in rural communities across the country.</p><p>The activity reinforces both organizations' commitment to working together toward a more integrated, competitive, and sustainable forestry sector, where SMEs play a leading role in the timber value chain.</p><p>&nbsp;</p>",
+      "meta_description": "Strategic alliance between PymeMad Nacional and CMPC to boost innovation and international markets for timber SMEs. Meeting at Aislacor plant, Tomé.",
+      "master": 1
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 3,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad Nacional e CMPC fortalecem aliança em encontro sobre inovação e oportunidades para PMEs madeireiras",
+      "slug": "pymemad-nacional-e-cmpc-fortalecem-alianca-em-encontro-sobre-inovacao-e-oportunidades-para-pmes-madeireiras",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>A jornada realizou-se na planta Aislacor, localizada na ex planta Bellavista Oveja Tomé, com foco em mercados internacionais e encadeamentos produtivos.</strong></li></ol><p>Tomé, 18 de junho de 2025 - Um importante encontro entre a PymeMad Nacional A.G. e a CMPC realizou-se esta manhã nas instalações da planta Aislacor, situada no que foi a histórica planta Bellavista Oveja Tomé. A jornada, que se estendeu das 10:00 às 13:00 horas, reuniu representantes de ambas organizações para abordar temas estratégicos para o desenvolvimento do setor de PME madeireiro nacional, com especial ênfase em inovação, mercados internacionais e encadeamentos produtivos.</p><p><strong>Agenda de trabalho colaborativo</strong></p><p>O encontro contemplou apresentações especializadas de executivos da CMPC sobre temas-chave para o setor:</p><p><strong>Feiras europeias e inovação:</strong>Analisaram-se as oportunidades que representam as feiras internacionais para as PMEs madeireiras industriais, compartilhando tendências globais que podem ser aproveitadas pelos pequenos e médios empresários do ramo.</p><p><strong>Mercado da madeira:</strong>Apresentou-se uma análise do panorama atual, identificando tanto os riscos como as oportunidades que as PMEs enfrentam no contexto nacional e internacional.</p><p><strong>Encadeamentos produtivos</strong>Expuseram-se os avanços concretos em matéria de colaboração entre a CMPC e as empresas associadas à PymeMad, mostrando casos de sucesso e projeções futuras.</p><p><strong>Visita às instalações</strong></p><p>A jornada culminou com uma visita guiada pelas instalações da planta Aislacor, liderada por Michel Esquerré. \"Este tipo de encontros são fundamentais para construir pontes reais entre as grandes empresas e as PMEs do setor”, assinalou Esquerré durante a visita.</p><p><strong>Fortalecendo o setor madeireiro PME</strong></p><p>O encontro enquadra-se nos esforços da PymeMad Nacional por gerar espaços de diálogo e colaboração efetiva com as grandes empresas florestais, buscando melhorar as condições de desenvolvimento para as pequenas e médias empresas que representam milhares de empregos em comunas rurais ao longo do país.</p><p>A atividade reforça o compromisso de ambas organizações por trabalhar em conjunto rumo a um setor florestal mais integrado, competitivo e sustentável, onde as PMEs desempenhem um papel protagonista na cadeia de valor da madeira.</p><p>&nbsp;</p>",
+      "meta_description": "Aliança estratégica entre PymeMad Nacional e CMPC para impulsionar inovação e mercados internacionais no setor madeireiro de PMEs. Encontro na planta...",
+      "master": 1
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 4,
+    "fields": {
+      "language_code": "es",
+      "title": "Presidente del Directorio de CMPC se reúne con PymeMad en encuentro histórico",
+      "slug": "presidente-del-directorio-de-cmpc-se-reune-con-pymemad-en-encuentro-historico",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong><em>Alta dirección de la compañía forestal recibe a representantes PyME en sus instalaciones de Los Ángeles y acuerdan profundizar la alianza estratégica para un sector más sustentable e inclusivo.</em></strong></li></ol><p><strong>Los Ángeles, 2 de julio de 2025.-</strong> PymeMad Nacional A.G. sostuvo una reunión con la plana mayor de CMPC en las instalaciones corporativas de la compañía en la ciudad de Los Ángeles, encabezada por Bernardo Larraín Matte, presidente del directorio de la empresa forestal, marcando un punto de inflexión en las relaciones entre las pequeñas y medianas empresas del sector y una de las principales compañías forestales de Chile.</p><p>El encuentro contó con la participación del presidente del directorio de CMPC, junto a altos ejecutivos de la compañía: Francisco Ruiz Tagle, gerente general; Guillermo Turner, Rafael Correa e Ignacio Lira Molina. La representación de PymeMad estuvo conformada por Michel Esquerre, presidente nacional; los presidentes regionales Sebastián Erenchun, Víctor Sandoval y Rocío Lagos; además de los directores Lorena Vargas y Hernán Muñoz.</p><p>Michel Esquerré calificó el encuentro como \"una excelente llegada del presidente del directorio a relacionarse con el mundo de las PyMEs y el diálogo necesario para tener un futuro sostenible en el sector forestal\". También, destacó que el acuerdo principal alcanzado fue \"seguir trabajando y profundizar esta relación para que en el futuro tengamos un sector forestal más sustentable, con una mirada de largo plazo en el encadenamiento productivo y el valor de las PyMEs\".</p><p>Por su parte, Lorena Vargas valoró especialmente el carácter directo del encuentro realizado en Los Ángeles: \"Me pareció súper valiosa esta reunión. Conectar las caras y realidades de las PyMEs con las personas que toman las decisiones estratégicas de las grandes empresas con las que coexistimos es súper relevante\".</p><p>La representante PyME enfatizó que la reunión demuestra que las pequeñas empresas \"son parte de la sostenibilidad del sector, parte de este ecosistema\", y que este tipo de alianzas \"abren la oportunidad de desarrollar nuevos negocios y productos que finalmente aporten tanto a la empresa como al sector\".</p><p>Vargas también destacó el compromiso mostrado por CMPC: \"Realmente me parece que el hecho de que el presidente del directorio tenga el interés de sentarse con nosotros y conocernos es una señal de que realmente quiere avanzar por un mejor sector de la mano de las PyMEs. Creo que ellos han demostrado con actos y hechos que de verdad quieren apoyar el desarrollo de las PyMEs\".</p><p>Este encuentro representa un avance significativo en la construcción de un sector forestal más inclusivo, donde las PyMEs sean reconocidas como actores estratégicos fundamentales para el desarrollo sostenible del rubro en Chile.</p>",
+      "meta_description": "Presidente de CMPC se reúne con PymeMad en Los Ángeles para fortalecer alianza estratégica entre grandes empresas y pymes del sector forestal chileno.",
+      "master": 2
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 5,
+    "fields": {
+      "language_code": "en",
+      "title": "Chairman of CMPC Board Meets with PymeMad in Historic Encounter",
+      "slug": "chairman-of-cmpc-board-meets-with-pymemad-in-historic-encounter",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong><em>Senior management of the forestry company receives SME representatives at their Los Ángeles facilities and agree to deepen the strategic alliance for a more sustainable and inclusive sector.</em></strong></li></ol><p><strong>Los Ángeles, July 2, 2025.-</strong>PymeMad Nacional A.G. held a meeting with the top leadership of CMPC at the company's corporate facilities in the city of Los Ángeles, led by Bernardo Larraín Matte, chairman of the forestry company's board, marking a turning point in relations between small and medium-sized enterprises in the sector and one of Chile's leading forestry companies.</p><p>The meeting was attended by the chairman of CMPC's board, along with senior executives of the company: Francisco Ruiz Tagle, general manager; Guillermo Turner, Rafael Correa, and Ignacio Lira Molina. The PymeMad representation consisted of Michel Esquerre, national president; regional presidents Sebastián Erenchun, Víctor Sandoval, and Rocío Lagos; as well as directors Lorena Vargas and Hernán Muñoz.</p><p>Michel Esquerré described the meeting as \"an excellent outreach by the board chairman to engage with the world of SMEs and the necessary dialogue for a sustainable future in the forestry sector.\" He also highlighted that the main agreement reached was \"to continue working and deepening this relationship so that in the future we have a more sustainable forestry sector, with a long-term vision for the productive chain and the value of SMEs.\"</p><p>For her part, Lorena Vargas particularly valued the direct nature of the meeting held in Los Ángeles: \"I found this meeting extremely valuable. Connecting the faces and realities of SMEs with the people who make strategic decisions in the large companies we coexist with is highly relevant.\"</p><p>The SME representative emphasized that the meeting demonstrates that small businesses \"are part of the sector's sustainability, part of this ecosystem,\" and that this type of alliance \"opens the opportunity to develop new businesses and products that ultimately benefit both the company and the sector.\"</p><p>Vargas also highlighted the commitment shown by CMPC: \"I truly believe that the fact that the board chairman is interested in sitting down with us and getting to know us is a sign that he genuinely wants to move forward toward a better sector hand in hand with SMEs. I think they have shown through actions and deeds that they really want to support the development of SMEs.\"</p><p>This meeting represents a significant step forward in building a more inclusive forestry sector, where SMEs are recognized as key strategic actors for the sustainable development of the industry in Chile.</p>",
+      "meta_description": "CMPC Chairman meets with SME representatives in historic encounter to deepen strategic alliance for a more sustainable Chilean forestry sector.",
+      "master": 2
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 6,
+    "fields": {
+      "language_code": "pt",
+      "title": "Presidente do Conselho de Administração da CMPC reúne-se com PymeMad em encontro histórico",
+      "slug": "presidente-do-conselho-de-administracao-da-cmpc-reune-se-com-pymemad-em-encontro-historico",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong><em>Alta direção da empresa florestal recebe representantes de PME nas suas instalações em Los Ángeles e acordam aprofundar a aliança estratégica para um setor mais sustentável e inclusivo.</em></strong></li></ol><p><strong>Los Ángeles, 2 de julho de 2025.-</strong>A PymeMad Nacional A.G. realizou uma reunião com a alta direção da CMPC nas instalações corporativas da empresa na cidade de Los Ángeles, liderada por Bernardo Larraín Matte, presidente do conselho de administração da empresa florestal, marcando um ponto de virada nas relações entre as pequenas e médias empresas do setor e uma das principais empresas florestais do Chile.</p><p>O encontro contou com a participação do presidente do conselho de administração da CMPC, juntamente com altos executivos da empresa: Francisco Ruiz Tagle, gerente geral; Guillermo Turner, Rafael Correa e Ignacio Lira Molina. A representação da PymeMad foi composta por Michel Esquerre, presidente nacional; os presidentes regionais Sebastián Erenchun, Víctor Sandoval e Rocío Lagos; além dos diretores Lorena Vargas e Hernán Muñoz.</p><p>Michel Esquerré classificou o encontro como \"uma excelente iniciativa do presidente do conselho de administração para relacionar-se com o mundo das PMEs e o diálogo necessário para termos um futuro sustentável no setor florestal\". Também destacou que o principal acordo alcançado foi \"continuar trabalhando e aprofundar esta relação para que no futuro tenhamos um setor florestal mais sustentável, com uma visão de longo prazo no encadeamento produtivo e no valor das PMEs\".</p><p>Por sua vez, Lorena Vargas valorizou especialmente o carácter direto do encontro realizado em Los Ángeles: \"Achei esta reunião super valiosa. Conectar as caras e realidades das PMEs com as pessoas que tomam as decisões estratégicas das grandes empresas com as quais coexistimos é super relevante\".</p><p>A representante das PMEs enfatizou que a reunião demonstra que as pequenas empresas \"são parte da sustentabilidade do setor, parte deste ecossistema\", e que este tipo de alianças \"abrem a oportunidade de desenvolver novos negócios e produtos que finalmente contribuam tanto para a empresa como para o setor\".</p><p>Vargas também destacou o compromisso demonstrado pela CMPC: \"Realmente acho que o facto de o presidente do conselho de administração ter o interesse de sentar-se connosco e conhecer-nos é um sinal de que ele realmente quer avançar para um setor melhor, de mãos dadas com as PMEs. Creio que eles demonstraram com atos e factos que realmente querem apoiar o desenvolvimento das PMEs\".</p><p>Este encontro representa um avanço significativo na construção de um setor florestal mais inclusivo, onde as PMEs sejam reconhecidas como atores estratégicos fundamentais para o desenvolvimento sustentável do ramo no Chile.</p>",
+      "meta_description": "Presidente do Conselho da CMPC reúne-se com PME em Los Ángeles para fortalecer aliança estratégica no setor florestal chileno mais sustentável e inclusivo.",
+      "master": 2
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 7,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad Nacional participa en conversatorio sobre el futuro forestal de Chile",
+      "slug": "pymemad-nacional-participa-en-conversatorio-sobre-el-futuro-forestal-de-chile",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>El presidente del gremio, Michel Esquerré Dal Borgo, expuso sobre innovación y encadenamiento productivo en el seminario \"Chile, País Forestal: Situación actual y desarrollo del próximo decenio\", organizado por Empresas K&amp;P en Concepción.</li></ol><p>PymeMad Nacional A.G. tuvo una destacada participación en el conversatorio \"Chile, País Forestal: Situación actual y desarrollo del próximo decenio 2025-2035\", realizado el viernes 4 de julio en el centro de eventos Mitrinco de Concepción, donde su presidente Michel Esquerre Dal Borgo presentó la iniciativa \"Aislacor, Soluciones del Futuro\".</p><p>El evento, organizado por Empresas K&amp;P en conmemoración de sus 30 años, reunió a los principales actores del sector forestal chileno, incluyendo representantes del mundo público y privado, gremios, asociaciones y empresas tecnológicas, quienes analizaron el escenario actual y las proyecciones para la próxima década.</p><p>Esquerré participó en el panel \"Mirada de los Gremios y Asociaciones\" junto a destacados dirigentes como José Carter Reyes (Aprobosque), Simón Berti Sanhueza (Colegio de Ingenieros Forestales), Ramón Figueroa Lizana (CORMA) y René Muñoz Klock (Acoforag). En su presentación, el dirigente abordó la problemática actual del sector de las pequeñas y medianas empresas forestales y expuso sobre procesos de innovación desde las pymes, presentando el proyecto Aislacor como una solución innovadora para el futuro del sector.</p><p>El seminario también contó con la participación de autoridades como el Gobernador Regional del Biobío, Sergio Giacamán García; el presidente de CORMA, Rodrigo O'Ryan Blaitt; y el Director Ejecutivo (s) de CONAF, Rodrigo Illesca Rojas, quienes abordaron temas de institucionalidad y desarrollo forestal.</p><p>La jornada incluyó además un panel sobre nuevas tecnologías con representantes de las principales empresas proveedoras de maquinaria forestal como Salfa, Latin Equipment Chile, Finning, Ponsse, Komatsu, CBI Chile y Pewag, evidenciando el interés del sector por modernizar sus procesos productivos.</p><p>La participación de PymeMad en este importante encuentro sectorial refuerza el compromiso del gremio con el desarrollo sustentable del sector forestal chileno y su rol como vocero de las pequeñas y medianas empresas madereras del país, posicionándose como un actor relevante en la discusión sobre el futuro de la industria forestal nacional.</p>",
+      "meta_description": "PymeMad Nacional participa en conversatorio sobre futuro forestal chileno. Michel Esquerré expuso sobre innovación y encadenamiento productivo en evento de...",
+      "master": 3
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 8,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Nacional Participates in Panel Discussion on the Future of Forestry in Chile",
+      "slug": "pymemad-nacional-participates-in-panel-discussion-on-the-future-of-forestry-in-chile",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>The guild's president, Michel Esquerré Dal Borgo, spoke about innovation and productive integration at the seminar \"Chile, a Forestry Nation: Current Situation and Development for the Next Decade,\" organized by Empresas K&P in Concepción.</li></ol><p>PymeMad Nacional A.G. had a notable participation in the panel discussion \"Chile, a Forestry Nation: Current Situation and Development for the Next Decade 2025-2035,\" held on Friday, July 4, at the Mitrinco Event Center in Concepción, where its president Michel Esquerre Dal Borgo presented the initiative \"Aislacor, Future Solutions.\"</p><p>The event, organized by Empresas K&P to commemorate their 30th anniversary, brought together the main players in the Chilean forestry sector, including representatives from the public and private spheres, guilds, associations, and technology companies, who analyzed the current scenario and projections for the next decade.</p><p>Esquerré participated in the panel \"Perspective of Guilds and Associations\" alongside distinguished leaders such as José Carter Reyes (Aprobosque), Simón Berti Sanhueza (College of Forest Engineers), Ramón Figueroa Lizana (CORMA), and René Muñoz Klock (Acoforag). In his presentation, the leader addressed the current challenges of the small and medium-sized forestry enterprises sector and discussed innovation processes from SMEs, presenting the Aislacor project as an innovative solution for the future of the sector.</p><p>The seminar also featured the participation of authorities such as the Regional Governor of Biobío, Sergio Giacamán García; the president of CORMA, Rodrigo O'Ryan Blaitt; and the Acting Executive Director of CONAF, Rodrigo Illesca Rojas, who addressed issues of institutional framework and forestry development.</p><p>The event also included a panel on new technologies with representatives from leading forestry machinery suppliers such as Salfa, Latin Equipment Chile, Finning, Ponsse, Komatsu, CBI Chile, and Pewag, highlighting the sector's interest in modernizing its production processes.</p><p>PymeMad's participation in this important sectoral meeting reinforces the guild's commitment to the sustainable development of the Chilean forestry sector and its role as a spokesperson for the country's small and medium-sized timber enterprises, positioning itself as a relevant actor in the discussion about the future of the national forestry industry.</p>",
+      "meta_description": "PymeMad Nacional joins discussion on Chile's forestry future. President Michel Esquerré presented on innovation and productive integration at Empresas K&P's...",
+      "master": 3
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 9,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad Nacional participa em conversa sobre o futuro florestal do Chile",
+      "slug": "pymemad-nacional-participa-em-conversa-sobre-o-futuro-florestal-do-chile",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span>O presidente do sindicato, Michel Esquerré Dal Borgo, falou sobre inovação e encadeamento produtivo no seminário \"Chile, País Florestal: Situação atual e desenvolvimento da próxima década\", organizado pela Empresas K&P em Concepción.</li></ol><p>A PymeMad Nacional A.G. teve uma participação destacada no conversatório \"Chile, País Florestal: Situação atual e desenvolvimento da próxima década 2025-2035\", realizado na sexta-feira, 4 de julho, no centro de eventos Mitrinco de Concepción, onde seu presidente Michel Esquerre Dal Borgo apresentou a iniciativa \"Aislacor, Soluções do Futuro\".</p><p>O evento, organizado pela Empresas K&P em comemoração aos seus 30 anos, reuniu os principais atores do setor florestal chileno, incluindo representantes dos setores público e privado, sindicatos, associações e empresas tecnológicas, que analisaram o cenário atual e as projeções para a próxima década.</p><p>Esquerré participou do painel \"Olhar dos Sindicatos e Associações\" junto a destacados líderes como José Carter Reyes (Aprobosque), Simón Berti Sanhueza (Colegio de Engenheiros Florestais), Ramón Figueroa Lizana (CORMA) e René Muñoz Klock (Acoforag). Em sua apresentação, o dirigente abordou a problemática atual do setor das pequenas e médias empresas florestais e expôs sobre processos de inovação a partir das PMEs, apresentando o projeto Aislacor como uma solução inovadora para o futuro do setor.</p><p>O seminário também contou com a participação de autoridades como o Governador Regional do Biobío, Sergio Giacamán García; o presidente da CORMA, Rodrigo O'Ryan Blaitt; e o Diretor Executivo (s) da CONAF, Rodrigo Illesca Rojas, que abordaram temas de institucionalidade e desenvolvimento florestal.</p><p>A jornada incluiu ainda um painel sobre novas tecnologias com representantes das principais empresas fornecedoras de maquinaria florestal como Salfa, Latin Equipment Chile, Finning, Ponsse, Komatsu, CBI Chile e Pewag, evidenciando o interesse do setor em modernizar seus processos produtivos.</p><p>A participação da PymeMad neste importante encontro setorial reforça o compromisso do sindicato com o desenvolvimento sustentável do setor florestal chileno e seu papel como porta-voz das pequenas e médias empresas madeireiras do país, posicionando-se como um ator relevante na discussão sobre o futuro da indústria florestal nacional.</p>",
+      "meta_description": "PymeMad Nacional participa em conversa sobre futuro florestal do Chile. Michel Esquerré abordou inovação e encadeamento produtivo em evento da Empresas K&P...",
+      "master": 3
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 10,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad participa en desayuno sobre proyecciones económicas organizado por CMPC",
+      "slug": "pymemad-participa-en-desayuno-sobre-proyecciones-economicas-organizado-por-cmpc",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Representantes de PymeMad participaron en el encuentro donde el ex presidente del Banco Central Vittorio Corbo y el analista Jorge Navarrete Poblete expusieron sobre los desafíos económicos del país.</strong></li></ol><p>PymeMad Nacional A.G. participó en el desayuno \"Proyecciones Económicas\" organizado por CMPC, realizado el pasado jueves 10 de julio en el Hotel Four Points by Sheraton de Los Ángeles. Por el gremio asistieron el presidente Michel Esquerré Dal Borgo, junto a los dirigentes Hernán Muñoz, Víctor Sandoval y Lorena Vargas.</p><p>El evento, liderado por Francisco Ruiz-Tagle, Gerente General de CMPC, contó con las exposiciones del reconocido economista y ex Presidente del Banco Central, Vittorio Corbo, junto al abogado y analista Jorge Navarrete Poblete, quienes analizaron los principales desafíos y perspectivas para la economía nacional e internacional.</p><p>Durante el encuentro, se abordaron temas cruciales para el sector forestal, incluyendo la visión económica internacional y las contingencias locales que afectan a la industria. Los representantes de PymeMad destacaron la importancia de estos espacios de diálogo, donde se discutió la visión económica del sector, con especial énfasis en los análisis sobre la realidad política actual y la incertidumbre que esta genera.</p><p>El presidente de PymeMad enfatizó el contraste entre \"la contingencia política, que es una mirada de corto plazo, contrarrestado con la necesidad del largo plazo en las miradas sectoriales para el desarrollo continuo\" del sector forestal. Esta perspectiva resulta fundamental para las pequeñas y medianas empresas madereras que requieren estabilidad y proyección para sus inversiones.</p><p>La participación de PymeMad en este tipo de instancias refuerza el compromiso del gremio con mantenerse informado sobre las tendencias económicas que impactan al sector, facilitando así la toma de decisiones estratégicas de sus asociados. El encuentro también permitió fortalecer los vínculos entre PymeMad y CMPC, una relación clave para el desarrollo de las pymes madereras del país.</p>",
+      "meta_description": "",
+      "master": 4
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 11,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad participates in breakfast meeting on economic projections organized by CMPC",
+      "slug": "pymemad-participates-in-breakfast-meeting-on-economic-projections-organized-by-cmpc",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Representatives of PymeMad participated in the meeting where former Central Bank President Vittorio Corbo and analyst Jorge Navarrete Poblete presented on the country's economic challenges.</strong></li></ol><p>PymeMad Nacional A.G. participated in the \"Economic Projections\" breakfast organized by CMPC, held last Thursday, July 10th at the Hotel Four Points by Sheraton in Los Ángeles. The association was represented by President Michel Esquerré Dal Borgo, along with directors Hernán Muñoz, Víctor Sandoval, and Lorena Vargas.</p><p>The event, led by Francisco Ruiz-Tagle, General Manager of CMPC, featured presentations by renowned economist and former Central Bank President Vittorio Corbo, along with lawyer and analyst Jorge Navarrete Poblete, who analyzed the main challenges and perspectives for the national and international economy.</p><p>During the meeting, crucial topics for the forestry sector were addressed, including the international economic outlook and local contingencies affecting the industry. PymeMad representatives highlighted the importance of these dialogue spaces, where the economic vision of the sector was discussed, with special emphasis on analyses of the current political reality and the uncertainty it generates.</p><p>The president of PymeMad emphasized the contrast between \"political contingency, which is a short-term view, countered by the need for long-term perspectives in sectoral views for continuous development\" of the forestry sector. This perspective is fundamental for small and medium-sized timber enterprises that require stability and projection for their investments.</p><p>PymeMad's participation in these types of events reinforces the association's commitment to staying informed about economic trends impacting the sector, thus facilitating strategic decision-making for its members. The meeting also helped strengthen ties between PymeMad and CMPC, a key relationship for the development of the country's timber SMEs.</p>",
+      "meta_description": "",
+      "master": 4
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 12,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad participa em café da manhã sobre projeções econômicas organizado pela CMPC",
+      "slug": "pymemad-participa-em-cafe-da-manha-sobre-projecoes-economicas-organizado-pela-cmpc",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Representantes da PymeMad participaram do encontro onde o ex-presidente do Banco Central Vittorio Corbo e o analista Jorge Navarrete Poblete apresentaram sobre os desafios econômicos do país.</strong></li></ol><p>A PymeMad Nacional A.G. participou do café da manhã \"Projeções Econômicas\" organizado pela CMPC, realizado na última quinta-feira, 10 de julho, no Hotel Four Points by Sheraton de Los Ángeles. Pela associação, estiveram presentes o presidente Michel Esquerré Dal Borgo, junto aos dirigentes Hernán Muñoz, Víctor Sandoval e Lorena Vargas.</p><p>O evento, liderado por Francisco Ruiz-Tagle, Gerente Geral da CMPC, contou com as exposições do reconhecido economista e ex-Presidente do Banco Central, Vittorio Corbo, junto ao advogado e analista Jorge Navarrete Poblete, que analisaram os principais desafios e perspectivas para a economia nacional e internacional.</p><p>Durante o encontro, foram abordados temas cruciais para o setor florestal, incluindo a visão econômica internacional e as contingências locais que afetam a indústria. Os representantes da PymeMad destacaram a importância destes espaços de diálogo, onde se discutiu a visão econômica do setor, com especial ênfase nas análises sobre a realidade política atual e a incerteza que esta gera.</p><p>O presidente da PymeMad enfatizou o contraste entre \"a contingência política, que é uma visão de curto prazo, contraposta com a necessidade do longo prazo nas perspectivas setoriais para o desenvolvimento contínuo\" do setor florestal. Esta perspectiva é fundamental para as pequenas e médias empresas madeireiras que requerem estabilidade e projeção para seus investimentos.</p><p>A participação da PymeMad neste tipo de instância reforça o compromisso da associação em manter-se informada sobre as tendências econômicas que impactam o setor, facilitando assim a tomada de decisões estratégicas de seus associados. O encontro também permitiu fortalecer os vínculos entre PymeMad e CMPC, uma relação chave para o desenvolvimento das PMEs madeireiras do país.</p>",
+      "meta_description": "",
+      "master": 4
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 13,
+    "fields": {
+      "language_code": "es",
+      "title": "Guivar Transforma: Innovación, equidad de género y servicio en el corazón del Valle del Itata",
+      "slug": "guivar-transforma-innovacion-equidad-de-genero-y-servicio-en-el-corazon-del-valle-del-itata",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>La empresa liderada por Lorena Vargas se ha consolidado como un referente en sostenibilidad y diversificación productiva, integrando orientación al servicio y fomentando activamente la participación femenina en la industria maderera.</strong></li></ol><p>Guivar Transforma, ubicada en Trehuaco y Coelemu, región de Ñuble, representa un caso ejemplar de cómo las pequeñas y medianas empresas forestales pueden liderar cambios significativos en la industria. Bajo la dirección de Lorena Vargas, ingeniera comercial y actual vicepresidenta de PyMeMad Biobío-Ñuble, la empresa ha revolucionado sus procesos productivos mientras construye un modelo de negocio más inclusivo y sostenible.</p><p>La transformación comenzó en 2010, cuando un proyecto de innovación mejoró radicalmente los procesos de secado y certificación de madera, permitiendo diversificar la cartera de productos y aumentar la capacidad productiva. Esta modernización tecnológica no solo optimizó la calidad del producto final, sino que también fortaleció la trazabilidad desde el bosque hasta el cliente, un valor diferenciador en el mercado actual.</p><p>\"Transformamos la madera destacando su carácter renovable y sostenible, agregando valor en cada etapa del proceso\", explica Vargas, quien asumió la subgerencia en 2019 y la gerencia general a fines de 2021, liderando la empresa durante los desafíos de la pandemia y tras el fallecimiento de su padre fundador en 2022.</p><p>Entre los avances más relevantes se encuentra la incorporación progresiva de mujeres en áreas operativas, alcanzando un 17% de participación femenina, con la meta de llegar al 30% hacia 2030. Esta política de equidad se extiende a todos los niveles de toma de decisiones, desafiando estereotipos en un rubro históricamente masculino. En paralelo, la empresa ha implementado diversas instancias orientadas a fortalecer el buen servicio, ajustadas tanto a las necesidades reales de los y las trabajadoras como a las demandas del mercado actual, contribuyendo así a una cultura organizacional más eficiente, colaborativa y centrada en las personas.</p><p>Guivar Transforma demuestra que las PyMEs forestales pueden ser motores clave del desarrollo local, generando empleo de calidad, impulsando prácticas sostenibles y contribuyendo al crecimiento económico de las comunidades rurales. Una muestra concreta de que la innovación y la tradición pueden convivir y potenciarse mutuamente en la industria forestal chilena.</p><p>&nbsp;</p>",
+      "meta_description": "Guivar Transforma lidera la innovación forestal en Ñuble con equidad de género y sostenibilidad. Conoce el modelo de Lorena Vargas para pymes madereras...",
+      "master": 5
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 14,
+    "fields": {
+      "language_code": "en",
+      "title": "Guivar Transforma: Innovation, Gender Equity, and Service at the Heart of the Itata Valley",
+      "slug": "guivar-transforma-innovation-gender-equity-and-service-at-the-heart-of-the-itata-valley",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The company led by Lorena Vargas has established itself as a benchmark in sustainability and productive diversification, integrating a service-oriented approach and actively promoting female participation in the timber industry.</strong></li></ol><p>Guivar Transforma, located in Trehuaco and Coelemu, Ñuble region, represents an exemplary case of how small and medium-sized forestry enterprises can lead significant changes in the industry. Under the direction of Lorena Vargas, a commercial engineer and current vice president of PyMeMad Biobío-Ñuble, the company has revolutionized its production processes while building a more inclusive and sustainable business model.</p><p>The transformation began in 2010, when an innovation project radically improved wood drying and certification processes, enabling the diversification of the product portfolio and increasing production capacity. This technological modernization not only optimized the quality of the final product but also strengthened traceability from the forest to the customer, a differentiating value in today's market.</p><p>\"We transform wood by highlighting its renewable and sustainable nature, adding value at every stage of the process,\" explains Vargas, who assumed the role of deputy manager in 2019 and general manager at the end of 2021, leading the company through the challenges of the pandemic and after the passing of her founding father in 2022.</p><p>Among the most relevant advances is the progressive incorporation of women in operational areas, reaching 17% female participation, with the goal of reaching 30% by 2030. This equity policy extends to all levels of decision-making, challenging stereotypes in a historically male-dominated industry. In parallel, the company has implemented various initiatives aimed at strengthening good service, tailored to both the real needs of workers and the demands of today's market, thus contributing to a more efficient, collaborative, and people-centered organizational culture.</p><p>Guivar Transforma demonstrates that forestry SMEs can be key drivers of local development, generating quality employment, promoting sustainable practices, and contributing to the economic growth of rural communities. A concrete example of how innovation and tradition can coexist and mutually reinforce each other in the Chilean forestry industry.</p><p>&nbsp;</p>",
+      "meta_description": "Guivar Transforma: Leading forestry innovation with gender equity in Chile's Itata Valley. Discover Lorena Vargas' sustainable business model for timber SMEs.",
+      "master": 5
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 15,
+    "fields": {
+      "language_code": "pt",
+      "title": "Guivar Transforma: Inovação, equidade de gênero e serviço no coração do Vale do Itata",
+      "slug": "guivar-transforma-inovacao-equidade-de-genero-e-servico-no-coracao-do-vale-do-itata",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>A empresa liderada por Lorena Vargas consolidou-se como referência em sustentabilidade e diversificação produtiva, integrando orientação ao serviço e promovendo ativamente a participação feminina na indústria madeireira.</strong></li></ol><p>Guivar Transforma, localizada em Trehuaco e Coelemu, região de Ñuble, representa um caso exemplar de como as pequenas e médias empresas florestais podem liderar mudanças significativas na indústria. Sob a direção de Lorena Vargas, engenheira comercial e atual vice-presidente da PyMeMad Biobío-Ñuble, a empresa revolucionou seus processos produtivos enquanto constrói um modelo de negócios mais inclusivo e sustentável.</p><p>A transformação começou em 2010, quando um projeto de inovação melhorou radicalmente os processos de secagem e certificação da madeira, permitindo diversificar o portfólio de produtos e aumentar a capacidade produtiva. Esta modernização tecnológica não apenas otimizou a qualidade do produto final, mas também fortaleceu a rastreabilidade desde a floresta até o cliente, um valor diferenciador no mercado atual.</p><p>\"Transformamos a madeira destacando seu caráter renovável e sustentável, agregando valor em cada etapa do processo\", explica Vargas, que assumiu a subgerência em 2019 e a gerência geral no final de 2021, liderando a empresa durante os desafios da pandemia e após o falecimento de seu pai fundador em 2022.</p><p>Entre os avanços mais relevantes está a incorporação progressiva de mulheres em áreas operativas, alcançando 17% de participação feminina, com a meta de chegar a 30% até 2030. Esta política de equidade estende-se a todos os níveis de tomada de decisão, desafiando estereótipos em um ramo historicamente masculino. Paralelamente, a empresa implementou diversas instâncias orientadas a fortalecer o bom serviço, ajustadas tanto às necessidades reais dos trabalhadores e trabalhadoras quanto às demandas do mercado atual, contribuindo assim para uma cultura organizacional mais eficiente, colaborativa e centrada nas pessoas.</p><p>Guivar Transforma demonstra que as PMEs florestais podem ser motores-chave do desenvolvimento local, gerando emprego de qualidade, impulsionando práticas sustentáveis e contribuindo para o crescimento econômico das comunidades rurais. Uma mostra concreta de que inovação e tradição podem coexistir e potencializar-se mutuamente na indústria florestal chilena.</p><p>&nbsp;</p>",
+      "meta_description": "Guivar Transforma: inovação florestal com equidade de gênero no Vale do Itata. Conheça o modelo sustentável de Lorena Vargas para PMEs madeireiras no Chile.",
+      "master": 5
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 16,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad participa activamente en Mesa de Fomento a la Industria Forestal en Valdivia",
+      "slug": "pymemad-participa-activamente-en-mesa-de-fomento-a-la-industria-forestal-en-valdivia",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>La organización gremial reafirma su compromiso con el desarrollo forestal sostenible durante la séptima sesión realizada en las dependencias de INFOR Valdivia, destacando la subutilización del bosque nativo regional.</strong></li></ol><p>PymeMad participó activamente en la 7ma sesión de la Mesa de Fomento a la Industria Forestal de la región, instancia que contó con la presencia del Director Ejecutivo de CONAF, Rodrigo Illanes, quien valoró las acciones de esta iniciativa público-privada y comprometió el apoyo institucional para avanzar en la hoja de ruta propuesta por la gobernanza local.</p><p>Durante el encuentro, se presentaron estudios sobre el Modelo de Planificación Táctica Forestal para el Bosque Nativo, asociatividad para la producción sostenible y transferencia tecnológica a través de software especializado. Los resultados revelaron una brecha significativa: solo el 1% de la masa forestal nativa disponible está siendo utilizada para la agregación de valor y con manejo sustentable.</p><p>Carlos Aravena Lobos, Vicepresidente de la Mesa y representante de PymeMad Los Ríos, destacó que estos hallazgos evidencian el alto potencial para impulsar encadenamientos productivos sostenibles con foco en las micro, pequeñas y medianas empresas forestales, la formación de talento local y la promoción estratégica de la madera regional.</p><p>La Mesa, que ya suma siete sesiones de trabajo, se ha consolidado como un espacio fundamental de diálogo y coordinación entre actores públicos y privados. Junto a PymeMad participan instituciones como las Seremis de Agricultura y Economía, Gobierno Regional, CORFO, CONAF, INFOR, además de gremios como Aprobosque, Achbiom, Corma Bosque Nativo y el Colegio de Ingenieros Forestales.</p><p>PymeMad reafirma su compromiso con el diálogo, la articulación y la acción conjunta, entendiendo que el desarrollo forestal con identidad y sustentabilidad requiere de bases colaborativas entre todos los actores del ecosistema regional.</p>",
+      "meta_description": "PymeMad participa en Mesa de Fomento Forestal de Valdivia, impulsando desarrollo sostenible del bosque nativo con apoyo de CONAF y estudios de planificación...",
+      "master": 6
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 17,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Actively Participates in the Promotion Table for the Forestry Industry in Valdivia",
+      "slug": "pymemad-actively-participates-in-the-promotion-table-for-the-forestry-industry-in-valdivia",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The trade organization reaffirms its commitment to sustainable forestry development during the seventh session held at the INFOR Valdivia facilities, highlighting the underutilization of the regional native forest.</strong></li></ol><p>PymeMad actively participated in the 7th session of the Promotion Table for the Forestry Industry of the region, an event attended by the Executive Director of CONAF, Rodrigo Illanes, who valued the actions of this public-private initiative and committed institutional support to advance the roadmap proposed by the local governance.</p><p>During the meeting, studies on the Tactical Forestry Planning Model for Native Forests, associativity for sustainable production, and technology transfer through specialized software were presented. The results revealed a significant gap: only 1% of the available native forest mass is being used for value addition and sustainable management.</p><p>Carlos Aravena Lobos, Vice President of the Table and representative of PymeMad Los Ríos, emphasized that these findings demonstrate the high potential to drive sustainable productive chains focused on micro, small, and medium-sized forestry enterprises, the development of local talent, and the strategic promotion of regional timber.</p><p>The Table, which has now held seven working sessions, has established itself as a key space for dialogue and coordination between public and private actors. Alongside PymeMad, participating institutions include the Seremis of Agriculture and Economy, the Regional Government, CORFO, CONAF, INFOR, as well as trade associations such as Aprobosque, Achbiom, Corma Native Forest, and the College of Forestry Engineers.</p><p>PymeMad reaffirms its commitment to dialogue, coordination, and joint action, understanding that forestry development with identity and sustainability requires collaborative foundations among all actors in the regional ecosystem.</p>",
+      "meta_description": "PymeMad joins Valdivia's Forestry Promotion Table, advancing sustainable native forest development with CONAF support and tactical planning model studies.",
+      "master": 6
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 18,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad participa ativamente na Mesa de Fomento à Indústria Florestal em Valdivia",
+      "slug": "pymemad-participa-ativamente-na-mesa-de-fomento-a-industria-florestal-em-valdivia",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>A organização sindical reafirma seu compromisso com o desenvolvimento florestal sustentável durante a sétima sessão realizada nas dependências do INFOR Valdivia, destacando a subutilização da floresta nativa regional.</strong></li></ol><p>A PymeMad participou ativamente na 7ª sessão da Mesa de Fomento à Indústria Florestal da região, instância que contou com a presença do Diretor Executivo da CONAF, Rodrigo Illanes, que valorizou as ações desta iniciativa público-privada e comprometeu o apoio institucional para avançar na rota proposta pela governança local.</p><p>Durante o encontro, foram apresentados estudos sobre o Modelo de Planejamento Tático Florestal para a Floresta Nativa, associatividade para a produção sustentável e transferência tecnológica por meio de software especializado. Os resultados revelaram uma lacuna significativa: apenas 1% da massa florestal nativa disponível está sendo utilizada para a agregação de valor e com manejo sustentável.</p><p>Carlos Aravena Lobos, Vice-Presidente da Mesa e representante da PymeMad Los Ríos, destacou que essas descobertas evidenciam o alto potencial para impulsionar cadeias produtivas sustentáveis com foco nas micro, pequenas e médias empresas florestais, a formação de talento local e a promoção estratégica da madeira regional.</p><p>A Mesa, que já soma sete sessões de trabalho, consolidou-se como um espaço fundamental de diálogo e coordenação entre atores públicos e privados. Junto à PymeMad participam instituições como as Seremis de Agricultura e Economia, Governo Regional, CORFO, CONAF, INFOR, além de sindicatos como Aprobosque, Achbiom, Corma Bosque Nativo e o Colégio de Engenheiros Florestais.</p><p>A PymeMad reafirma seu compromisso com o diálogo, a articulação e a ação conjunta, entendendo que o desenvolvimento florestal com identidade e sustentabilidade requer bases colaborativas entre todos os atores do ecossistema regional.</p>",
+      "meta_description": "PymeMad participa na Mesa de Fomento Florestal de Valdivia, promovendo desenvolvimento sustentável da floresta nativa com apoio da CONAF e estudos de...",
+      "master": 6
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 19,
+    "fields": {
+      "language_code": "es",
+      "title": "Construyendo Territorios Más Seguros: El Compromiso de las PyMEs Madereras",
+      "slug": "construyendo-territorios-mas-seguros-el-compromiso-de-las-pymes-madereras",
+      "body": "<p>El invierno es el momento perfecto para prepararnos ante los incendios forestales del verano. Esta aparente paradoja tiene una lógica implacable: la prevención efectiva requiere tiempo, planificación y trabajo coordinado entre todos los actores del territorio.</p><p>Como presidente de <strong>PymeMad Biobío</strong> y líder del <strong>Programa Estratégico Regional Biobío Madera</strong>, he tenido el privilegio de participar activamente, junto a Conaf, Senapred, Corma, Bomberos, ministerios y municipios, en la elaboración de la Guía para la Preparación de Viviendas ante Incendios Forestales. Este trabajo colaborativo demuestra que la protección de nuestras comunidades requiere del compromiso y conocimiento de todos los sectores.</p><h4>Presencia local, impacto nacional</h4><p>En nuestra región del Biobío comprendemos que las PyMEs madereras son actores claves en la prevención. Están presentes en los territorios donde coexisten bosques y comunidades, conocen cada rincón del territorio y mantienen vínculos estrechos con los vecinos. Por eso, desde PymeMad promovemos que nuestras empresas aporten en:</p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Educación preventiva</strong>: Compartir conocimiento técnico sobre manejo forestal</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Infraestructura de protección</strong>: Colaborar en cortafuegos y zonas de seguridad</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Innovación</strong>: Desarrollar productos madereros con tratamientos ignífugos</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Vigilancia temprana</strong>: Actuar como centinelas en zonas de riesgo</li></ol><h4>Conocimiento técnico que salva vidas</h4><p>La experiencia nos ha enseñado que las pavesas pueden viajar kilómetros, la radiación térmica afecta hasta 60 metros del frente de fuego, y una zona perimetral despejada de 10 metros puede marcar la diferencia entre la destrucción y la supervivencia. Este conocimiento técnico debe traducirse en acciones concretas en cada hogar y comunidad.</p><h4>Un llamado a la acción colectiva</h4><p>Desde PymeMad hacemos un llamado a todas las regiones del país: el momento de actuar es ahora. La construcción de territorios resilientes al fuego requiere del trabajo conjunto de empresas, autoridades y vecinos. Como gremio, estamos comprometidos a liderar con el ejemplo, compartiendo conocimiento y recursos para proteger lo que más importa: nuestras comunidades y nuestro patrimonio forestal.</p>",
+      "meta_description": "",
+      "master": 7
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 20,
+    "fields": {
+      "language_code": "en",
+      "title": "Building Safer Territories: The Commitment of Timber SMEs",
+      "slug": "building-safer-territories-the-commitment-of-timber-smes",
+      "body": "<p>Winter is the perfect time to prepare for summer wildfires. This apparent paradox has an unyielding logic: effective prevention requires time, planning, and coordinated work among all stakeholders in the territory.</p><p>As president of<strong>PymeMad Biobío</strong>and leader of the<strong>Biobío Wood Regional Strategic Program</strong>, I have had the privilege of actively participating, alongside Conaf, Senapred, Corma, Firefighters, ministries, and municipalities, in the development of the Guide for Home Preparation Against Wildfires. This collaborative work demonstrates that protecting our communities requires the commitment and knowledge of all sectors.</p><h4>Local presence, national impact</h4><p>In our Biobío region, we understand that timber SMEs are key players in prevention. They are present in territories where forests and communities coexist, they know every corner of the land, and they maintain close ties with neighbors. That is why, from PymeMad, we promote that our companies contribute in:</p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Preventive education</strong>: Sharing technical knowledge about forest management</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Protection infrastructure</strong>: Collaborating on firebreaks and safety zones</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Innovation</strong>: Developing timber products with fire-retardant treatments</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Early surveillance</strong>: Acting as sentinels in risk zones</li></ol><h4>Technical knowledge that saves lives</h4><p>Experience has taught us that embers can travel kilometers, thermal radiation affects up to 60 meters from the fire front, and a cleared 10-meter perimeter zone can make the difference between destruction and survival. This technical knowledge must translate into concrete actions in every home and community.</p><h4>A call to collective action</h4><p>From PymeMad, we call on all regions of the country: the time to act is now. Building fire-resilient territories requires the joint work of companies, authorities, and neighbors. As a guild, we are committed to leading by example, sharing knowledge and resources to protect what matters most: our communities and our forest heritage.</p>",
+      "meta_description": "",
+      "master": 7
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 21,
+    "fields": {
+      "language_code": "pt",
+      "title": "Construindo Territórios Mais Seguros: O Compromisso das PMEs Madeireiras",
+      "slug": "construindo-territorios-mais-seguros-o-compromisso-das-pmes-madeireiras",
+      "body": "<p>O inverno é o momento perfeito para nos prepararmos para os incêndios florestais do verão. Esta aparente paradoxo tem uma lógica implacável: a prevenção efetiva requer tempo, planejamento e trabalho coordenado entre todos os atores do território.</p><p>Como presidente da<strong>PymeMad Biobío</strong>e líder do<strong>Programa Estratégico Regional Biobío Madeira</strong>, tive o privilégio de participar ativamente, junto à Conaf, Senapred, Corma, Bombeiros, ministérios e municípios, na elaboração do Guia para a Preparação de Residências contra Incêndios Florestais. Este trabalho colaborativo demonstra que a proteção de nossas comunidades requer o compromisso e conhecimento de todos os setores.</p><h4>Presença local, impacto nacional</h4><p>Em nossa região do Biobío entendemos que as PMEs madeireiras são atores chave na prevenção. Estão presentes nos territórios onde coexistem florestas e comunidades, conhecem cada canto do território e mantêm vínculos estreitos com os vizinhos. Por isso, desde a PymeMad promovemos que nossas empresas contribuam em:</p><ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Educação preventiva</strong>: Compartilhar conhecimento técnico sobre manejo florestal</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Infraestrutura de proteção</strong>: Colaborar em corta-fogos e zonas de segurança</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Inovação</strong>: Desenvolver produtos madeireiros com tratamentos ignífugos</li><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Vigilância precoce</strong>: Atuar como sentinelas em zonas de risco</li></ol><h4>Conhecimento técnico que salva vidas</h4><p>A experiência nos ensinou que as brasas podem viajar quilômetros, a radiação térmica afeta até 60 metros da frente de fogo, e uma zona perimetral limpa de 10 metros pode marcar a diferença entre a destruição e a sobrevivência. Este conhecimento técnico deve se traduzir em ações concretas em cada lar e comunidade.</p><h4>Um chamado à ação coletiva</h4><p>Desde a PymeMad fazemos um chamado a todas as regiões do país: o momento de agir é agora. A construção de territórios resilientes ao fogo requer o trabalho conjunto de empresas, autoridades e vizinhos. Como associação, estamos comprometidos a liderar com o exemplo, compartilhando conhecimento e recursos para proteger o que mais importa: nossas comunidades e nosso patrimônio florestal.</p>",
+      "meta_description": "",
+      "master": 7
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 22,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad Biobío-Ñuble presenta plan estratégico y renueva directorio regional",
+      "slug": "pymemad-biobio-nuble-presenta-plan-estrategico-y-renueva-directorio-regional",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>PymeMad Biobío-Ñuble realizó su Asamblea General de Socios el pasado 24 de julio en Tomé, en las dependencias de Aislacor, con la participación de 10 empresas asociadas, donde se eligió nuevo directorio y se presentó un plan estratégico quinquenal desarrollado regionalmente como propuesta para fortalecer a las PyMEs madereras.</strong></li></ol><p>Víctor Sandoval Sanzana fue reelecto como presidente regional por unanimidad, acompañado por Lorena Vargas como vicepresidenta, Javier Barrera como secretario, Rodolfo Contardo como tesorero, y los directores Felipe Enríquez, José Basauri y Michel Esquerré.</p><p>Durante el encuentro se presentó un completo informe de gestión regional que destacó los avances en asesoría comunicacional y posicionamiento gremial, las mesas de trabajo establecidas con grandes empresas forestales, y la activa participación en instancias técnicas como Impulso Pyme 4.0, SENAPRED y el programa BioBío Madera, donde PymeMad preside actualmente la gobernanza.</p><p>\"Este plan estratégico desarrollado desde Biobío-Ñuble es nuestra propuesta para consolidarnos como la voz autorizada del sector PyME forestal. Queremos compartir estas iniciativas con todas las regiones donde operamos para fortalecer nuestra representatividad\", señaló Michel Esquerré durante la presentación.</p><p>El plan quinquenal propuesto contempla objetivos ambiciosos como la incorporación total de empresas del sector, el fortalecimiento operacional de las PyMEs asociadas, el desarrollo de nuevas oportunidades de negocio y la consolidación de alianzas estratégicas dentro del ecosistema forestal.</p><p>Entre las iniciativas presentadas destaca el plan \"La Primera Asociación 3.0\", que incluye propuestas como el lanzamiento de un nuevo sitio web institucional, la digitalización de procesos administrativos, la activación coordinada de redes sociales y la publicación de la Revista \"Somos PYMEMAD\" trimestral.</p><p>La propuesta desarrollada por Biobío-Ñuble será compartida con las demás regiones de PymeMad para su evaluación e implementación coordinada.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble renueva directorio y presenta plan estratégico quinquenal para fortalecer las PyMEs madereras regionales. Conoce las nuevas autoridades...",
+      "master": 8
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 23,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Biobío-Ñuble Presents Strategic Plan and Renews Regional Board",
+      "slug": "pymemad-biobio-nuble-presents-strategic-plan-and-renews-regional-board",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>PymeMad Biobío-Ñuble held its General Assembly of Members on July 24 in Tomé, at the facilities of Aislacor, with the participation of 10 associated companies. During the event, a new board was elected and a five-year strategic plan developed regionally was presented as a proposal to strengthen timber SMEs.</strong></li></ol><p>Víctor Sandoval Sanzana was unanimously reelected as regional president, accompanied by Lorena Vargas as vice president, Javier Barrera as secretary, Rodolfo Contardo as treasurer, and directors Felipe Enríquez, José Basauri, and Michel Esquerré.</p><p>During the meeting, a comprehensive regional management report was presented, highlighting progress in communication advisory and guild positioning, the establishment of working groups with major forestry companies, and active participation in technical instances such as Impulso Pyme 4.0, SENAPRED, and the BioBío Madera program, where PymeMad currently chairs the governance.</p><p>\"This strategic plan developed from Biobío-Ñuble is our proposal to establish ourselves as the authoritative voice of the forestry SME sector. We want to share these initiatives with all the regions where we operate to strengthen our representativeness,\" stated Michel Esquerré during the presentation.</p><p>The proposed five-year plan includes ambitious objectives such as the full incorporation of sector companies, operational strengthening of associated SMEs, the development of new business opportunities, and the consolidation of strategic alliances within the forestry ecosystem.</p><p>Among the initiatives presented, the \"First 3.0 Association\" plan stands out, which includes proposals such as the launch of a new institutional website, the digitization of administrative processes, coordinated activation of social media, and the quarterly publication of the \"Somos PYMEMAD\" Magazine.</p><p>The proposal developed by Biobío-Ñuble will be shared with the other regions of PymeMad for evaluation and coordinated implementation.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble renews regional board and presents 5-year strategic plan to strengthen timber SMEs. Discover new leadership and guild advancements.",
+      "master": 8
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 24,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad Biobío-Ñuble apresenta plano estratégico e renova diretoria regional",
+      "slug": "pymemad-biobio-nuble-apresenta-plano-estrategico-e-renova-diretoria-regional",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>A PymeMad Biobío-Ñuble realizou sua Assembleia Geral de Associados no dia 24 de julho em Tomé, nas dependências da Aislacor, com a participação de 10 empresas associadas, onde foi eleita uma nova diretoria e apresentado um plano estratégico quinquenal desenvolvido regionalmente como proposta para fortalecer as PMEs madeireiras.</strong></li></ol><p>Víctor Sandoval Sanzana foi reeleito como presidente regional por unanimidade, acompanhado por Lorena Vargas como vice-presidente, Javier Barrera como secretário, Rodolfo Contardo como tesoureiro, e os diretores Felipe Enríquez, José Basauri e Michel Esquerré.</p><p>Durante o encontro, foi apresentado um completo informe de gestão regional que destacou os avanços em assessoria comunicacional e posicionamento sindical, as mesas de trabalho estabelecidas com grandes empresas florestais, e a ativa participação em instâncias técnicas como Impulso Pyme 4.0, SENAPRED e o programa BioBío Madeira, onde a PymeMad atualmente preside a governança.</p><p>\"Este plano estratégico desenvolvido desde Biobío-Ñuble é nossa proposta para nos consolidarmos como a voz autorizada do setor de PMEs florestais. Queremos compartilhar estas iniciativas com todas as regiões onde atuamos para fortalecer nossa representatividade\", declarou Michel Esquerré durante a apresentação.</p><p>O plano quinquenal proposto contempla objetivos ambiciosos como a incorporação total de empresas do setor, o fortalecimento operacional das PMEs associadas, o desenvolvimento de novas oportunidades de negócio e a consolidação de alianças estratégicas dentro do ecossistema florestal.</p><p>Entre as iniciativas apresentadas, destaca-se o plano \"A Primeira Associação 3.0\", que inclui propostas como o lançamento de um novo site institucional, a digitalização de processos administrativos, a ativação coordenada de redes sociais e a publicação da Revista \"Somos PYMEMAD\" trimestral.</p><p>A proposta desenvolvida por Biobío-Ñuble será compartilhada com as demais regiões da PymeMad para sua avaliação e implementação coordenada.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble renova diretoria e apresenta plano estratégico quinquenal para fortalecer PMEs madeireiras regionais. Conheça as novas autoridades e...",
+      "master": 8
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 25,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad participa en Consejo Regional Exportador de Biobío 2025",
+      "slug": "pymemad-participa-en-consejo-regional-exportador-de-biobio-2025",
+      "body": "<p><strong>Michel Esquerré, presidente de PymeMad Nacional, fue invitado a participar del Consejo Regional Exportador organizado por ProChile Biobío, instancia clave para abordar la crisis de exportaciones que afecta al sector forestal de pequeñas y medianas empresas.</strong></p><p>La actividad se realizó en las oficinas de Desarrolla Biobío en Concepción, convocada por Cristóbal Herrera Gazale, Director Regional de ProChile. El encuentro reunió a representantes de empresas exportadoras y gremios regionales para conocer las actividades de ProChile y escuchar las necesidades del sector.</p><p>Sobre la crisis que enfrenta el sector, Esquerré señaló que \"las exportaciones forestales cayeron dramáticamente del 10% en 2015 a menos del 4% actual. Esta crisis es la punta de un iceberg gigante. Los problemas se vienen sembrando hace mucho tiempo y el daño al encadenamiento productivo regional no es fácil de reparar\".</p><p>El dirigente evaluó positivamente el encuentro, destacando que \"la reunión tuvo una connotación positiva. Las autoridades mostraron genuino interés y se fueron con preguntas importantes y el compromiso de buscar soluciones concretas desde ProChile\".</p><p>Entre los temas abordados destacaron la necesidad de diversificar la matriz exportadora regional mediante innovación, el impacto de la crisis en las PyMEs madereras y la urgencia de implementar medidas de apoyo específicas para el sector.</p><p><em>PymeMad representa a cerca de 100 pequeños y medianos aserraderos desde el Maule hasta Los Ríos, generando empleo directo para más de 10.000 familias chilenas.</em></p>",
+      "meta_description": "PymeMad participa en Consejo Exportador de Biobío 2025 para abordar crisis del sector forestal. Michel Esquerré analiza caída de exportaciones y soluciones...",
+      "master": 9
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 26,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Participates in Biobío 2025 Regional Export Council",
+      "slug": "pymemad-participates-in-biobio-2025-regional-export-council",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Michel Esquerré, president of PymeMad Nacional, was invited to participate in the Regional Export Council organized by ProChile Biobío, a key platform to address the export crisis affecting the small and medium-sized forestry sector.</strong></li></ol><p>The event took place at the offices of Desarrolla Biobío in Concepción, convened by Cristóbal Herrera Gazale, Regional Director of ProChile. The meeting brought together representatives from exporting companies and regional trade associations to learn about ProChile's activities and hear the sector's needs.</p><p>Regarding the crisis facing the sector, Esquerré stated that \"forestry exports have dramatically fallen from 10% in 2015 to less than 4% today. This crisis is the tip of a giant iceberg. Problems have been brewing for a long time, and the damage to the regional productive chain is not easy to repair.\"</p><p>The leader evaluated the meeting positively, highlighting that \"the meeting had a positive connotation. The authorities showed genuine interest and left with important questions and a commitment to seek concrete solutions from ProChile.\"</p><p>Among the topics discussed were the need to diversify the regional export matrix through innovation, the impact of the crisis on timber SMEs, and the urgency of implementing specific support measures for the sector.</p><p><em>PymeMad represents nearly 100 small and medium-sized sawmills from Maule to Los Ríos, generating direct employment for over 10,000 Chilean families.</em></p>",
+      "meta_description": "PymeMad joins Biobío 2025 Export Council to address forestry sector crisis. President Michel Esquerré discusses export decline and solutions for regional SMEs.",
+      "master": 9
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 27,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad participa no Conselho Regional Exportador de Biobío 2025",
+      "slug": "pymemad-participa-no-conselho-regional-exportador-de-biobio-2025",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Michel Esquerré, presidente da PymeMad Nacional, foi convidado a participar do Conselho Regional Exportador organizado pela ProChile Biobío, instância chave para abordar a crise de exportações que afeta o setor florestal de pequenas e médias empresas.</strong></li></ol><p>A atividade foi realizada nos escritórios da Desarrolla Biobío em Concepción, convocada por Cristóbal Herrera Gazale, Diretor Regional da ProChile. O encontro reuniu representantes de empresas exportadoras e associações regionais para conhecer as atividades da ProChile e ouvir as necessidades do setor.</p><p>Sobre a crise que enfrenta o setor, Esquerré señalou que \"as exportações florestais caíram dramaticamente de 10% em 2015 para menos de 4% atualmente. Esta crise é a ponta de um iceberg gigante. Os problemas vêm sendo semeados há muito tempo e o dano ao encadeamento produtivo regional não é fácil de reparar\".</p><p>O dirigente avaliou positivamente o encontro, destacando que \"a reunião teve uma conotação positiva. As autoridades mostraram genuíno interesse e foram embora com perguntas importantes e o compromisso de buscar soluções concretas desde a ProChile\".</p><p>Entre os temas abordados destacaram-se a necessidade de diversificar a matriz exportadora regional mediante inovação, o impacto da crise nas PMEs madeireiras e a urgência de implementar medidas de apoio específicas para o setor.</p><p><em>A PymeMad representa cerca de 100 pequenas e médias serrarias desde o Maule até Los Ríos, gerando emprego direto para mais de 10.000 famílias chilenas.</em></p>",
+      "meta_description": "PymeMad participa do Conselho Exportador de Biobío 2025 para crise do setor florestal. Michel Esquerré analisa queda das exportações e soluções para PMEs...",
+      "master": 9
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 28,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad Biobío fortalece vínculos con el sector construcción en exitoso encuentro maderero",
+      "slug": "pymemad-biobio-fortalece-vinculos-con-el-sector-construccion-en-exitoso-encuentro-maderero",
+      "body": "<p><strong>Víctor Sandoval, presidente de PymeMad Biobío, participó activamente en el Encuentro Maderero realizado en el Quincho Kupal de Los Ángeles, instancia que reunió a representantes de pymes madereras y la industria de la construcción.</strong></p><p>El encuentro, organizado por el Programa Estratégico Regional Biobío Madera con el apoyo de Corfo, convocó a más de dos decenas de actores clave del ecosistema de la construcción en madera de la provincia del Biobío.</p><p><strong>Alianzas estratégicas para el desarrollo</strong></p><p>Durante la jornada, Sandoval, junto al gerente del programa estratégico Frane Zilic y el presidente de la Cámara Chilena de la Construcción Los Ángeles, Mario Zerega, encabezaron las actividades orientadas a fortalecer los vínculos entre sectores.</p><p>Durante la reunión de trabajo en dependencias de la Cámara Chilena de la Construcción de Los Ángeles, los representantes del programa compartieron con medios de comunicación de la provincia\", destacó el presidente de PymeMad Biobío.</p><p><strong>Oportunidades concretas para las pymes</strong></p><p>El encuentro permitió a las pymes madereras, constructores, representantes de universidades locales y entidades como Corfo, Infor, Minvu y Serviu, compartir experiencias y analizar las oportunidades que ofrece la construcción en madera en la región.</p><p>Sandoval enfatizó que estos espacios son fundamentales para \"generar confianzas entre pymes madereras, constructores y otras instituciones vinculadas al desarrollo del sector\", destacando que la provincia cuenta con todas las condiciones para liderar la transformación hacia la construcción sostenible.</p><p><strong>Próximos pasos</strong></p><p>La actividad, que incluyó dinámicas grupales y talleres de trabajo en equipo, marca el inicio de una serie de iniciativas en las que PymeMad Biobío participará activamente para seguir avanzando en la integración de las pymes al mercado de la construcción en madera.</p><p>\"Los desafíos de la construcción en madera en la región están siendo abordados de manera colaborativa, como punto de partida para fortalecer este importante sector\", concluyó Sandoval.</p>",
+      "meta_description": "PymeMad Biobío fortalece alianzas estratégicas entre pymes madereras y construcción en exitoso encuentro sectorial en Los Ángeles, Biobío.",
+      "master": 10
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 29,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Biobío Strengthens Ties with Construction Sector at Successful Timber Meeting",
+      "slug": "pymemad-biobio-strengthens-ties-with-construction-sector-at-successful-timber-meeting",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Víctor Sandoval, president of PymeMad Biobío, actively participated in the Timber Meeting held at Quincho Kupal in Los Ángeles, an event that brought together representatives from timber SMEs and the construction industry.</strong></li></ol><p>The meeting, organized by the Regional Strategic Program Biobío Madera with support from Corfo, gathered over two dozen key stakeholders from the timber construction ecosystem in the Biobío province.</p><p><strong>Strategic Alliances for Development</strong></p><p>During the event, Sandoval, alongside the strategic program manager Frane Zilic and the president of the Chilean Chamber of Construction Los Ángeles, Mario Zerega, led activities aimed at strengthening inter-sectoral ties.</p><p>\"During the working meeting at the facilities of the Chilean Chamber of Construction in Los Ángeles, program representatives engaged with local media outlets,\" highlighted the president of PymeMad Biobío.</p><p><strong>Concrete Opportunities for SMEs</strong></p><p>The meeting enabled timber SMEs, builders, representatives from local universities, and entities such as Corfo, Infor, Minvu, and Serviu to share experiences and analyze the opportunities offered by timber construction in the region.</p><p>Sandoval emphasized that these spaces are crucial to \"build trust among timber SMEs, builders, and other institutions linked to the sector’s development,\" noting that the province has all the conditions to lead the transformation toward sustainable construction.</p><p><strong>Next Steps</strong></p><p>The event, which included group dynamics and teamwork workshops, marks the beginning of a series of initiatives in which PymeMad Biobío will actively participate to further integrate SMEs into the timber construction market.</p><p>\"The challenges of timber construction in the region are being addressed collaboratively, as a starting point to strengthen this important sector,\" concluded Sandoval.</p>",
+      "meta_description": "PymeMad Biobío strengthens strategic alliances between timber SMEs and construction sector at successful meeting in Los Ángeles, Biobío province.",
+      "master": 10
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 30,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad Biobío fortalece vínculos com o setor da construção em bem-sucedido encontro madeireiro",
+      "slug": "pymemad-biobio-fortalece-vinculos-com-o-setor-da-construcao-em-bem-sucedido-encontro-madeireiro",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Víctor Sandoval, presidente da PymeMad Biobío, participou ativamente no Encontro Madeireiro realizado no Quincho Kupal de Los Ángeles, instância que reuniu representantes de PMEs madeireiras e da indústria da construção.</strong></li></ol><p>O encontro, organizado pelo Programa Estratégico Regional Biobío Madeira com o apoio da Corfo, convocou mais de duas dezenas de atores chave do ecossistema da construção em madeira da província de Biobío.</p><p><strong>Alianças estratégicas para o desenvolvimento</strong></p><p>Durante a jornada, Sandoval, juntamente com o gerente do programa estratégico Frane Zilic e o presidente da Câmara Chilena da Construção de Los Ángeles, Mario Zerega, lideraram as atividades orientadas a fortalecer os vínculos entre setores.</p><p>\"Durante a reunião de trabalho nas dependências da Câmara Chilena da Construção de Los Ángeles, os representantes do programa compartilharam com meios de comunicação da província\", destacou o presidente da PymeMad Biobío.</p><p><strong>Oportunidades concretas para as PMEs</strong></p><p>O encontro permitiu que as PMEs madeireiras, construtores, representantes de universidades locais e entidades como Corfo, Infor, Minvu e Serviu, compartilhassem experiências e analisassem as oportunidades que oferece a construção em madeira na região.</p><p>Sandoval enfatizou que estes espaços são fundamentais para \"gerar confianças entre PMEs madeireiras, construtores e outras instituições vinculadas ao desenvolvimento do setor\", destacando que a província conta com todas as condições para liderar a transformação rumo à construção sustentável.</p><p><strong>Próximos passos</strong></p><p>A atividade, que incluiu dinâmicas grupais e workshops de trabalho em equipe, marca o início de uma série de iniciativas nas quais a PymeMad Biobío participará ativamente para continuar avançando na integração das PMEs ao mercado da construção em madeira.</p><p>\"Os desafios da construção em madeira na região estão sendo abordados de maneira colaborativa, como ponto de partida para fortalecer este importante setor\", concluiu Sandoval.</p>",
+      "meta_description": "PymeMad Biobío fortalece alianças estratégicas entre PMEs madeireiras e construção em encontro setorial bem-sucedido em Los Ángeles, Biobío.",
+      "master": 10
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 31,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad avanza en modernización tecnológica con exitosa instalación de sensores en aserraderos de La Araucanía",
+      "slug": "pymemad-avanza-en-modernizacion-tecnologica-con-exitosa-instalacion-de-sensores-en-aserraderos-de-la-araucania",
+      "body": "<p><strong>PymeMad Araucanía</strong> impulsa la modernización de sus empresas asociadas con la exitosa implementación del programa Red de Fomento Sostenible, donde su Presidenta Regional, Rocío Lagos, reportó la conclusión de la primera fase con la instalación de sensores de monitoreo eléctrico en tres empresas madereras, mientras otras seis se encuentran en proceso de diagnóstico.</p><p>El proyecto, ejecutado en colaboración con el Centro para la Industria 4.0 (C4i) de la Universidad de Concepción, contempla el monitoreo de variables eléctricas como voltaje, corriente y potencias, permitiendo identificar indicadores productivos críticos como tiempos muertos, factor de operación y factor de uso en los equipos principales de los aserraderos.</p><p>Ignacio Marchant, representante del C4i, destacó que la tecnología instalada incluye un dashboard de visualización con sistema de alertas basado en umbrales personalizados, lo que permite detectar comportamientos anómalos en tiempo real. \"La filosofía del proyecto es clara: la tecnología es un medio, no un fin. Los datos nos permiten crear planes de trabajo personalizados para cada empresa, con impacto medible mediante comparación antes y después\", señaló.</p><p>El programa Red de Fomento Sostenible, que tiene una duración de tres años y abarca desde la región del Biobío hasta Los Lagos, proyecta realizar 300 diagnósticos y 200 implementaciones en empresas manufactureras. En La Araucanía, se han identificado entre 15 y 20 empresas potenciales del rubro maderero para continuar con el proceso.</p><p>\"Este proyecto representa un avance significativo en la modernización de nuestro sector. La colaboración con las universidades nos permite acceder a tecnología de punta que mejorará la competitividad de nuestros asociados\", destacó la Presidenta Regional.</p><p>PymeMad Araucanía participará activamente en la mesa de gobernanza del programa, donde aportará la visión y necesidades del sector maderero junto a otros gremios manufactureros de las cuatro regiones. Esta instancia colaborativa entre CORFO, gremios y pymes manufactureras definirá la priorización de paquetes tecnológicos y validará soluciones específicas para cada sector productivo.</p>",
+      "meta_description": "PymeMad moderniza aserraderos en La Araucanía con sensores eléctricos. Monitoreo de voltaje, corriente y productividad en colaboración con C4i de la UdeC.",
+      "master": 11
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 32,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Advances in Technological Modernization with Successful Sensor Installation in La Araucanía Sawmills",
+      "slug": "pymemad-advances-in-technological-modernization-with-successful-sensor-installation-in-la-araucania-sawmills",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>PymeMad Araucanía</strong>is driving the modernization of its associated companies with the successful implementation of the Sustainable Promotion Network program. Its Regional President, Rocío Lagos, reported the completion of the first phase with the installation of electrical monitoring sensors in three timber companies, while six others are undergoing diagnostics.</li></ol><p>The project, executed in collaboration with the Center for Industry 4.0 (C4i) of the University of Concepción, includes monitoring electrical variables such as voltage, current, and power, enabling the identification of critical production indicators like downtime, operation factor, and usage factor in the main equipment of the sawmills.</p><p>Ignacio Marchant, representative of C4i, highlighted that the installed technology includes a visualization dashboard with an alert system based on customized thresholds, allowing real-time detection of anomalous behaviors. \"The project's philosophy is clear: technology is a means, not an end. Data allows us to create customized work plans for each company, with measurable impact through before-and-after comparison,\" he stated.</p><p>The Sustainable Promotion Network program, which spans three years and covers from the Biobío region to Los Lagos, plans to conduct 300 diagnostics and 200 implementations in manufacturing companies. In La Araucanía, 15 to 20 potential timber companies have been identified to continue the process.</p><p>\"This project represents a significant advancement in the modernization of our sector. Collaboration with universities allows us to access cutting-edge technology that will improve the competitiveness of our associates,\" emphasized the Regional President.</p><p>PymeMad Araucanía will actively participate in the program's governance board, contributing the vision and needs of the timber sector alongside other manufacturing guilds from the four regions. This collaborative instance among CORFO, guilds, and manufacturing SMEs will define the prioritization of technological packages and validate specific solutions for each productive sector.</p>",
+      "meta_description": "PymeMad modernizes sawmills in La Araucanía with electrical sensors. Voltage, current and productivity monitoring in collaboration with C4i from UdeC.",
+      "master": 11
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 33,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad avança em modernização tecnológica com instalação bem-sucedida de sensores em serrarias de La Araucanía",
+      "slug": "pymemad-avanca-em-modernizacao-tecnologica-com-instalacao-bem-sucedida-de-sensores-em-serrarias-de-la-araucania",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>PymeMad Araucanía</strong>impulsiona a modernização de suas empresas associadas com a implementação bem-sucedida do programa Rede de Fomento Sustentável, onde sua Presidente Regional, Rocío Lagos, relatou a conclusão da primeira fase com a instalação de sensores de monitoramento elétrico em três empresas madeireiras, enquanto outras seis estão em processo de diagnóstico.</li></ol><p>O projeto, executado em colaboração com o Centro para a Indústria 4.0 (C4i) da Universidade de Concepción, contempla o monitoramento de variáveis elétricas como tensão, corrente e potências, permitindo identificar indicadores produtivos críticos como tempos mortos, fator de operação e fator de uso nos equipamentos principais das serrarias.</p><p>Ignacio Marchant, representante do C4i, destacou que a tecnologia instalada inclui um dashboard de visualização com sistema de alertas baseado em limites personalizados, o que permite detectar comportamentos anômalos em tempo real. \"A filosofia do projeto é clara: a tecnologia é um meio, não um fim. Os dados nos permitem criar planos de trabalho personalizados para cada empresa, com impacto mensurável mediante comparação antes e depois\", afirmou.</p><p>O programa Rede de Fomento Sustentável, que tem duração de três anos e abrange desde a região de Biobío até Los Lagos, projeta realizar 300 diagnósticos e 200 implementações em empresas manufactureras. Em La Araucanía, foram identificadas entre 15 e 20 empresas potenciais do ramo madeireiro para continuar com o processo.</p><p>\"Este projeto representa um avanço significativo na modernização do nosso setor. A colaboração com as universidades nos permite acessar tecnologia de ponta que melhorará a competitividade de nossos associados\", destacou a Presidente Regional.</p><p>PymeMad Araucanía participará ativamente na mesa de governança do programa, onde aportará a visão e necessidades do setor madeireiro junto a outros sindicatos manufactureros das quatro regiões. Esta instância colaborativa entre CORFO, sindicatos e PMEs manufactureras definirá a priorização de pacotes tecnológicos e validará soluções específicas para cada setor produtivo.</p>",
+      "meta_description": "PymeMad moderniza serrarias em La Araucanía com sensores elétricos. Monitoramento de tensão, corrente e produtividade em colaboração com C4i da UdeC.",
+      "master": 11
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 34,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad se integra a la gobernanza del Programa Red de Fomento Sostenible de CORFO",
+      "slug": "pymemad-se-integra-a-la-gobernanza-del-programa-red-de-fomento-sostenible-de-corfo",
+      "body": "<p><strong>Las regiones del Biobío y Araucanía del gremio participarán activamente en la orientación estratégica del programa que busca potenciar la incorporación tecnológica en la manufactura del sur de Chile.</strong></p><p>Las organizaciones regionales de PymeMad fueron invitadas a formar parte de la gobernanza del Programa Red de Fomento Sostenible (RFS) en Manufactura de CORFO, iniciativa que abarca las regiones del Biobío, La Araucanía, Los Ríos y Los Lagos. Los presidentes regionales confirmaron su participación en este espacio clave para el desarrollo tecnológico del sector manufacturero.</p><p>El programa, liderado por la Universidad de Concepción a través del Centro para la Industria 4.0 (C4i), busca potenciar la incorporación de tecnología productiva en la manufactura de las cuatro regiones mencionadas. La invitación fue extendida por Benjamín Germany, gerente del C4i, quien destacó la importancia de contar con la representación sectorial y territorial del rubro maderero-forestal.</p><p>Víctor Sandoval, presidente de PymeMad Biobío, expresó su agradecimiento por la invitación y señaló que \"el sector maderero-forestal es de suma importancia en las regiones donde el programa trabaja y creo que podemos contribuir con la mirada de las pymes que nuestra asociación gremial representa\".</p><p>Por su parte, Rocío Lagos, presidenta de PYMEMAD Araucanía, manifestó que \"agradecemos la invitación a ser parte de la gobernanza del Programa Red de Fomento Sostenible en Manufactura de CORFO. Creemos que este espacio será una gran oportunidad para colaborar, compartir la visión y necesidades de nuestras pymes, así también para sumar esfuerzos para potenciar la manufactura en nuestras regiones\".</p><p>La participación de PymeMad en la gobernanza permitirá aportar la visión y necesidades específicas del sector productivo maderero, proponer y priorizar paquetes tecnológicos atingentes a su realidad, validar las soluciones técnicas propuestas por el equipo del programa y generar instancias de difusión con sus asociados.</p><p>Esta alianza estratégica entre el mundo gremial, las pymes y la academia consolida un modelo de trabajo colaborativo que busca generar un impacto concreto en el desarrollo tecnológico y la competitividad del sector manufacturero maderero en el sur de Chile.</p>",
+      "meta_description": "PymeMad se integra a la gobernanza del Programa Red de Fomento Sostenible de CORFO para potenciar la manufactura tecnológica en el sur de Chile. Desarrollo...",
+      "master": 12
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 35,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Joins the Governance of CORFO's Sustainable Development Network Program",
+      "slug": "pymemad-joins-the-governance-of-corfos-sustainable-development-network-program",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The Biobío and Araucanía regions of the association will actively participate in the strategic direction of the program, which aims to enhance technological integration in the manufacturing sector of southern Chile.</strong></li></ol><p>Regional organizations of PymeMad were invited to be part of the governance of CORFO's Sustainable Development Network (RFS) Program in Manufacturing, an initiative covering the Biobío, La Araucanía, Los Ríos, and Los Lagos regions. The regional presidents confirmed their participation in this key space for the technological development of the manufacturing sector.</p><p>The program, led by the University of Concepción through the Center for Industry 4.0 (C4i), seeks to boost the adoption of productive technology in the manufacturing of the four mentioned regions. The invitation was extended by Benjamín Germany, manager of C4i, who highlighted the importance of having sectoral and territorial representation of the wood-forestry industry.</p><p>Víctor Sandoval, president of PymeMad Biobío, expressed his gratitude for the invitation and stated that \"the wood-forestry sector is extremely important in the regions where the program operates, and I believe we can contribute with the perspective of the SMEs that our trade association represents.\"</p><p>Meanwhile, Rocío Lagos, president of PYMEMAD Araucanía, stated that \"we appreciate the invitation to be part of the governance of CORFO's Sustainable Development Network Program in Manufacturing. We believe this space will be a great opportunity to collaborate, share the vision and needs of our SMEs, as well as to join efforts to boost manufacturing in our regions.\"</p><p>PymeMad's participation in the governance will allow contributing the vision and specific needs of the wood production sector, proposing and prioritizing technological packages relevant to their reality, validating the technical solutions proposed by the program team, and generating dissemination instances with their associates.</p><p>This strategic alliance between the trade world, SMEs, and academia consolidates a collaborative work model aimed at generating a concrete impact on the technological development and competitiveness of the wood manufacturing sector in southern Chile.</p>",
+      "meta_description": "PymeMad joins CORFO's Sustainable Development Network Program governance to boost technological manufacturing in southern Chile. Industry 4.0 advancement.",
+      "master": 12
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 36,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad integra-se à governança do Programa Rede de Fomento Sustentável da CORFO",
+      "slug": "pymemad-integra-se-a-governanca-do-programa-rede-de-fomento-sustentavel-da-corfo",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>As regiões de Biobío e Araucanía do sindicato participarão ativamente na orientação estratégica do programa que busca potencializar a incorporação tecnológica na manufatura do sul do Chile.</strong></li></ol><p>As organizações regionais da PymeMad foram convidadas a formar parte da governança do Programa Rede de Fomento Sustentável (RFS) em Manufatura da CORFO, iniciativa que abrange as regiões de Biobío, La Araucanía, Los Ríos e Los Lagos. Os presidentes regionais confirmaram sua participação neste espaço chave para o desenvolvimento tecnológico do setor manufatureiro.</p><p>O programa, liderado pela Universidade de Concepción através do Centro para a Indústria 4.0 (C4i), busca potencializar a incorporação de tecnologia produtiva na manufatura das quatro regiões mencionadas. O convite foi estendido por Benjamín Germany, gerente do C4i, que destacou a importância de contar com a representação setorial e territorial do ramo madeireiro-florestal.</p><p>Víctor Sandoval, presidente da PymeMad Biobío, expressou seu agradecimento pelo convite e afirmou que \"o setor madeireiro-florestal é de suma importância nas regiões onde o programa atua e acredito que podemos contribuir com a perspectiva das PMEs que nossa associação sindical representa\".</p><p>Por sua vez, Rocío Lagos, presidente da PYMEMAD Araucanía, manifestou que \"agradecemos o convite para ser parte da governança do Programa Rede de Fomento Sustentável em Manufatura da CORFO. Acreditamos que este espaço será uma grande oportunidade para colaborar, compartilhar a visão e necessidades de nossas PMEs, assim como para somar esforços para potencializar a manufatura em nossas regiões\".</p><p>A participação da PymeMad na governança permitirá aportar a visão e necessidades específicas do setor produtivo madeireiro, propor e priorizar pacotes tecnológicos pertinentes à sua realidade, validar as soluções técnicas propostas pela equipe do programa e gerar instâncias de divulgação com seus associados.</p><p>Esta aliança estratégica entre o mundo sindical, as PMEs e a academia consolida um modelo de trabalho colaborativo que busca gerar um impacto concreto no desenvolvimento tecnológico e na competitividade do setor manufatureiro madeireiro no sul do Chile.</p>",
+      "meta_description": "PymeMad integra-se à governança do Programa Rede de Fomento Sustentável da CORFO para potencializar a manufatura tecnológica no sul do Chile....",
+      "master": 12
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 37,
+    "fields": {
+      "language_code": "es",
+      "title": "PYMEMAD participa en ENEXPRO BIOBÍO 2025 organizado por ProChile",
+      "slug": "pymemad-participa-en-enexpro-biobio-2025-organizado-por-prochile",
+      "body": "<p><strong><em>El gremio maderero estableció networking estratégico con delegaciones internacionales durante el encuentro exportador</em></strong></p><p>La Asociación Gremial de Pequeñas y Medianas Industriales de la Madera (PYMEMAD) tuvo una destacada presencia en ENEXPRO 2025, evento que reunió a 26 importadores internacionales con empresas chilenas en Concepción.</p><p>Esta instancia fue clave para el sector forestal regional. Michel Esquerré, presidente de PymeMad Nacional, sostuvo una reunión con empresarios mexicanos, quienes expresaron su interés en establecer vínculos comerciales de largo plazo con Chile, valorando la madurez del mercado y la calidad del trabajo maderero nacional.</p><p>\"La delegación mexicana mostró particular interés en tres áreas de negocio: pallets, mueblería y construcción. Valoran mucho nuestro mercado maduro y la seriedad con que trabajamos\", destacó Esquerré.</p><p>Las ruedas de negocios contaron con una amplia participación de empresas socias. Víctor Sandoval, presidente del gremio Biobío-Ñuble, resaltó: \"Fue una jornada muy productiva donde, además de las reuniones formales, se generaron valiosas instancias de conversación, permitiendo compartir experiencias y preocupaciones comunes del sector\".</p><p>Las actividades culminaron con visitas técnicas a plantas productivas, incluyendo Guivar Transforma, ubicada en el Valle del Itata entre las comunas de Trehuaco y Coelemu. Lorena Vargas, vicepresidenta regional y gerenta general de la empresa, recibió a 15 importadores que conocieron el modelo de negocio renovable y los procesos productivos desde el origen.</p><p>\"Esta actividad de ProChile es enriquecedora para nuestro sector. Nos permite acceder directamente a clientes finales sin intermediarios y sin necesidad de invertir inicialmente en viajes comerciales\", señaló Vargas, quien ve en estas instancias una puerta de entrada a nuevos mercados tradicionalmente alcanzados solo mediante traders.</p><p>Esta presencia en <strong>ENEXPRO BIOBÍO</strong> 2025 reafirma el compromiso de PYMEMAD con la internacionalización de las pymes forestales chilenas y su posicionamiento en mercados estratégicos.</p>",
+      "meta_description": "PYMEMAD fortalece alianzas internacionales en ENEXPRO BIOBÍO 2025. Networking estratégico con delegaciones mexicanas interesadas en pallets, mueblería y...",
+      "master": 13
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 38,
+    "fields": {
+      "language_code": "en",
+      "title": "PYMEMAD participates in ENEXPRO BIOBÍO 2025 organized by ProChile",
+      "slug": "pymemad-participates-in-enexpro-biobio-2025-organized-by-prochile",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong><em>The timber association established strategic networking with international delegations during the export meeting</em></strong></li></ol><p>The Guild Association of Small and Medium Timber Industries (PYMEMAD) had a prominent presence at ENEXPRO 2025, an event that brought together 26 international importers with Chilean companies in Concepción.</p><p>This instance was key for the regional forestry sector. Michel Esquerré, president of PymeMad Nacional, held a meeting with Mexican businesspeople, who expressed their interest in establishing long-term commercial ties with Chile, valuing the maturity of the market and the quality of the national timber work.</p><p>\"The Mexican delegation showed particular interest in three business areas: pallets, furniture, and construction. They highly value our mature market and the seriousness with which we work,\" highlighted Esquerré.</p><p>The business rounds saw broad participation from member companies. Víctor Sandoval, president of the Biobío-Ñuble guild, emphasized: \"It was a very productive day where, in addition to formal meetings, valuable opportunities for conversation were generated, allowing the sharing of experiences and common concerns of the sector.\"</p><p>The activities culminated with technical visits to production plants, including Guivar Transforma, located in the Itata Valley between the municipalities of Trehuaco and Coelemu. Lorena Vargas, regional vice president and general manager of the company, received 15 importers who learned about the renewable business model and production processes from the origin.</p><p>\"This ProChile activity is enriching for our sector. It allows us to access end customers directly without intermediaries and without the initial need to invest in business trips,\" stated Vargas, who sees these instances as a gateway to new markets traditionally reached only through traders.</p><p>This presence in<strong>ENEXPRO BIOBÍO</strong>2025 reaffirms PYMEMAD's commitment to the internationalization of Chilean forestry SMEs and their positioning in strategic markets.</p>",
+      "meta_description": "PYMEMAD builds international partnerships at ENEXPRO BIOBÍO 2025. Strategic networking with Mexican delegations interested in Chilean pallets, furniture and...",
+      "master": 13
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 39,
+    "fields": {
+      "language_code": "pt",
+      "title": "PYMEMAD participa da ENEXPRO BIOBÍO 2025 organizada pela ProChile",
+      "slug": "pymemad-participa-da-enexpro-biobio-2025-organizada-pela-prochile",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong><em>O sindicato madeireiro estabeleceu networking estratégico com delegações internacionais durante o encontro exportador</em></strong></li></ol><p>A Associação Sindical de Pequenas e Médias Indústrias da Madeira (PYMEMAD) teve uma presença destacada na ENEXPRO 2025, evento que reuniu 26 importadores internacionais com empresas chilenas em Concepción.</p><p>Esta instância foi chave para o setor florestal regional. Michel Esquerré, presidente da PymeMad Nacional, manteve uma reunião com empresários mexicanos, que expressaram seu interesse em estabelecer vínculos comerciais de longo prazo com o Chile, valorizando a maturidade do mercado e a qualidade do trabalho madeireiro nacional.</p><p>\"A delegação mexicana mostrou interesse particular em três áreas de negócio: paletes, mobiliário e construção. Valorizam muito nosso mercado maduro e a seriedade com que trabalhamos\", destacou Esquerré.</p><p>As rodadas de negócios contaram com uma ampla participação de empresas associadas. Víctor Sandoval, presidente do sindicato Biobío-Ñuble, ressaltou: \"Foi uma jornada muito produtiva onde, além das reuniões formais, geraram-se valiosas instâncias de conversação, permitindo compartilhar experiências e preocupações comuns do setor\".</p><p>As atividades culminaram com visitas técnicas a plantas produtivas, incluindo Guivar Transforma, localizada no Vale do Itata entre as comunas de Trehuaco e Coelemu. Lorena Vargas, vice-presidente regional e gerente geral da empresa, recebeu 15 importadores que conheceram o modelo de negócio renovável e os processos produtivos desde a origem.</p><p>\"Esta atividade da ProChile é enriquecedora para nosso setor. Permite-nos acessar diretamente clientes finais sem intermediários e sem necessidade de investir inicialmente em viagens comerciais\", assinalou Vargas, que vê nestas instâncias uma porta de entrada a novos mercados tradicionalmente alcançados apenas mediante traders.</p><p>Esta presença na<strong>ENEXPRO BIOBÍO</strong>2025 reafirma o compromisso da PYMEMAD com a internacionalização das PMEs florestais chilenas e seu posicionamento em mercados estratégicos.</p>",
+      "meta_description": "PYMEMAD fortalece parcerias internacionais na ENEXPRO BIOBÍO 2025. Networking estratégico com delegações mexicanas interessadas em paletes, móveis e...",
+      "master": 13
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 40,
+    "fields": {
+      "language_code": "es",
+      "title": "PymeMad Biobío-Ñuble participa en encuentro empresarial sobre trabas que frenan a las Pymes",
+      "slug": "pymemad-biobio-nuble-participa-en-encuentro-empresarial-sobre-trabas-que-frenan-a-las-pymes",
+      "body": "<p><strong>Dirigentes gremiales, emprendedores y empresarios de la Región de Ñuble se reunieron en Chillán para analizar con el economista Óscar Landerretche las políticas públicas que afectan la competitividad de las pequeñas y medianas empresas.</strong></p><p>Víctor Sandoval, presidente de Pymemad Biobío-Ñuble, participó como uno de los invitados principales del Encuentro Empresarial y Gremial Ñuble 2025, que se llevó a cabo en el Gran Hotel Isabel Riquelme de Chillán. El evento, organizado por el Multigremial Nacional y Multigremial Ñuble, convocó a representantes de diversos gremios productivos de la región.</p><p>La jornada tuvo como tema central \"Trabas que Frenan a las Pymes\", abordando cómo las políticas públicas actuales inciden en la competitividad del sector, incluyendo aspectos como permisología, contribuciones e impuestos. El economista Óscar Landerretche fue el expositor principal del encuentro.</p><p>\"Fue una súper buena conversación, muy fructífera. Además de la presentación plenaria de Landerretche sobre su visión del país, tuvimos una mesa de trabajo más reducida con empresarios locales donde cada sector - comercio, agricultura, construcción y nosotros desde el área maderera - pudimos compartir nuestras preocupaciones específicas y proyecciones económicas\", señaló Sandoval.</p><p>Entre los otros dirigentes gremiales participantes estuvieron Alicia Calli de la Asociación Gremial de Profesionales de la Belleza Ñuble, Patricio Figueroa de Asofucam Ñuble, Carlos González de la Asociación de Agricultores de Ñuble, Juan Pablo Swett del Multigremial Nacional, Alejandro Lama de la Cámara de Comercio Chillán-Ñuble y FEDECOMTUR, Sebastián Godoy de la Cámara Chilena de la Construcción Ñuble, y Carlos Smith de APROCARNE.</p><p>El programa concluyó con palabras de cierre a cargo de Juan Pablo Swett y un espacio de networking con visita a stands y activaciones de marca.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble analiza trabas que frenan a las Pymes en encuentro empresarial de Chillán. Políticas públicas, permisología y competitividad con...",
+      "master": 14
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 41,
+    "fields": {
+      "language_code": "en",
+      "title": "PymeMad Biobío-Ñuble participates in business meeting on obstacles holding back SMEs",
+      "slug": "pymemad-biobio-nuble-participates-in-business-meeting-on-obstacles-holding-back-smes",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Union leaders, entrepreneurs, and business owners from the Ñuble Region gathered in Chillán to analyze with economist Óscar Landerretche the public policies affecting the competitiveness of small and medium-sized enterprises.</strong></li></ol><p>Víctor Sandoval, president of Pymemad Biobío-Ñuble, participated as one of the main guests at the Ñuble 2025 Business and Union Meeting, held at the Gran Hotel Isabel Riquelme in Chillán. The event, organized by the National Multiguild and Ñuble Multiguild, brought together representatives from various productive guilds in the region.</p><p>The central theme of the event was \"Obstacles Holding Back SMEs,\" addressing how current public policies impact the sector's competitiveness, including aspects such as permits, contributions, and taxes. Economist Óscar Landerretche was the main speaker at the meeting.</p><p>\"It was a very good conversation, very fruitful. In addition to Landerretche's plenary presentation on his vision for the country, we had a smaller working table with local business owners where each sector—commerce, agriculture, construction, and us from the timber industry—could share our specific concerns and economic projections,\" Sandoval stated.</p><p>Among the other participating union leaders were Alicia Calli from the Ñuble Beauty Professionals Guild Association, Patricio Figueroa from Asofucam Ñuble, Carlos González from the Ñuble Farmers Association, Juan Pablo Swett from the National Multiguild, Alejandro Lama from the Chillán-Ñuble Chamber of Commerce and FEDECOMTUR, Sebastián Godoy from the Ñuble Chilean Chamber of Construction, and Carlos Smith from APROCARNE.</p><p>The program concluded with closing remarks by Juan Pablo Swett and a networking session with visits to stands and brand activations.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble discusses obstacles holding back SMEs at Chillán business meeting. Public policies, permits, and competitiveness with economist Óscar...",
+      "master": 14
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 42,
+    "fields": {
+      "language_code": "pt",
+      "title": "PymeMad Biobío-Ñuble participa em encontro empresarial sobre entraves que freiam as PMEs",
+      "slug": "pymemad-biobio-nuble-participa-em-encontro-empresarial-sobre-entraves-que-freiam-as-pmes",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>Lideranças sindicais, empreendedores e empresários da Região de Ñuble reuniram-se em Chillán para analisar com o economista Óscar Landerretche as políticas públicas que afetam a competitividade das pequenas e médias empresas.</strong></li></ol><p>Víctor Sandoval, presidente da Pymemad Biobío-Ñuble, participou como um dos convidados principais do Encontro Empresarial e Sindical Ñuble 2025, realizado no Gran Hotel Isabel Riquelme em Chillán. O evento, organizado pelo Multigremial Nacional e Multigremial Ñuble, reuniu representantes de diversos sindicatos produtivos da região.</p><p>O evento teve como tema central \"Entraves que Freiam as PMEs\", abordando como as políticas públicas atuais impactam a competitividade do setor, incluindo aspectos como licenças, contribuições e impostos. O economista Óscar Landerretche foi o palestrante principal do encontro.</p><p>\"Foi uma conversa superprodutiva e muito frutífera. Além da apresentação plenária de Landerretche sobre sua visão do país, tivemos uma mesa de trabalho reduzida com empresários locais onde cada setor - comércio, agricultura, construção e nós da área madeireira - pudemos compartilhar nossas preocupações específicas e projeções econômicas\", declarou Sandoval.</p><p>Entre os outros líderes sindicais participantes estiveram Alicia Calli da Associação Sindical de Profissionais da Beleza Ñuble, Patricio Figueroa da Asofucam Ñuble, Carlos González da Associação de Agricultores de Ñuble, Juan Pablo Swett do Multigremial Nacional, Alejandro Lama da Câmara de Comércio Chillán-Ñuble e FEDECOMTUR, Sebastián Godoy da Câmara Chilena da Construção Ñuble, e Carlos Smith da APROCARNE.</p><p>O programa encerrou com palavras finais de Juan Pablo Swett e um espaço de networking com visita a estandes e ativações de marca.</p>",
+      "meta_description": "PymeMad Biobío-Ñuble debate entraves que freiam PMEs em encontro empresarial em Chillán. Políticas públicas, licenças e competitividade com economista Óscar...",
+      "master": 14
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 43,
+    "fields": {
+      "language_code": "es",
+      "title": "Arauco y PymeMad Araucanía avanzan en encadenamiento productivo para fortalecer PyMEs madereras en la Región",
+      "slug": "arauco-y-pymemad-araucania-avanzan-en-encadenamiento-productivo-para-fortalecer-pymes-madereras-en-la-region",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>La mesa de trabajo reporta un 80% de empresas visitadas en el programa de digitalización y ya cuenta con códigos comerciales creados para productos de pino oregón y maderas nativas.</strong></li></ol><p>La colaboración entre Arauco y PymeMad Araucanía muestra resultados concretos en sus tres líneas estratégicas de trabajo, según informó Alejandro Parada Campos, Jefe de Vinculación y Encadenamiento de Arauco. La iniciativa busca fortalecer la competitividad de las pequeñas y medianas empresas del sector forestal-maderero regional.</p><p>En la Red de Fomento Sostenible, implementada con apoyo de Corfo y el Centro de la Industria 4.0, ya participan 11 PyMEs de la región de la Araucanía, con 4 empresas completamente digitalizadas mediante sensores productivos. El programa ha visitado cerca del 80% de los asociados, superando las resistencias iniciales.</p><p>La mesa de trabajo, integrada por el directorio de PymeMad Araucanía (Rocío Lagos, Daniel Krasniansky, Hernán Barrios y Claudio Conejeros) y representantes de Arauco (Juan Pablo Portius, Alejandro Parada y Arturo Jorquera), ha logrado estandarizar fichas técnicas para productos de mayor valor agregado en pino oregón y especies nativas. Arauco confirmó la creación de códigos comerciales y espera concretar las primeras ventas durante 2025.</p><p>\"Este esfuerzo permite avanzar en soluciones compartidas que fortalecen la competitividad, la sostenibilidad y la proyección regional de la industria\", señaló Rocío Lagos, presidenta de PymeMad Araucanía, destacando la articulación entre el conocimiento de las PyMEs y las capacidades técnicas de Arauco.</p><p>\"Vemos a las PyMEs como aliados estratégicos donde podemos generar valor compartido\", agregó Parada, quien destacó la importancia de la estandarización productiva y la nivelación de competencias como factores clave para mejorar la competitividad regional.</p><p>El trabajo conjunto también incluye el levantamiento de un diagnóstico sectorial para identificar brechas y presentar propuestas a organismos públicos como GORE y Corfo, buscando instrumentos de apoyo pertinentes para el desarrollo del sector.</p>",
+      "meta_description": "Arauco y PymeMad Araucanía fortalecen PyMEs madereras con digitalización y encadenamiento productivo. 80% de empresas visitadas y códigos comerciales...",
+      "master": 15
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 44,
+    "fields": {
+      "language_code": "en",
+      "title": "Arauco and PymeMad Araucanía Advance in Productive Linkage to Strengthen Timber SMEs in the Region",
+      "slug": "arauco-and-pymemad-araucania-advance-in-productive-linkage-to-strengthen-timber-smes-in-the-region",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>The working group reports that 80% of companies have been visited under the digitalization program and already has commercial codes created for Oregon pine and native timber products.</strong></li></ol><p>Collaboration between Arauco and PymeMad Araucanía shows concrete results in its three strategic lines of work, according to Alejandro Parada Campos, Head of Linkage and Supply Chain at Arauco. The initiative aims to strengthen the competitiveness of small and medium-sized enterprises in the regional timber-forestry sector.</p><p>In the Sustainable Development Network, implemented with support from Corfo and the Industry 4.0 Center, 11 SMEs from the Araucanía region are already participating, with 4 companies fully digitalized through production sensors. The program has visited nearly 80% of its partners, overcoming initial resistance.</p><p>The working group, comprised of the board of PymeMad Araucanía (Rocío Lagos, Daniel Krasniansky, Hernán Barrios, and Claudio Conejeros) and representatives from Arauco (Juan Pablo Portius, Alejandro Parada, and Arturo Jorquera), has successfully standardized technical datasheets for higher value-added Oregon pine and native species products. Arauco confirmed the creation of commercial codes and expects to finalize the first sales during 2025.</p><p>\"This effort enables progress in shared solutions that strengthen competitiveness, sustainability, and the regional projection of the industry,\" stated Rocío Lagos, President of PymeMad Araucanía, highlighting the synergy between SMEs' knowledge and Arauco's technical capabilities.</p><p>\"We see SMEs as strategic allies with whom we can generate shared value,\" added Parada, who emphasized the importance of production standardization and skill leveling as key factors to improve regional competitiveness.</p><p>The joint effort also includes conducting a sectoral diagnosis to identify gaps and present proposals to public entities such as GORE and Corfo, seeking relevant support instruments for the sector's development.</p>",
+      "meta_description": "Arauco and PymeMad Araucanía boost timber SMEs through productive linkage and digitalization. 80% companies visited with commercial codes created. Regional...",
+      "master": 15
+    }
+  },
+  {
+    "model": "landing.posttranslation",
+    "pk": 45,
+    "fields": {
+      "language_code": "pt",
+      "title": "Arauco e PymeMad Araucanía avançam em encadeamento produtivo para fortalecer PMEs madeireiras na Região",
+      "slug": "arauco-e-pymemad-araucania-avancam-em-encadeamento-produtivo-para-fortalecer-pmes-madeireiras-na-regiao",
+      "body": "<ol><li data-list=\"bullet\"><span class=\"ql-ui\" contenteditable=\"false\"></span><strong>A mesa de trabalho reporta 80% das empresas visitadas no programa de digitalização e já conta com códigos comerciais criados para produtos de pinho oregón e madeiras nativas.</strong></li></ol><p>A colaboração entre Arauco e PymeMad Araucanía mostra resultados concretos em suas três linhas estratégicas de trabalho, conforme informou Alejandro Parada Campos, Chefe de Vinculação e Encadeamento da Arauco. A iniciativa busca fortalecer a competitividade das pequenas e médias empresas do setor florestal-madeireiro regional.</p><p>Na Rede de Fomento Sustentável, implementada com apoio da Corfo e do Centro da Indústria 4.0, já participam 11 PMEs da região de Araucanía, com 4 empresas completamente digitalizadas mediante sensores produtivos. O programa visitou cerca de 80% dos associados, superando as resistências iniciais.</p><p>A mesa de trabalho, integrada pelo diretório da PymeMad Araucanía (Rocío Lagos, Daniel Krasniansky, Hernán Barrios e Claudio Conejeros) e representantes da Arauco (Juan Pablo Portius, Alejandro Parada e Arturo Jorquera), conseguiu padronizar fichas técnicas para produtos de maior valor agregado em pinho oregón e espécies nativas. A Arauco confirmou a criação de códigos comerciais e espera concretizar as primeiras vendas durante 2025.</p><p>\"Este esforço permite avançar em soluções compartilhadas que fortalecem a competitividade, a sustentabilidade e a projeção regional da indústria\", afirmou Rocío Lagos, presidente da PymeMad Araucanía, destacando a articulação entre o conhecimento das PMEs e as capacidades técnicas da Arauco.</p><p>\"Vemos as PMEs como aliados estratégicos onde podemos gerar valor compartilhado\", acrescentou Parada, que destacou a importância da padronização produtiva e da nivelamento de competências como fatores chave para melhorar a competitividade regional.</p><p>O trabalho conjunto também inclui o levantamento de um diagnóstico setorial para identificar lacunas e apresentar propostas a organismos públicos como GORE e Corfo, buscando instrumentos de apoio pertinentes para o desenvolvimento do setor.</p>",
+      "meta_description": "Arauco e PymeMad Araucanía fortalecem PMEs madeireiras com encadeamento produtivo e digitalização. 80% empresas visitadas e códigos comerciais criados....",
+      "master": 15
+    }
+  }
+]

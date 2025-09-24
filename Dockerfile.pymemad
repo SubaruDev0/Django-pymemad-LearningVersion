@@ -1,0 +1,75 @@
+FROM python:3.9.18-slim
+
+# Install os-level dependencies (as root)
+RUN apt-get update && apt-get install -y \
+    wkhtmltopdf \
+    gettext \
+    awscli \
+    wget \
+    curl \
+    lsb-release \
+    gnupg \
+    gzip \
+    nano \
+    procps \
+    --no-install-recommends && \
+    # Agregar repositorio oficial de PostgreSQL para obtener versión 17
+    sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list' && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    apt-get update && \
+    apt-get install -y postgresql-client-17 --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create a non-root user for running the application
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+# Create a directory for the source code and use it as base path
+WORKDIR /home/yllorca/dockerdir/pymemad/
+
+# Copy the python depencencies list for pip
+COPY ./requirements.txt /home/yllorca/dockerdir/pymemad/requirements.txt
+
+# Install python packages at system level
+RUN pip install pip --upgrade && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Copy entrypoint script which waits for the db to be ready
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# This script will run before every command executed in the container
+ENTRYPOINT ["entrypoint.sh"]
+
+# Copy the script that starts the production application server (gunicorn)
+COPY run.sh /usr/local/bin/run.sh
+RUN chmod +x /usr/local/bin/run.sh
+
+# Copy the source code of our django app to the working directoy
+COPY . ./
+
+# Create scripts directory and copy backup script if exists
+RUN mkdir -p /app/scripts && \
+    if [ -f scripts/backup_database.sh ]; then \
+        cp scripts/backup_database.sh /app/scripts/backup_database.sh && \
+        chmod +x /app/scripts/backup_database.sh; \
+    fi && \
+    if [ -f scripts/health_monitor.sh ]; then \
+        cp scripts/health_monitor.sh /app/scripts/health_monitor.sh && \
+        chmod +x /app/scripts/health_monitor.sh; \
+    fi
+
+# Change ownership of the application directory to appuser
+RUN chown -R appuser:appuser /home/yllorca/dockerdir/pymemad/ && \
+    chown -R appuser:appuser /app/
+
+# Set environment variables for better Python behavior
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONIOENCODING=utf-8
+
+# Switch to non-root user
+USER appuser
+
+# The production server starts by default when the container starts
+CMD ["run.sh"]

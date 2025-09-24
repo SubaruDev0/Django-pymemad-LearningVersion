@@ -1,0 +1,271 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Acceso Socios - PymeMad" %}{% endblock %}
+{% block description %}{% trans "Accede al área exclusiva de socios de PymeMad para gestionar tu cuenta y acceder a servicios especializados." %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Reset para página de login */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Ocultar header y footer del base template */
+    .page-wrapper > header,
+    .page-wrapper > footer,
+    .btn-scroll-top {
+        display: none !important;
+    }
+
+    /* Contenedor principal */
+    .login-page {
+        min-height: 100vh;
+        display: flex;
+        position: relative;
+    }
+
+    /* Botón de regreso */
+    .back-to-home {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        z-index: 10;
+    }
+
+    @media (min-width: 576px) {
+        .back-to-home {
+            top: 2rem;
+            right: 2rem;
+        }
+    }
+
+    /* Contenedor del formulario */
+    .login-content {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .login-form-wrapper {
+        width: 100%;
+        max-width: 526px;
+    }
+
+    /* Imagen de portada */
+    .login-cover {
+        display: none;
+    }
+
+    @media (min-width: 992px) {
+        .login-content {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .login-cover {
+            display: block;
+            flex: 0 0 50%;
+            max-width: 50%;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    }
+
+    /* Overlay gradient para la imagen */
+    .login-cover-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg,
+            rgba(0,0,0,0.2) 0%,
+            rgba(0,0,0,0.3) 50%,
+            rgba(0,0,0,0.8) 100%
+        );
+        display: flex;
+        align-items: flex-end;
+        padding: 3rem;
+    }
+
+    /* Estilos del formulario */
+    .brand-logo {
+        max-width: 180px;
+        height: auto;
+        margin-bottom: 3rem;
+    }
+
+    .divider-text {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin: 2rem 0;
+    }
+
+    .divider-text::before,
+    .divider-text::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #dee2e6;
+    }
+
+    .divider-text span {
+        padding: 0 1rem;
+        color: #6c757d;
+        font-size: 0.875rem;
+    }
+
+    /* Copyright en móvil */
+    .mobile-copyright {
+        position: absolute;
+        bottom: 1rem;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 0.875rem;
+        color: #6c757d;
+    }
+
+    @media (min-width: 992px) {
+        .mobile-copyright {
+            display: none;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<div class="login-page">
+    <!-- Botón de regreso -->
+    <a class="back-to-home btn btn-icon bg-light border rounded-circle"
+       href="{% url 'landing:home' %}"
+       data-bs-toggle="tooltip"
+       data-bs-placement="left"
+       title="{% trans 'Volver al inicio' %}">
+        <i class="ai-home text-dark"></i>
+    </a>
+
+    <!-- Contenido del formulario -->
+    <div class="login-content">
+        <div class="login-form-wrapper">
+            <!-- Logo -->
+            <div class="text-center text-lg-start">
+                <img src="{% static 'assets/img/logo_pymemad.webp' %}" alt="PymeMad" class="brand-logo">
+            </div>
+
+            <!-- Título -->
+            <h1 class="h2 mb-2">{% trans "Bienvenido de vuelta" %}</h1>
+            <p class="text-muted pb-3 mb-3 mb-lg-4">
+                {% trans "¿No tienes una cuenta?" %}&nbsp;&nbsp;
+                <a href="#" class="text-decoration-none">{% trans "Contáctanos" %}</a>
+            </p>
+
+            <!-- Formulario -->
+            <form method="post" id="login-form" action="{% url 'accounts:login' %}" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- Email/RUT -->
+                <div class="pb-3 mb-3">
+                    <div class="position-relative">
+                        <i class="ai-mail fs-lg position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                        <input class="form-control form-control-lg ps-5"
+                               type="text"
+                               name="username"
+                               placeholder="{% trans 'Email o RUT empresa' %}"
+                               required>
+                        <div class="invalid-feedback">
+                            {% trans "Por favor ingresa tu email o RUT" %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contraseña -->
+                <div class="mb-4">
+                    <div class="position-relative">
+                        <i class="ai-lock-closed fs-lg position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                        <div class="password-toggle">
+                            <input class="form-control form-control-lg ps-5"
+                                   type="password"
+                                   name="password"
+                                   placeholder="{% trans 'Contraseña' %}"
+                                   required>
+                            <label class="password-toggle-btn" aria-label="{% trans 'Mostrar/ocultar contraseña' %}">
+                                <input class="password-toggle-check" type="checkbox">
+                                <span class="password-toggle-indicator"></span>
+                            </label>
+                        </div>
+                        <div class="invalid-feedback">
+                            {% trans "Por favor ingresa tu contraseña" %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Opciones -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between pb-4">
+                    <div class="form-check my-1">
+                        <input class="form-check-input" type="checkbox" id="keep-signed" name="remember">
+                        <label class="form-check-label ms-1" for="keep-signed">
+                            {% trans "Mantener sesión iniciada" %}
+                        </label>
+                    </div>
+                    <a class="fs-sm fw-semibold text-decoration-none my-1" href="#">
+                        {% trans "¿Olvidaste tu contraseña?" %}
+                    </a>
+                </div>
+
+                <!-- Botón submit -->
+                <button class="btn btn-lg btn-primary w-100 mb-4" type="submit">
+                    {% trans "Iniciar sesión" %}
+                </button>
+
+
+                <!-- Enlaces adicionales -->
+                <div class="text-center pt-3">
+                    <p class="fs-sm text-muted mb-2">
+                        {% trans "¿Tu empresa aún no es socia?" %}
+                    </p>
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="ai-star me-2"></i>
+                        {% trans "Únete a PymeMad" %}
+                    </a>
+                </div>
+            </form>
+
+            <!-- Copyright para móvil -->
+            <p class="mobile-copyright">
+                &copy; {% now "Y" %} PymeMad Nacional A.G.
+            </p>
+        </div>
+    </div>
+
+    <!-- Imagen de portada -->
+    <div class="login-cover" style="background-image: url({% static 'assets/img/about/about.webp' %});">
+        <div class="login-cover-overlay">
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'assets/js/front/login.js' %}"></script>
+{% endblock extra_js %}

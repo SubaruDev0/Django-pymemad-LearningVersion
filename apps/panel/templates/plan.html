@@ -1,0 +1,893 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Plan Estratégico - PymeMad Nacional{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        /* KPI Cards */
+        .kpi-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e8e8e8;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+
+        .kpi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .kpi-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kpi-trend {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .trend-up { color: #16a34a; }
+        .trend-down { color: #dc2626; }
+        .trend-neutral { color: #6c757d; }
+
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 0.25rem 0;
+            line-height: 1;
+        }
+
+        .kpi-subtitle {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .kpi-progress {
+            margin-top: 0.75rem;
+            height: 6px;
+            background: #f0f0f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .kpi-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a5f3f 0%, #2c7a5e 100%);
+            transition: width 0.5s ease;
+        }
+
+        /* Heatmap Styles */
+        .heatmap-container {
+            overflow-x: auto;
+        }
+
+        .heatmap-grid {
+            display: grid;
+            grid-template-columns: 150px repeat(12, 1fr);
+            gap: 4px;
+            min-width: 900px;
+        }
+
+        .heatmap-header {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            padding: 0.5rem;
+            color: #6c757d;
+        }
+
+        .heatmap-region {
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.75rem;
+            display: flex;
+            align-items: center;
+            color: #333;
+        }
+
+        .heatmap-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .heatmap-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10;
+        }
+
+        /* Heatmap Colors */
+        .heat-high { background: #16a34a; color: white; }
+        .heat-medium { background: #fbbf24; color: #333; }
+        .heat-low { background: #ef4444; color: white; }
+        .heat-empty { background: #f5f5f5; color: #999; }
+
+        /* Timeline Styles */
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 100px 1fr 150px 150px 120px 100px;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #e8e8e8;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            background: #fafafa;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-item:hover {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transform: translateX(4px);
+        }
+
+        .timeline-date {
+            font-size: 0.813rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .timeline-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .timeline-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 0.938rem;
+        }
+
+        .timeline-meta {
+            font-size: 0.75rem;
+            color: #6c757d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-region {
+            font-size: 0.813rem;
+            color: #6c757d;
+        }
+
+        .timeline-responsible {
+            font-size: 0.813rem;
+            color: #333;
+        }
+
+        .timeline-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-completed { background: #d1fae5; color: #065f46; }
+        .status-in-progress { background: #dbeafe; color: #1e3a8a; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-overdue { background: #fee2e2; color: #991b1b; }
+
+        .timeline-progress {
+            width: 60px;
+            height: 6px;
+            background: #e5e5e5;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #1a5f3f;
+            transition: width 0.3s ease;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs-container {
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            margin: -1.5rem -1.5rem 1.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            color: #6c757d;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: #1a5f3f;
+            background: rgba(26,95,63,0.05);
+        }
+
+        .nav-tab.active {
+            color: #1a5f3f;
+            border-bottom-color: #1a5f3f;
+            background: rgba(26,95,63,0.05);
+        }
+
+        /* View Options */
+        .view-options {
+            display: flex;
+            gap: 0.5rem;
+            background: #f5f5f5;
+            padding: 0.25rem;
+            border-radius: 8px;
+        }
+
+        .view-option {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.813rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: transparent;
+        }
+
+        .view-option.active {
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 1200px) {
+            .timeline-item {
+                grid-template-columns: 1fr auto;
+                gap: 1rem;
+            }
+
+            .timeline-date,
+            .timeline-region,
+            .timeline-responsible {
+                display: none;
+            }
+
+            .heatmap-grid {
+                grid-template-columns: 100px repeat(12, 60px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .kpi-value {
+                font-size: 1.5rem;
+            }
+
+            .timeline-item {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .timeline-progress {
+                width: 100%;
+            }
+
+            .nav-tabs {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-tab {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .heatmap-grid {
+                grid-template-columns: 80px repeat(12, 50px);
+                font-size: 0.75rem;
+            }
+
+            .heatmap-cell {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pt-4 pb-2 pb-sm-4">
+        <!-- Header -->
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-4 gap-3">
+            <div>
+                <h2 class="h2 mb-0">Plan Estratégico 2025</h2>
+                <p class="text-muted mb-0">Dashboard Ejecutivo - Monitoreo de Objetivos</p>
+            </div>
+            <div class="d-flex gap-2">
+                <select class="form-select form-select-sm" id="periodSelector" style="width: auto;">
+                    <option value="q3">Q3 2025</option>
+                    <option value="q2">Q2 2025</option>
+                    <option value="q1">Q1 2025</option>
+                    <option value="year" selected>Año 2025</option>
+                </select>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#newActivityModal">
+                    <i class="ai-plus me-2"></i>Nueva Actividad
+                </button>
+            </div>
+        </div>
+
+        <!-- Executive Summary KPIs -->
+        <div class="row g-3 mb-4" id="executiveView">
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card kpi-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Actividades Totales</span>
+                            <span class="kpi-trend trend-up">
+                                <i class="ai-arrow-up"></i> 12%
+                            </span>
+                        </div>
+                        <div class="kpi-value">342</div>
+                        <div class="kpi-subtitle">287 Completadas</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-fill" style="width: 83.9%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card kpi-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Cumplimiento Plan</span>
+                            <span class="kpi-trend trend-up">
+                                <i class="ai-arrow-up"></i> 5.2%
+                            </span>
+                        </div>
+                        <div class="kpi-value">83.9%</div>
+                        <div class="kpi-subtitle">Meta: 85%</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-fill" style="width: 83.9%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card kpi-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Socios Activos</span>
+                            <span class="kpi-trend trend-up">
+                                <i class="ai-arrow-up"></i> 8
+                            </span>
+                        </div>
+                        <div class="kpi-value">67</div>
+                        <div class="kpi-subtitle">Meta: 80 socios</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-fill" style="width: 83.75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card kpi-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Capacitaciones</span>
+                            <span class="kpi-trend trend-neutral">
+                                <i class="ai-arrow-right"></i> 0%
+                            </span>
+                        </div>
+                        <div class="kpi-value">48</div>
+                        <div class="kpi-subtitle">892 participantes</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-fill" style="width: 80%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-lg">
+                <div class="card kpi-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Recaudación</span>
+                            <span class="kpi-trend trend-up">
+                                <i class="ai-arrow-up"></i> 15%
+                            </span>
+                        </div>
+                        <div class="kpi-value">$45.2M</div>
+                        <div class="kpi-subtitle">Meta: $50M</div>
+                        <div class="kpi-progress">
+                            <div class="kpi-progress-fill" style="width: 90.4%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Performance Heatmap -->
+        <div class="card mb-4">
+            <div class="card-header bg-transparent">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Cumplimiento por Región - 2025</h5>
+                    <div class="view-options">
+                        <button class="view-option active" data-view="monthly">Mensual</button>
+                        <button class="view-option" data-view="quarterly">Trimestral</button>
+                        <button class="view-option" data-view="yearly">Anual</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="heatmap-container">
+                    <div class="heatmap-grid">
+                        <!-- Headers -->
+                        <div class="heatmap-header"></div>
+                        <div class="heatmap-header">ENE</div>
+                        <div class="heatmap-header">FEB</div>
+                        <div class="heatmap-header">MAR</div>
+                        <div class="heatmap-header">ABR</div>
+                        <div class="heatmap-header">MAY</div>
+                        <div class="heatmap-header">JUN</div>
+                        <div class="heatmap-header">JUL</div>
+                        <div class="heatmap-header">AGO</div>
+                        <div class="heatmap-header">SEP</div>
+                        <div class="heatmap-header">OCT</div>
+                        <div class="heatmap-header">NOV</div>
+                        <div class="heatmap-header">DIC</div>
+                        
+                        <!-- Biobío/Ñuble -->
+                        <div class="heatmap-region">Biobío/Ñuble</div>
+                        <div class="heatmap-cell heat-high" title="92% cumplimiento">92%</div>
+                        <div class="heatmap-cell heat-high" title="88% cumplimiento">88%</div>
+                        <div class="heatmap-cell heat-high" title="91% cumplimiento">91%</div>
+                        <div class="heatmap-cell heat-medium" title="85% cumplimiento">85%</div>
+                        <div class="heatmap-cell heat-medium" title="82% cumplimiento">82%</div>
+                        <div class="heatmap-cell heat-high" title="89% cumplimiento">89%</div>
+                        <div class="heatmap-cell heat-high" title="87% cumplimiento">87%</div>
+                        <div class="heatmap-cell heat-medium" title="84% cumplimiento">84%</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        
+                        <!-- Maule -->
+                        <div class="heatmap-region">Maule</div>
+                        <div class="heatmap-cell heat-medium" title="78% cumplimiento">78%</div>
+                        <div class="heatmap-cell heat-medium" title="82% cumplimiento">82%</div>
+                        <div class="heatmap-cell heat-medium" title="85% cumplimiento">85%</div>
+                        <div class="heatmap-cell heat-high" title="88% cumplimiento">88%</div>
+                        <div class="heatmap-cell heat-high" title="90% cumplimiento">90%</div>
+                        <div class="heatmap-cell heat-medium" title="86% cumplimiento">86%</div>
+                        <div class="heatmap-cell heat-medium" title="83% cumplimiento">83%</div>
+                        <div class="heatmap-cell heat-medium" title="85% cumplimiento">85%</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        
+                        <!-- Araucanía -->
+                        <div class="heatmap-region">Araucanía</div>
+                        <div class="heatmap-cell heat-high" title="95% cumplimiento">95%</div>
+                        <div class="heatmap-cell heat-high" title="93% cumplimiento">93%</div>
+                        <div class="heatmap-cell heat-high" title="92% cumplimiento">92%</div>
+                        <div class="heatmap-cell heat-high" title="91% cumplimiento">91%</div>
+                        <div class="heatmap-cell heat-high" title="94% cumplimiento">94%</div>
+                        <div class="heatmap-cell heat-high" title="96% cumplimiento">96%</div>
+                        <div class="heatmap-cell heat-high" title="93% cumplimiento">93%</div>
+                        <div class="heatmap-cell heat-high" title="95% cumplimiento">95%</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        
+                        <!-- Los Ríos -->
+                        <div class="heatmap-region">Los Ríos</div>
+                        <div class="heatmap-cell heat-medium" title="72% cumplimiento">72%</div>
+                        <div class="heatmap-cell heat-low" title="68% cumplimiento">68%</div>
+                        <div class="heatmap-cell heat-medium" title="75% cumplimiento">75%</div>
+                        <div class="heatmap-cell heat-medium" title="78% cumplimiento">78%</div>
+                        <div class="heatmap-cell heat-medium" title="80% cumplimiento">80%</div>
+                        <div class="heatmap-cell heat-medium" title="82% cumplimiento">82%</div>
+                        <div class="heatmap-cell heat-medium" title="79% cumplimiento">79%</div>
+                        <div class="heatmap-cell heat-medium" title="81% cumplimiento">81%</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                        <div class="heatmap-cell heat-empty">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activities Timeline -->
+        <div class="card">
+            <div class="card-header bg-transparent">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Actividades del Plan Estratégico</h5>
+                    <button class="btn btn-sm btn-outline-primary" onclick="exportActivities()">
+                        <i class="ai-download me-1"></i>Exportar
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Filters -->
+                <div class="row g-3 mb-4">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small">Región:</label>
+                        <select class="form-select form-select-sm" id="regionFilter">
+                            <option value="">Todas las regiones</option>
+                            <option value="biobio">Biobío/Ñuble</option>
+                            <option value="maule">Maule</option>
+                            <option value="araucania">Araucanía</option>
+                            <option value="rios">Los Ríos</option>
+                            <option value="nacional">Nacional</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small">Estado:</label>
+                        <select class="form-select form-select-sm" id="statusFilter">
+                            <option value="">Todos los estados</option>
+                            <option value="completed">Completado</option>
+                            <option value="in-progress">En progreso</option>
+                            <option value="pending">Pendiente</option>
+                            <option value="overdue">Vencido</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label small">Tipo:</label>
+                        <select class="form-select form-select-sm" id="typeFilter">
+                            <option value="">Todos los tipos</option>
+                            <option value="training">Capacitación</option>
+                            <option value="meeting">Reunión</option>
+                            <option value="project">Proyecto</option>
+                            <option value="event">Evento</option>
+                            <option value="publication">Publicación</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Timeline List -->
+                <div class="timeline-list">
+                    <div class="timeline-item">
+                        <div class="timeline-date">15/08/2025</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Capacitación Secado de Madera</div>
+                            <div class="timeline-meta">
+                                <span><i class="ai-book-open"></i> Capacitación</span>
+                                <span>• 45 participantes</span>
+                                <span>• Universidad del Biobío</span>
+                            </div>
+                        </div>
+                        <div class="timeline-region">Biobío/Ñuble</div>
+                        <div class="timeline-responsible">Victor Sandoval</div>
+                        <div class="timeline-status">
+                            <span class="status-badge status-in-progress">En progreso</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="progress-bar" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">20/08/2025</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Mesa de Trabajo con CMPC</div>
+                            <div class="timeline-meta">
+                                <span><i class="ai-users"></i> Reunión</span>
+                                <span>• Negociación volumen 2026</span>
+                                <span>• 180,000 m³ anuales</span>
+                            </div>
+                        </div>
+                        <div class="timeline-region">Nacional</div>
+                        <div class="timeline-responsible">Michel Esquerre</div>
+                        <div class="timeline-status">
+                            <span class="status-badge status-pending">Pendiente</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">25/08/2025</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Instalación Sensores de Productividad</div>
+                            <div class="timeline-meta">
+                                <span><i class="ai-tool"></i> Proyecto</span>
+                                <span>• 8 empresas piloto</span>
+                                <span>• Universidad del Biobío</span>
+                            </div>
+                        </div>
+                        <div class="timeline-region">Araucanía</div>
+                        <div class="timeline-responsible">Rocío Lagos</div>
+                        <div class="timeline-status">
+                            <span class="status-badge status-in-progress">En progreso</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="progress-bar" style="width: 40%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">01/09/2025</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Lanzamiento Revista PymeMad #1</div>
+                            <div class="timeline-meta">
+                                <span><i class="ai-file-text"></i> Publicación</span>
+                                <span>• Edición trimestral</span>
+                                <span>• 2,000 ejemplares</span>
+                            </div>
+                        </div>
+                        <div class="timeline-region">Nacional</div>
+                        <div class="timeline-responsible">Yury Llorca</div>
+                        <div class="timeline-status">
+                            <span class="status-badge status-pending">Pendiente</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="progress-bar" style="width: 20%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-date">10/09/2025</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Feria Regional de Productos Madereros</div>
+                            <div class="timeline-meta">
+                                <span><i class="ai-calendar"></i> Evento</span>
+                                <span>• 25 expositores</span>
+                                <span>• Centro de Eventos Maule</span>
+                            </div>
+                        </div>
+                        <div class="timeline-region">Maule</div>
+                        <div class="timeline-responsible">Hernán Muñoz</div>
+                        <div class="timeline-status">
+                            <span class="status-badge status-pending">Pendiente</span>
+                        </div>
+                        <div class="timeline-progress">
+                            <div class="progress-bar" style="width: 15%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center mt-4">
+                    <button class="btn btn-outline-primary btn-sm">
+                        <i class="ai-refresh me-2"></i>Cargar más actividades
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Activity Modal -->
+    <div class="modal fade" id="newActivityModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nueva Actividad del Plan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Título de la Actividad</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Tipo de Actividad</label>
+                                <select class="form-select" required>
+                                    <option value="">Seleccionar tipo...</option>
+                                    <option>Capacitación</option>
+                                    <option>Reunión</option>
+                                    <option>Proyecto</option>
+                                    <option>Evento</option>
+                                    <option>Publicación</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Región</label>
+                                <select class="form-select" required>
+                                    <option value="">Seleccionar región...</option>
+                                    <option>Nacional</option>
+                                    <option>Biobío/Ñuble</option>
+                                    <option>Maule</option>
+                                    <option>Araucanía</option>
+                                    <option>Los Ríos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Responsable</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de Inicio</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Fecha de Término</label>
+                                <input type="date" class="form-control" required>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Descripción</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Meta/Objetivo</label>
+                                <input type="text" class="form-control" placeholder="Ej: 50 participantes">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Presupuesto Estimado</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Crear Actividad</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function() {
+            // Navigation tabs
+            $('.nav-tab').on('click', function() {
+                $('.nav-tab').removeClass('active');
+                $(this).addClass('active');
+                
+                const tab = $(this).data('tab');
+                console.log('Switching to tab:', tab);
+                // Aquí se implementaría la lógica de cambio de vista
+            });
+
+            // View options (Monthly/Quarterly/Yearly)
+            $('.view-option').on('click', function() {
+                $('.view-option').removeClass('active');
+                $(this).addClass('active');
+                
+                const view = $(this).data('view');
+                console.log('Switching to view:', view);
+                // Aquí se implementaría la lógica de cambio de vista del heatmap
+            });
+
+            // Filters
+            $('#regionFilter, #statusFilter, #typeFilter').on('change', function() {
+                filterActivities();
+            });
+
+            // Period selector
+            $('#periodSelector').on('change', function() {
+                const period = $(this).val();
+                updateDashboard(period);
+            });
+
+            // Heatmap cell interactions
+            $('.heatmap-cell').on('click', function() {
+                if (!$(this).hasClass('heat-empty')) {
+                    const value = $(this).text();
+                    const region = $(this).parent().find('.heatmap-region').text();
+                    const month = $('.heatmap-header').eq($(this).index()).text();
+                    
+                    console.log(`Región: ${region}, Mes: ${month}, Cumplimiento: ${value}`);
+                    // Aquí se podría mostrar un modal con detalles
+                }
+            });
+
+            // Function to filter activities
+            function filterActivities() {
+                const region = $('#regionFilter').val();
+                const status = $('#statusFilter').val();
+                const type = $('#typeFilter').val();
+                
+                console.log('Filtering:', { region, status, type });
+                
+                // Implementar lógica de filtrado
+                $('.timeline-item').each(function() {
+                    let show = true;
+                    
+                    // Aquí se implementaría la lógica de filtrado real
+                    // basada en los valores de los filtros
+                    
+                    if (show) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+
+            // Function to update dashboard based on period
+            function updateDashboard(period) {
+                console.log('Updating dashboard for period:', period);
+                
+                // Aquí se implementaría la actualización de KPIs y gráficos
+                // basada en el período seleccionado
+                
+                // Ejemplo: actualizar valores de KPIs
+                if (period === 'q3') {
+                    $('.kpi-value').first().text('108');
+                    // ... actualizar otros valores
+                } else if (period === 'year') {
+                    $('.kpi-value').first().text('342');
+                    // ... actualizar otros valores
+                }
+            }
+
+            // Export activities function
+            window.exportActivities = function() {
+                console.log('Exporting activities...');
+                // Aquí se implementaría la lógica de exportación
+                alert('Exportando actividades del plan estratégico...');
+            };
+
+            // Initialize tooltips
+            $('[title]').tooltip();
+
+            // Animate progress bars on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const progressBar = entry.target.querySelector('.kpi-progress-fill, .progress-bar');
+                        if (progressBar) {
+                            const width = progressBar.style.width;
+                            progressBar.style.width = '0';
+                            setTimeout(() => {
+                                progressBar.style.width = width;
+                            }, 100);
+                        }
+                    }
+                });
+            });
+
+            $('.kpi-card, .timeline-item').each(function() {
+                observer.observe(this);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,853 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Gestión de Comentarios{% endblock %}
+
+{% block extra_css %}
+    <!-- Estilos específicos movidos a custom.css -->
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+                <h1 class="h2 mb-0">{{ title_page|default:"Gestionar Comentarios" }}</h1>
+                <p class="text-muted mb-0">Modera y gestiona los comentarios de los visitantes</p>
+            </div>
+            <div class="d-flex gap-2">
+                <span class="badge bg-success">Publicados: {{ active_comments }}</span>
+                <span class="badge bg-warning">Pendientes: {{ pending_comments }}</span>
+                <span class="badge bg-primary">Total: {{ total_comments }}</span>
+            </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Estado de Comentarios</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Evolución Temporal (30 días)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="timelineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filtros -->
+        <div class="card border-0 mb-4">
+            <div class="card-header bg-transparent">
+                <h5 class="card-title mb-0">
+                    <i class="ai-filter me-2"></i>Filtros de Búsqueda
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="get" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {{ filter.form.active.label_tag }}
+                                {{ filter.form.active }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {{ filter.form.post.label_tag }}
+                                {{ filter.form.post }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                {{ filter.form.created_date_range.label_tag }}
+                                {{ filter.form.created_date_range }}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button type="button" id="clearFiltersButton" class="btn btn-outline-secondary">
+                                <i class="ai-x-circle me-1"></i>Limpiar
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="filterButton">
+                                <i class="ai-filter me-1"></i>Aplicar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabla de Comentarios -->
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="commentsTable" class="table table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox" id="selectAll"></th>
+                            <th>Autor</th>
+                            <th>Email</th>
+                            <th>Post</th>
+                            <th>Comentario</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ver detalles del comentario -->
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Autor:</strong> <span id="modalName"></span></p>
+                            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                            <p><strong>Fecha:</strong> <span id="modalDate"></span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Post:</strong> <span id="modalPost"></span></p>
+                            <p><strong>Estado:</strong> <span id="modalStatus"></span></p>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <p><strong>Comentario:</strong></p>
+                            <div class="p-3 bg-light rounded" id="modalBody"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para editar comentario -->
+    <div class="modal fade" id="editCommentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Comentario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCommentForm">
+                        <input type="hidden" id="edit-comment-id" name="comment_id">
+                        <div class="mb-3">
+                            <label for="edit-comment-name" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="edit-comment-name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-comment-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="edit-comment-email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-comment-body" class="form-label">Comentario</label>
+                            <textarea class="form-control" id="edit-comment-body" name="body" rows="5" required></textarea>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="edit-comment-active" name="active">
+                            <label class="form-check-label" for="edit-comment-active">
+                                Publicado
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCommentBtn">Guardar cambios</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript">
+    // Configuración global con URLs generadas por Django
+    var commentsConfig = {
+        currentLanguage: '{{ current_language }}',
+        urls: {
+            list: window.location.href,
+            update: "{% url 'dashboard:comment-update' pk=0 %}",  // Se reemplaza el 0 con el ID real
+            delete: "{% url 'dashboard:comment-delete' pk=0 %}",  // Se reemplaza el 0 con el ID real
+            postsSearch: '{% url "dashboard:posts-search" %}',
+            dataTableLanguage: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+        },
+        chartData: {{ chart_data|safe }}
+    };
+</script>
+
+<!-- Script mejorado para gestión de comentarios en la lista -->
+<script>
+$(document).ready(function() {
+    // Variable para guardar la instancia de DataTable
+    let table;
+    
+    // Obtener configuración del objeto global
+    const currentLanguage = commentsConfig.currentLanguage;
+
+    // Configurar Flatpickr para rango de fechas
+    flatpickr("#id_created_date_range", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        locale: "es",
+        altInput: true,
+        altFormat: "d/m/Y",
+        rangeSeparator: " a ",
+        allowInput: true
+    });
+
+    // Configurar Select2
+    $('#id_active').select2({
+        placeholder: 'Seleccionar estado',
+        allowClear: true,
+        width: '100%'
+    });
+
+    $('#id_post').select2({
+        placeholder: 'Seleccionar publicación',
+        allowClear: true,
+        width: '100%',
+        ajax: {
+            url: commentsConfig.urls.postsSearch,
+            dataType: 'json',
+            delay: 250,
+            data: function(params) {
+                return {
+                    q: params.term,
+                    page: params.page
+                };
+            },
+            processResults: function(data, params) {
+                params.page = params.page || 1;
+                return {
+                    results: data.items,
+                    pagination: {
+                        more: (params.page * 30) < data.total_count
+                    }
+                };
+            },
+            cache: true
+        },
+        minimumInputLength: 2
+    });
+
+    // Configurar DataTable
+    table = $('#commentsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: commentsConfig.urls.list,
+            type: 'GET',
+            data: function(d) {
+                // Agregar parámetros de filtro
+                d.active = $('#id_active').val();
+                d.post = $('#id_post').val();
+                d.created_date_range = $('#id_created_date_range').val();
+            }
+        },
+        columns: [
+            {
+                data: 'id',
+                orderable: false,
+                searchable: false,
+                render: function(data) {
+                    return '<input type="checkbox" class="select-comment" value="' + data + '">';
+                }
+            },
+            {data: 'name'},
+            {data: 'email'},
+            {data: 'post'},
+            {data: 'body'},
+            {data: 'active'},
+            {data: 'created_at'},
+            {data: 'actions', orderable: false, searchable: false}
+        ],
+        language: {
+            url: commentsConfig.urls.dataTableLanguage
+        },
+        order: [[6, 'desc']],
+        pageLength: 25,
+        drawCallback: function(settings) {
+            // Reinicializar tooltips si los usas
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
+    });
+
+    // Aplicar filtros al enviar el formulario
+    $('#filterForm').on('submit', function(e) {
+        e.preventDefault();
+        table.ajax.reload();
+    });
+
+    // Botón limpiar filtros
+    $('#clearFiltersButton').on('click', function() {
+        $('#id_active').val(null).trigger('change');
+        $('#id_post').val(null).trigger('change');
+        $('#id_created_date_range').val('');
+        if ($('#id_created_date_range')[0]._flatpickr) {
+            $('#id_created_date_range')[0]._flatpickr.clear();
+        }
+        table.ajax.reload();
+    });
+
+    // Checkbox select all
+    $('#selectAll').on('change', function() {
+        $('.select-comment').prop('checked', this.checked);
+    });
+
+    // Ver comentario completo
+    $(document).on('click', '.view-comment', function() {
+        const $btn = $(this);
+
+        // Escapar HTML para prevenir XSS
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+
+        $('#modalName').text($btn.data('name'));
+        $('#modalEmail').text($btn.data('email'));
+        $('#modalPost').text($btn.data('post'));
+        $('#modalBody').html(escapeHtml($btn.data('body')).replace(/\n/g, '<br>'));
+        $('#modalStatus').html($btn.data('active') === true || $btn.data('active') === 'True' ?
+            '<span class="badge bg-success">Publicado</span>' :
+            '<span class="badge bg-warning">Pendiente</span>');
+        $('#modalDate').text($btn.data('date'));
+        $('#commentModal').modal('show');
+    });
+
+    // Aprobar comentario
+    $(document).on('click', '.approve-comment', function() {
+        const commentId = $(this).data('id');
+        const button = $(this);
+
+        Swal.fire({
+            title: '¿Aprobar comentario?',
+            text: 'Este comentario será visible públicamente',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, aprobar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Aprobando comentario',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: commentsConfig.urls.update.replace('0', commentId),
+                    type: 'POST',
+                    data: {
+                        action: 'approve',
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: '¡Aprobado!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            table.ajax.reload(null, false); // false para mantener la página actual
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Error al aprobar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Error al aprobar el comentario',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Rechazar comentario
+    $(document).on('click', '.reject-comment', function() {
+        const commentId = $(this).data('id');
+
+        Swal.fire({
+            title: '¿Rechazar comentario?',
+            text: 'El comentario no será visible públicamente',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ffc107',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, rechazar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Procesando...',
+                    text: 'Rechazando comentario',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: commentsConfig.urls.update.replace('0', commentId),
+                    type: 'POST',
+                    data: {
+                        action: 'reject',
+                        csrfmiddlewaretoken: getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Rechazado',
+                                text: response.message,
+                                icon: 'info',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            table.ajax.reload(null, false);
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Error al rechazar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Error al rechazar el comentario',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Editar comentario
+    $(document).on('click', '.edit-comment', function() {
+        const commentId = $(this).data('id');
+
+        // Mostrar loading mientras carga los datos
+        Swal.fire({
+            title: 'Cargando...',
+            text: 'Obteniendo datos del comentario',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        // Cargar datos del comentario
+        $.ajax({
+            url: commentsConfig.urls.update.replace('0', commentId),
+            type: 'GET',
+            success: function(response) {
+                Swal.close();
+
+                if (response.success) {
+                    const comment = response.comment;
+                    $('#edit-comment-id').val(comment.id);
+                    $('#edit-comment-name').val(comment.name);
+                    $('#edit-comment-email').val(comment.email);
+                    $('#edit-comment-body').val(comment.body);
+                    $('#edit-comment-active').prop('checked', comment.active);
+                    $('#editCommentModal').modal('show');
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message || 'Error al cargar el comentario',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            },
+            error: function(xhr) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al cargar el comentario',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+
+    // Guardar cambios del comentario
+    $('#saveCommentBtn').on('click', function() {
+        const commentId = $('#edit-comment-id').val();
+
+        // Validar campos requeridos
+        const name = $('#edit-comment-name').val().trim();
+        const email = $('#edit-comment-email').val().trim();
+        const body = $('#edit-comment-body').val().trim();
+
+        if (!name || !email || !body) {
+            Swal.fire({
+                title: 'Campos requeridos',
+                text: 'Por favor complete todos los campos',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
+        // Validar formato de email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            Swal.fire({
+                title: 'Email inválido',
+                text: 'Por favor ingrese un correo electrónico válido',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+
+        // Preparar datos del formulario
+        const formData = {
+            action: 'edit',
+            name: name,
+            email: email,
+            body: body,
+            active: $('#edit-comment-active').is(':checked'),
+            csrfmiddlewaretoken: getCSRFToken()
+        };
+
+        // Mostrar loading
+        Swal.fire({
+            title: 'Guardando...',
+            text: 'Actualizando el comentario',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        $.ajax({
+            url: commentsConfig.urls.update.replace('0', commentId),
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                if (response.success) {
+                    $('#editCommentModal').modal('hide');
+
+                    Swal.fire({
+                        title: '¡Actualizado!',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Recargar la tabla
+                    table.ajax.reload(null, false);
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: response.message || 'Error al actualizar el comentario',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            },
+            error: function(xhr) {
+                let errorMessage = 'Error al actualizar el comentario';
+
+                if (xhr.responseJSON && xhr.responseJSON.message) {
+                    errorMessage = xhr.responseJSON.message;
+                }
+
+                Swal.fire({
+                    title: 'Error',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        });
+    });
+
+    // Eliminar comentario
+    $(document).on('click', '.delete-comment', function() {
+        const commentId = $(this).data('id');
+        const row = $(this).closest('tr');
+        const commentName = row.find('td:eq(1)').text(); // Columna del nombre
+
+        Swal.fire({
+            title: '¿Eliminar comentario?',
+            html: `¿Estás seguro de que deseas eliminar el comentario de <strong>${commentName}</strong>?<br>Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Mostrar loading
+                Swal.fire({
+                    title: 'Eliminando...',
+                    text: 'Procesando la solicitud',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                $.ajax({
+                    url: commentsConfig.urls.delete.replace('0', commentId),
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken()
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: '¡Eliminado!',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+
+                            // Recargar la tabla
+                            table.ajax.reload(null, false);
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: response.message || 'Error al eliminar el comentario',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Error al eliminar el comentario',
+                            icon: 'error',
+                            confirmButtonText: 'Aceptar'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Configurar gráficos con Chart.js
+    const chartData = commentsConfig.chartData;
+
+    // Gráfico de estado
+    if (chartData.status && document.getElementById('statusChart')) {
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: chartData.status.labels,
+                datasets: [{
+                    data: chartData.status.data,
+                    backgroundColor: ['#28a745', '#ffc107'],
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Gráfico de top posts
+    {#if (chartData.top_posts && document.getElementById('topPostsChart')) {#}
+    {#    const topPostsCtx = document.getElementById('topPostsChart').getContext('2d');#}
+    {#    new Chart(topPostsCtx, {#}
+    {#        type: 'bar',#}
+    {#        data: {#}
+    {#            labels: chartData.top_posts.labels,#}
+    {#            datasets: [{#}
+    {#                label: 'Comentarios',#}
+    {#                data: chartData.top_posts.data,#}
+    {#                backgroundColor: 'rgba(0, 123, 255, 0.8)',#}
+    {#                borderColor: '#007bff',#}
+    {#                borderWidth: 1#}
+    {#            }]#}
+    {#        },#}
+    {#        options: {#}
+    {#            responsive: true,#}
+    {#            maintainAspectRatio: false,#}
+    {#            plugins: {#}
+    {#                legend: {#}
+    {#                    display: false#}
+    {#                },#}
+    {#                tooltip: {#}
+    {#                    callbacks: {#}
+    {#                        title: function(tooltipItems) {#}
+    {#                            return tooltipItems[0].label;#}
+    {#                        }#}
+    {#                    }#}
+    {#                }#}
+    {#            },#}
+    {#            scales: {#}
+    {#                y: {#}
+    {#                    beginAtZero: true,#}
+    {#                    ticks: {#}
+    {#                        stepSize: 1#}
+    {#                    }#}
+    {#                },#}
+    {#                x: {#}
+    {#                    ticks: {#}
+    {#                        maxRotation: 45,#}
+    {#                        minRotation: 45#}
+    {#                    }#}
+    {#                }#}
+    {#            }#}
+    {#        }#}
+    {#    });#}
+    {#}#}
+
+    // Gráfico de línea temporal
+    if (chartData.timeline && document.getElementById('timelineChart')) {
+        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+        new Chart(timelineCtx, {
+            type: 'line',
+            data: {
+                labels: chartData.timeline.labels,
+                datasets: [{
+                    label: 'Comentarios',
+                    data: chartData.timeline.data,
+                    borderColor: '#007bff',
+                    backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 3,
+                    pointHoverRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            maxRotation: 45,
+                            minRotation: 45
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

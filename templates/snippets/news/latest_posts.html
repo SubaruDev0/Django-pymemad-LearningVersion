@@ -1,0 +1,32 @@
+<!-- snippets/news/latest_posts.html -->
+{% load static i18n blog_extras %}
+
+{% if latest_posts %}
+    <h4 class="pt-3 pt-lg-0 pb-1">{% trans "Noticias recientes:" %}</h4>
+    <div class="mb-lg-5 mb-4">
+        {% for post in latest_posts %}
+            <article class="position-relative d-flex align-items-center mb-4">
+                {% get_post_image_url post as post_image %}
+                {% if post_image %}
+                    <img class="rounded" src="{{ post_image }}"
+                         width="92" alt="{{ post.title }}">
+                {% else %}
+                    <div class="rounded bg-secondary d-flex align-items-center justify-content-center"
+                         style="width: 92px; height: 69px;">
+                        <i class="ai-file-text text-muted"></i>
+                    </div>
+                {% endif %}
+                <div class="ps-3">
+                    <h4 class="h6 mb-2">
+                        <a class="stretched-link" href="{% post_link_url post %}">
+                            {{ post.title|truncatewords:8 }}
+                        </a>
+                    </h4>
+                    <span class="fs-sm text-body-secondary">
+                        {{ post.publish|date:"d M Y" }}
+                    </span>
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endif %}

@@ -1,0 +1,97 @@
+{% load static %}
+{% load i18n %}
+<!-- Footer -->
+<footer class="footer bg-dark pb-3 pt-sm-3 py-md-4 py-lg-5" data-bs-theme="dark">
+    <div class="container pb-4 pt-5">
+        <!-- Logo y descripción -->
+        <div class="row pb-4 mb-4 mb-lg-5">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <a class="d-inline-block mb-3" href="index.html">
+                    <img src="{% static 'assets/img/logo_pymemad_inverter.webp' %}" alt="PymeMad Nacional" width="200">
+                </a>
+                <p class="text-body-secondary fs-sm mb-0">{% trans "Asociación gremial que representa a las pequeñas y medianas empresas del sector forestal en Chile." %}</p>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        <h6 class="mb-3">{% trans "Nosotros" %}</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#quienes-somos">{% trans "¿Quiénes somos?" %}</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#mision-vision">{% trans "Misión y Visión" %}</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#directorio">{% trans "Directorio" %}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4 mb-3 mb-sm-0">
+                        <h6 class="mb-3">{% trans "Socios" %}</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#directorio-socios">{% trans "Directorio" %}</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#beneficios">{% trans "Beneficios" %}</a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="#como-asociarse">{% trans "Hazte Socio" %}</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <h6 class="mb-3">{% trans "Contacto" %}</h6>
+                        <ul class="nav flex-column">
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="mailto:contacto@pymemad.cl">
+                                    <i class="ai-mail fs-sm me-2"></i>contacto@pymemad.cl
+                                </a>
+                            </li>
+                            <li class="nav-item mb-2">
+                                <a class="nav-link p-0 text-body-secondary" href="tel:+56912345678">
+                                    <i class="ai-phone fs-sm me-2"></i>+569 1234 5678
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enlaces rápidos y redes sociales -->
+        <div class="d-md-flex align-items-center justify-content-between pb-1 pb-md-0 mb-4 mb-md-5">
+            <nav class="nav justify-content-center justify-content-md-start pb-sm-2 pb-md-0 mb-4 mb-md-0 ms-md-n3">
+                <a class="nav-link py-1 px-0 mx-3" href="#noticias">{% trans "Noticias" %}</a>
+                <a class="nav-link py-1 px-0 mx-3" href="#revista">{% trans "Revista" %}</a>
+                <a class="nav-link py-1 px-0 mx-3" href="#recursos">{% trans "Recursos" %}</a>
+                <a class="nav-link py-1 px-0 mx-3" href="#normativas">{% trans "Normativas" %}</a>
+                <a class="nav-link py-1 px-0 mx-3" href="#contacto">{% trans "Contacto" %}</a>
+            </nav>
+            <div class="d-flex justify-content-center justify-content-md-start me-md-n2">
+                <a class="btn btn-icon btn-sm btn-secondary btn-instagram rounded-circle mx-2" href="https://instagram.com/pymemad" aria-label="Instagram">
+                    <i class="ai-instagram"></i>
+                </a>
+                <a class="btn btn-icon btn-sm btn-secondary btn-facebook rounded-circle mx-2" href="https://facebook.com/pymemad" aria-label="Facebook">
+                    <i class="ai-facebook"></i>
+                </a>
+                <a class="btn btn-icon btn-sm btn-secondary btn-x rounded-circle mx-2" href="https://twitter.com/pymemad" aria-label="X">
+                    <i class="ai-x"></i>
+                </a>
+                <a class="btn btn-icon btn-sm btn-secondary btn-linkedin rounded-circle mx-2" href="https://linkedin.com/company/pymemad" aria-label="LinkedIn">
+                    <i class="ai-linkedin"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Copyright y créditos -->
+        <div class="nav d-block d-md-flex align-items-center justify-content-between text-center text-md-start">
+            <a class="nav-link d-inline-block text-body-secondary fs-sm text-decoration-none order-md-2 py-1 px-0 mb-3 mb-md-0" href="#">{% trans "Política de privacidad" %}</a>
+            <p class="fs-sm order-md-1 mb-0">
+                <span class="text-body-secondary">&copy; {{ current_year }} PymeMad Nacional A.G. {% trans "Todos los derechos reservados." %} Developed with ❤️ by</span>
+                <a class="nav-link d-inline fw-normal p-0 ms-1" href="https://www.helloworld.cl/" target="_blank" rel="noopener">HelloWorld SpA</a>
+            </p>
+        </div>
+    </div>
+</footer>

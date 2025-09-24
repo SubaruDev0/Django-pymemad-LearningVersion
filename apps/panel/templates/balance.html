@@ -1,0 +1,1040 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Balance y Estados - PymeMad Nacional{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-card.positive {
+            border-left: 4px solid #4caf50;
+        }
+
+        .stat-card.negative {
+            border-left: 4px solid #f44336;
+        }
+
+        .stat-card.neutral {
+            border-left: 4px solid #2196f3;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .bg-primary.bg-opacity-10 {
+            background-color: rgba(26, 95, 63, 0.1) !important;
+        }
+
+        .bg-success.bg-opacity-10 {
+            background-color: rgba(76, 175, 80, 0.1) !important;
+        }
+
+        .bg-warning.bg-opacity-10 {
+            background-color: rgba(255, 152, 0, 0.1) !important;
+        }
+
+        .bg-danger.bg-opacity-10 {
+            background-color: rgba(244, 67, 54, 0.1) !important;
+        }
+
+        .bg-info.bg-opacity-10 {
+            background-color: rgba(33, 150, 243, 0.1) !important;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .balance-positive {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .balance-negative {
+            color: #f44336;
+            font-weight: 600;
+        }
+
+        .summary-table {
+            font-size: 0.95rem;
+        }
+
+        .summary-table th {
+            background-color: rgba(26, 95, 63, 0.05);
+            font-weight: 600;
+        }
+
+        .summary-table .total-row {
+            font-weight: bold;
+            background-color: #f8f9fa;
+        }
+
+        .summary-table .subtotal-row {
+            font-weight: 600;
+            background-color: #fafafa;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+        }
+
+        .trend-indicator {
+            font-size: 0.875rem;
+            margin-left: 0.5rem;
+        }
+
+
+        /* Mobile optimizations */
+        @media (max-width: 767px) {
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .stat-label {
+                font-size: 0.75rem;
+            }
+            
+            .summary-table {
+                font-size: 0.875rem;
+            }
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            
+            .card {
+                break-inside: avoid;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pt-4 pb-2 pb-sm-4">
+        <!-- Header -->
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-4 gap-3">
+            <div>
+                <h2 class="h2 mb-0">Balance y Estados Financieros</h2>
+                <p class="text-muted mb-0">Vista consolidada de ingresos y egresos</p>
+            </div>
+            <div class="d-flex gap-2">
+                <div class="dropdown no-print">
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="ai-download me-2"></i>Exportar
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="exportToPDF()">
+                                <i class="ai-file me-2 text-danger"></i>Exportar a PDF
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="exportToExcel()">
+                                <i class="ai-table me-2 text-success"></i>Exportar a Excel
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="window.print()">
+                                <i class="ai-printer me-2"></i>Imprimir
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Period and Region Selector -->
+        <div class="alert alert-light no-print mb-3">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-md-4">
+                    <label class="form-label mb-1">Período de Análisis</label>
+                    <div class="input-group">
+                        <input type="month" class="form-control form-control-sm" id="startMonth" value="2025-01">
+                        <span class="input-group-text">hasta</span>
+                        <input type="month" class="form-control form-control-sm" id="endMonth" value="2025-08">
+                    </div>
+                </div>
+                <div class="col-6 col-md-4">
+                    <label class="form-label mb-1">Comparar con</label>
+                    <select class="form-select form-select-sm" id="compareWith">
+                        <option value="none">Sin comparación</option>
+                        <option value="previous">Período anterior</option>
+                        <option value="year">Año anterior</option>
+                    </select>
+                </div>
+                <div class="col-6 col-md-4">
+                    <label class="form-label mb-1">Vista</label>
+                    <select class="form-select form-select-sm" id="viewType">
+                        <option value="monthly">Mensual</option>
+                        <option value="quarterly">Trimestral</option>
+                        <option value="yearly">Anual</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Region Selector -->
+        <div class="alert alert-light no-print">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-md-3">
+                    <h5 class="mb-0 text-center text-md-start">Filtrar por Región</h5>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="btn-group-vertical btn-group-sm d-md-none w-100" role="group">
+                        <button type="button" class="btn btn-outline-primary active text-start" data-region="all">
+                            <i class="ai-globe me-2"></i> Consolidado Nacional
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="biobio">
+                            <i class="ai-map-pin me-2"></i> Biobío/Ñuble
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="maule">
+                            <i class="ai-map-pin me-2"></i> Maule
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="araucania">
+                            <i class="ai-map-pin me-2"></i> Araucanía
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="rios">
+                            <i class="ai-map-pin me-2"></i> Los Ríos
+                        </button>
+                    </div>
+                    <div class="btn-group d-none d-md-flex w-100" role="group">
+                        <button type="button" class="btn btn-outline-primary active" data-region="all">
+                            <i class="ai-globe me-1"></i> <span class="d-none d-lg-inline">Consolidado Nacional</span>
+                            <span class="d-lg-none">Nacional</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="biobio">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Biobío/Ñuble</span>
+                            <span class="d-lg-none">BB/Ñ</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="maule">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Maule</span>
+                            <span class="d-lg-none">Maule</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="araucania">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Araucanía</span>
+                            <span class="d-lg-none">Arauc.</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="rios">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Los Ríos</span>
+                            <span class="d-lg-none">Ríos</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row g-3 g-lg-4 mb-4">
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card positive border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                                <i class="ai-arrow-up"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-success">$156.4M</div>
+                                <div class="stat-label">Total Ingresos</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small>
+                                <span class="trend-indicator text-success">
+                                    <i class="ai-arrow-up me-1"></i>+12.5%
+                                </span>
+                                <span class="d-none d-sm-inline">vs período anterior</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card negative border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-danger bg-opacity-10 text-danger me-3">
+                                <i class="ai-arrow-down"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-danger">$98.5M</div>
+                                <div class="stat-label">Total Egresos</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small>
+                                <span class="trend-indicator text-danger">
+                                    <i class="ai-arrow-up me-1"></i>+8.3%
+                                </span>
+                                <span class="d-none d-sm-inline">vs período anterior</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card positive border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                                <i class="ai-calculator"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value balance-positive">$57.9M</div>
+                                <div class="stat-label">Resultado Neto</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small>
+                                <span class="trend-indicator text-success">
+                                    <i class="ai-arrow-up me-1"></i>+21.8%
+                                </span>
+                                <span class="d-none d-sm-inline">vs período anterior</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card neutral border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                                <i class="ai-percent"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value">37.1%</div>
+                                <div class="stat-label">Margen Neto</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small>
+                                <span class="trend-indicator text-success">
+                                    <i class="ai-arrow-up me-1"></i>+3.2pp
+                                </span>
+                                <span class="d-none d-sm-inline">vs período anterior</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <!-- Income Statement Trend -->
+            <div class="col-12 col-lg-8 mb-4 mb-lg-0">
+                <div class="card">
+                    <div class="card-header bg-transparent d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Evolución de Resultados</h5>
+                        <div class="btn-group btn-group-sm no-print" role="group">
+                            <button type="button" class="btn btn-outline-secondary active" data-chart="line">
+                                <span class="d-none d-sm-inline">Líneas</span>
+                                <i class="ai-trending-up d-sm-none"></i>
+                            </button>
+                            <button type="button" class="btn btn-outline-secondary" data-chart="bar">
+                                <span class="d-none d-sm-inline">Barras</span>
+                                <i class="ai-bar-chart-2 d-sm-none"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="incomeStatementChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Income Breakdown -->
+            <div class="col-12 col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">Composición de Ingresos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="incomeBreakdownChart"></canvas>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="ai-circle-fill text-primary me-2"></i>Cuotas Socios</span>
+                                <strong>68%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="ai-circle-fill text-info me-2"></i>Publicidad</span>
+                                <strong>18%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span><i class="ai-circle-fill text-success me-2"></i>Eventos</span>
+                                <strong>9%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span><i class="ai-circle-fill text-warning me-2"></i>Otros</span>
+                                <strong>5%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Income Statement Table -->
+        <div class="card mb-4">
+            <div class="card-header bg-transparent">
+                <h5 class="mb-0">Estado de Resultados Detallado</h5>
+                <small class="text-muted">Período: Enero - Agosto 2025</small>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover summary-table" id="incomeStatementTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">Concepto</th>
+                                <th class="text-end d-none d-md-table-cell">Ene-Ago 2025</th>
+                                <th class="text-end">Actual</th>
+                                <th class="text-end d-none d-sm-table-cell">Variación</th>
+                                <th class="text-end">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ingresos -->
+                            <tr class="table-primary">
+                                <td colspan="5"><strong>INGRESOS OPERACIONALES</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Cuotas de Socios</td>
+                                <td class="text-end d-none d-md-table-cell">$106,340,000</td>
+                                <td class="text-end">$106.3M</td>
+                                <td class="text-end balance-positive d-none d-sm-table-cell">+$11.1M</td>
+                                <td class="text-end">11.7%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Publicidad y Patrocinios</td>
+                                <td class="text-end d-none d-md-table-cell">$28,150,000</td>
+                                <td class="text-end">$28.2M</td>
+                                <td class="text-end balance-positive d-none d-sm-table-cell">+$5.7M</td>
+                                <td class="text-end">25.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Eventos y Capacitaciones</td>
+                                <td class="text-end d-none d-md-table-cell">$14,080,000</td>
+                                <td class="text-end">$14.1M</td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell">-$2.1M</td>
+                                <td class="text-end">-13.1%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Otros Ingresos</td>
+                                <td class="text-end d-none d-md-table-cell">$7,810,000</td>
+                                <td class="text-end">$7.8M</td>
+                                <td class="text-end balance-positive d-none d-sm-table-cell">+$2.7M</td>
+                                <td class="text-end">53.1%</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td><strong>Total Ingresos</strong></td>
+                                <td class="text-end d-none d-md-table-cell"><strong>$156,380,000</strong></td>
+                                <td class="text-end"><strong>$156.4M</strong></td>
+                                <td class="text-end balance-positive d-none d-sm-table-cell"><strong>+$17.4M</strong></td>
+                                <td class="text-end"><strong>12.5%</strong></td>
+                            </tr>
+                            
+                            <!-- Egresos -->
+                            <tr class="table-danger">
+                                <td colspan="5"><strong>EGRESOS OPERACIONALES</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Gastos de Personal</td>
+                                <td class="text-end d-none d-md-table-cell">$42,800,000</td>
+                                <td class="text-end">$42.8M</td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell">+$4.3M</td>
+                                <td class="text-end">11.2%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Gastos Administrativos</td>
+                                <td class="text-end d-none d-md-table-cell">$18,650,000</td>
+                                <td class="text-end">$18.7M</td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell">+$1.5M</td>
+                                <td class="text-end">8.4%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Marketing y Comunicaciones</td>
+                                <td class="text-end d-none d-md-table-cell">$15,200,000</td>
+                                <td class="text-end">$15.2M</td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell">+$2.4M</td>
+                                <td class="text-end">18.8%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Gastos Operacionales</td>
+                                <td class="text-end d-none d-md-table-cell">$12,300,000</td>
+                                <td class="text-end">$12.3M</td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell">+$0.8M</td>
+                                <td class="text-end">7.0%</td>
+                            </tr>
+                            <tr>
+                                <td class="ps-4">Otros Gastos</td>
+                                <td class="text-end d-none d-md-table-cell">$9,500,000</td>
+                                <td class="text-end">$9.5M</td>
+                                <td class="text-end balance-positive d-none d-sm-table-cell">-$1.3M</td>
+                                <td class="text-end">-12.0%</td>
+                            </tr>
+                            <tr class="subtotal-row">
+                                <td><strong>Total Egresos</strong></td>
+                                <td class="text-end d-none d-md-table-cell"><strong>$98,450,000</strong></td>
+                                <td class="text-end"><strong>$98.5M</strong></td>
+                                <td class="text-end balance-negative d-none d-sm-table-cell"><strong>+$7.7M</strong></td>
+                                <td class="text-end"><strong>8.4%</strong></td>
+                            </tr>
+                            
+                            <!-- Resultado -->
+                            <tr class="total-row table-success">
+                                <td><strong>RESULTADO NETO</strong></td>
+                                <td class="text-end d-none d-md-table-cell"><strong class="balance-positive">$57,930,000</strong></td>
+                                <td class="text-end"><strong class="balance-positive">$57.9M</strong></td>
+                                <td class="text-end d-none d-sm-table-cell"><strong class="balance-positive">+$9.7M</strong></td>
+                                <td class="text-end"><strong>20.2%</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Margen Neto</strong></td>
+                                <td class="text-end d-none d-md-table-cell"><strong>37.1%</strong></td>
+                                <td class="text-end"><strong>37.1%</strong></td>
+                                <td class="text-end d-none d-sm-table-cell"><strong class="balance-positive">+2.4pp</strong></td>
+                                <td class="text-end">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Regional Breakdown -->
+        <div class="card mb-4">
+            <div class="card-header bg-transparent">
+                <h5 class="mb-0">Resultado por Región</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Biobío/Ñuble -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <h6 class="mb-3">
+                            <i class="ai-map-pin text-primary me-2"></i>
+                            Biobío/Ñuble
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Ingresos</small>
+                                    <h6 class="mb-0 text-success">$52.5M</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Egresos</small>
+                                    <h6 class="mb-0 text-danger">$31.2M</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded p-2 text-center">
+                                    <small class="text-muted d-block">Resultado Neto</small>
+                                    <h5 class="mb-0 balance-positive">$21.3M</h5>
+                                    <small class="text-success">Margen: 40.5%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Maule -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <h6 class="mb-3">
+                            <i class="ai-map-pin text-primary me-2"></i>
+                            Maule
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Ingresos</small>
+                                    <h6 class="mb-0 text-success">$38.2M</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Egresos</small>
+                                    <h6 class="mb-0 text-danger">$25.8M</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded p-2 text-center">
+                                    <small class="text-muted d-block">Resultado Neto</small>
+                                    <h5 class="mb-0 balance-positive">$12.4M</h5>
+                                    <small class="text-success">Margen: 32.5%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Araucanía -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <h6 class="mb-3">
+                            <i class="ai-map-pin text-primary me-2"></i>
+                            Araucanía
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Ingresos</small>
+                                    <h6 class="mb-0 text-success">$28.9M</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Egresos</small>
+                                    <h6 class="mb-0 text-danger">$19.5M</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded p-2 text-center">
+                                    <small class="text-muted d-block">Resultado Neto</small>
+                                    <h5 class="mb-0 balance-positive">$9.5M</h5>
+                                    <small class="text-success">Margen: 32.7%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Los Ríos -->
+                    <div class="col-12 col-md-6 col-lg-3">
+                        <h6 class="mb-3">
+                            <i class="ai-map-pin text-primary me-2"></i>
+                            Los Ríos
+                        </h6>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Ingresos</small>
+                                    <h6 class="mb-0 text-success">$36.8M</h6>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center">
+                                    <small class="text-muted d-block">Egresos</small>
+                                    <h6 class="mb-0 text-danger">$22.0M</h6>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="bg-light rounded p-2 text-center">
+                                    <small class="text-muted d-block">Resultado Neto</small>
+                                    <h5 class="mb-0 balance-positive">$14.8M</h5>
+                                    <small class="text-success">Margen: 40.3%</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Detail -->
+        <div class="card">
+            <div class="card-header bg-transparent">
+                <h5 class="mb-0">Detalle Mensual 2025</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover" id="monthlyDetailTable">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th class="text-end">Ingresos</th>
+                                <th class="text-end d-none d-sm-table-cell">Egresos</th>
+                                <th class="text-end">Resultado</th>
+                                <th class="text-end d-none d-md-table-cell">Margen</th>
+                                <th class="text-end d-none d-lg-table-cell">Acumulado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Enero</td>
+                                <td class="text-end">$18.2M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.1M</td>
+                                <td class="text-end balance-positive">$6.1M</td>
+                                <td class="text-end d-none d-md-table-cell">33.5%</td>
+                                <td class="text-end d-none d-lg-table-cell">$6.1M</td>
+                            </tr>
+                            <tr>
+                                <td>Febrero</td>
+                                <td class="text-end">$19.5M</td>
+                                <td class="text-end d-none d-sm-table-cell">$11.8M</td>
+                                <td class="text-end balance-positive">$7.7M</td>
+                                <td class="text-end d-none d-md-table-cell">39.5%</td>
+                                <td class="text-end d-none d-lg-table-cell">$13.8M</td>
+                            </tr>
+                            <tr>
+                                <td>Marzo</td>
+                                <td class="text-end">$18.9M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.5M</td>
+                                <td class="text-end balance-positive">$6.4M</td>
+                                <td class="text-end d-none d-md-table-cell">33.9%</td>
+                                <td class="text-end d-none d-lg-table-cell">$20.2M</td>
+                            </tr>
+                            <tr>
+                                <td>Abril</td>
+                                <td class="text-end">$19.8M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.3M</td>
+                                <td class="text-end balance-positive">$7.5M</td>
+                                <td class="text-end d-none d-md-table-cell">37.9%</td>
+                                <td class="text-end d-none d-lg-table-cell">$27.7M</td>
+                            </tr>
+                            <tr>
+                                <td>Mayo</td>
+                                <td class="text-end">$20.1M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.8M</td>
+                                <td class="text-end balance-positive">$7.3M</td>
+                                <td class="text-end d-none d-md-table-cell">36.3%</td>
+                                <td class="text-end d-none d-lg-table-cell">$35.0M</td>
+                            </tr>
+                            <tr>
+                                <td>Junio</td>
+                                <td class="text-end">$19.7M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.2M</td>
+                                <td class="text-end balance-positive">$7.5M</td>
+                                <td class="text-end d-none d-md-table-cell">38.2%</td>
+                                <td class="text-end d-none d-lg-table-cell">$42.5M</td>
+                            </tr>
+                            <tr>
+                                <td>Julio</td>
+                                <td class="text-end">$20.2M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.4M</td>
+                                <td class="text-end balance-positive">$7.8M</td>
+                                <td class="text-end d-none d-md-table-cell">38.7%</td>
+                                <td class="text-end d-none d-lg-table-cell">$50.3M</td>
+                            </tr>
+                            <tr>
+                                <td>Agosto</td>
+                                <td class="text-end">$20.0M</td>
+                                <td class="text-end d-none d-sm-table-cell">$12.4M</td>
+                                <td class="text-end balance-positive">$7.6M</td>
+                                <td class="text-end d-none d-md-table-cell">38.0%</td>
+                                <td class="text-end d-none d-lg-table-cell">$57.9M</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- SheetJS para exportar Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- jsPDF para exportar PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Data for charts
+            const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago'];
+            const incomeData = [18200000, 19500000, 18900000, 19800000, 20100000, 19650000, 20230000, 20000000];
+            const expenseData = [12100000, 11800000, 12500000, 12300000, 12800000, 12150000, 12400000, 12400000];
+            const netData = incomeData.map((income, index) => income - expenseData[index]);
+
+            // Income Statement Chart
+            const ctx = document.getElementById('incomeStatementChart');
+            let incomeStatementChart;
+            
+            if (ctx) {
+                incomeStatementChart = new Chart(ctx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: months,
+                        datasets: [{
+                            label: 'Ingresos',
+                            data: incomeData,
+                            borderColor: '#4caf50',
+                            backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Egresos',
+                            data: expenseData,
+                            borderColor: '#f44336',
+                            backgroundColor: 'rgba(244, 67, 54, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4
+                        }, {
+                            label: 'Resultado Neto',
+                            data: netData,
+                            borderColor: '#1a5f3f',
+                            backgroundColor: 'rgba(26, 95, 63, 0.2)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let value = context.parsed.y;
+                                        return context.dataset.label + ': $' + value.toLocaleString('es-CL');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return '$' + (value / 1000000).toFixed(1) + 'M';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Income Breakdown Chart
+            const incomeCtx = document.getElementById('incomeBreakdownChart');
+            if (incomeCtx) {
+                new Chart(incomeCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Cuotas Socios', 'Publicidad', 'Eventos', 'Otros'],
+                        datasets: [{
+                            data: [106340000, 28150000, 14080000, 7810000],
+                            backgroundColor: ['#1a5f3f', '#2196f3', '#4caf50', '#ff9800'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let value = context.parsed;
+                                        let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        let percentage = ((value / total) * 100).toFixed(1);
+                                        return context.label + ': $' + value.toLocaleString('es-CL') + ' (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Chart type switcher
+            $('[data-chart]').on('click', function() {
+                $('[data-chart]').removeClass('active');
+                $(this).addClass('active');
+                
+                const chartType = $(this).data('chart');
+                if (incomeStatementChart) {
+                    incomeStatementChart.config.type = chartType;
+                    incomeStatementChart.update();
+                }
+            });
+
+            // Region filter buttons
+            $('.btn-group[role="group"] button, .btn-group-vertical[role="group"] button').on('click', function() {
+                $('.btn-group[role="group"] button, .btn-group-vertical[role="group"] button').removeClass('active');
+                $(this).addClass('active');
+                
+                const region = $(this).data('region');
+                console.log('Filtering by region:', region);
+                // Aquí se implementaría la lógica de filtrado
+            });
+        });
+
+        // Export to PDF
+        function exportToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(20);
+            doc.text('PymeMad - Balance General', 14, 20);
+            doc.setFontSize(12);
+            doc.text('Período: Enero - Agosto 2025', 14, 30);
+            
+            // Summary
+            doc.setFontSize(14);
+            doc.text('Resumen Ejecutivo', 14, 45);
+            doc.setFontSize(11);
+            doc.text('Total Ingresos: $156,380,000', 14, 55);
+            doc.text('Total Egresos: $98,450,000', 14, 62);
+            doc.text('Resultado Neto: $57,930,000', 14, 69);
+            doc.text('Margen Neto: 37.1%', 14, 76);
+            
+            // Table
+            doc.autoTable({
+                startY: 85,
+                head: [['Concepto', 'Ene-Ago 2025', 'Variación', '%']],
+                body: [
+                    ['INGRESOS', '', '', ''],
+                    ['Cuotas de Socios', '$106,340,000', '$11,140,000', '11.7%'],
+                    ['Publicidad y Patrocinios', '$28,150,000', '$5,650,000', '25.1%'],
+                    ['Eventos y Capacitaciones', '$14,080,000', '-$2,120,000', '-13.1%'],
+                    ['Otros Ingresos', '$7,810,000', '$2,710,000', '53.1%'],
+                    ['Total Ingresos', '$156,380,000', '$17,380,000', '12.5%'],
+                    ['', '', '', ''],
+                    ['EGRESOS', '', '', ''],
+                    ['Gastos de Personal', '$42,800,000', '$4,300,000', '11.2%'],
+                    ['Gastos Administrativos', '$18,650,000', '$1,450,000', '8.4%'],
+                    ['Marketing y Comunicaciones', '$15,200,000', '$2,400,000', '18.8%'],
+                    ['Gastos Operacionales', '$12,300,000', '$800,000', '7.0%'],
+                    ['Otros Gastos', '$9,500,000', '-$1,300,000', '-12.0%'],
+                    ['Total Egresos', '$98,450,000', '$7,650,000', '8.4%'],
+                    ['', '', '', ''],
+                    ['RESULTADO NETO', '$57,930,000', '$9,730,000', '20.2%']
+                ],
+                theme: 'grid',
+                styles: { fontSize: 9 }
+            });
+            
+            // Save
+            doc.save('PymeMad_Balance_General_2025.pdf');
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            // Prepare data
+            const wsData = [
+                ['PYMEMAD - BALANCE GENERAL'],
+                ['Período: Enero - Agosto 2025'],
+                [],
+                ['RESUMEN EJECUTIVO'],
+                ['Total Ingresos', 156380000],
+                ['Total Egresos', 98450000],
+                ['Resultado Neto', 57930000],
+                ['Margen Neto', '37.1%'],
+                [],
+                ['ESTADO DE RESULTADOS DETALLADO'],
+                ['Concepto', 'Ene-Ago 2025', 'Ene-Ago 2024', 'Variación', '%'],
+                [],
+                ['INGRESOS OPERACIONALES'],
+                ['Cuotas de Socios', 106340000, 95200000, 11140000, '11.7%'],
+                ['Publicidad y Patrocinios', 28150000, 22500000, 5650000, '25.1%'],
+                ['Eventos y Capacitaciones', 14080000, 16200000, -2120000, '-13.1%'],
+                ['Otros Ingresos', 7810000, 5100000, 2710000, '53.1%'],
+                ['Total Ingresos', 156380000, 139000000, 17380000, '12.5%'],
+                [],
+                ['EGRESOS OPERACIONALES'],
+                ['Gastos de Personal', 42800000, 38500000, 4300000, '11.2%'],
+                ['Gastos Administrativos', 18650000, 17200000, 1450000, '8.4%'],
+                ['Marketing y Comunicaciones', 15200000, 12800000, 2400000, '18.8%'],
+                ['Gastos Operacionales', 12300000, 11500000, 800000, '7.0%'],
+                ['Otros Gastos', 9500000, 10800000, -1300000, '-12.0%'],
+                ['Total Egresos', 98450000, 90800000, 7650000, '8.4%'],
+                [],
+                ['RESULTADO NETO', 57930000, 48200000, 9730000, '20.2%'],
+                ['Margen Neto', '37.1%', '34.7%', '2.4pp', '-']
+            ];
+
+            // Create workbook
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            
+            // Add styles (widths)
+            ws['!cols'] = [
+                {wch: 30},
+                {wch: 15},
+                {wch: 15},
+                {wch: 15},
+                {wch: 10}
+            ];
+            
+            // Add worksheet to workbook
+            XLSX.utils.book_append_sheet(wb, ws, "Balance General");
+            
+            // Create monthly detail sheet
+            const monthlyData = [
+                ['DETALLE MENSUAL 2025'],
+                ['Mes', 'Ingresos', 'Egresos', 'Resultado', 'Margen', 'Acumulado'],
+                ['Enero', 18200000, 12100000, 6100000, '33.5%', 6100000],
+                ['Febrero', 19500000, 11800000, 7700000, '39.5%', 13800000],
+                ['Marzo', 18900000, 12500000, 6400000, '33.9%', 20200000],
+                ['Abril', 19800000, 12300000, 7500000, '37.9%', 27700000],
+                ['Mayo', 20100000, 12800000, 7300000, '36.3%', 35000000],
+                ['Junio', 19650000, 12150000, 7500000, '38.2%', 42500000],
+                ['Julio', 20230000, 12400000, 7830000, '38.7%', 50330000],
+                ['Agosto', 20000000, 12400000, 7600000, '38.0%', 57930000]
+            ];
+            
+            const ws2 = XLSX.utils.aoa_to_sheet(monthlyData);
+            XLSX.utils.book_append_sheet(wb, ws2, "Detalle Mensual");
+            
+            // Save
+            XLSX.writeFile(wb, "PymeMad_Balance_General_2025.xlsx");
+        }
+    </script>
+{% endblock %}

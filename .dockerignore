@@ -1,0 +1,145 @@
+# ========================================
+# Version Control
+# ========================================
+.git/
+.gitignore
+.github/
+
+# ========================================
+# Python
+# ========================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.pytest_cache/
+.coverage
+.hypothesis/
+
+# ========================================
+# Virtual Environments
+# ========================================
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# ========================================
+# IDEs and Editors
+# ========================================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ========================================
+# Environment and Configuration
+# ========================================
+.env
+.env.*
+!.env.example
+setup_github_secrets.sh
+
+# Documentation and sensitive guides
+BRANCH_PROTECTION_GUIDE.md
+GH_CLI_REFERENCE.md
+
+# Critical scripts
+setup_branch_protection.sh
+pr_dashboard.sh
+monthly_audit.sh
+
+# ========================================
+# Django
+# ========================================
+*.log
+db.sqlite3
+db.sqlite3-journal
+local_settings.py
+
+# Django migrations (keep __init__.py)
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Static and media files (will be generated in container)
+static/
+media/
+static_cdn/
+media_cdn/
+staticfiles/
+
+# ========================================
+# Infrastructure and Deployment
+# ========================================
+k8s/
+.kube/
+docker-compose.yml
+docker-compose.*.yml
+Dockerfile
+.dockerignore
+
+# Nginx configuration
+nginx/
+custom_proxy_settings.conf
+
+# ========================================
+# Development Tools
+# ========================================
+ngrok/
+api_examples/
+clear_all_migration.py
+
+# Scripts - exclude all
+scripts/
+
+# Deployment scripts
+deploy_file.sh
+deploy_image.sh
+deploy_quick.sh
+deploy_static.sh
+invalidate_cache.sh
+monitoring_pymemad.sh
+run.sh
+entrypoint.sh
+force-update-deployments.sh
+restart_deployments.sh
+
+# ========================================
+# Documentation
+# ========================================
+README.md
+docs/
+*.md
+DEPLOY_STATIC.md
+
+# ========================================
+# Testing
+# ========================================
+tests/
+test_*.py
+*_test.py
+
+# ========================================
+# Temporary Files
+# ========================================
+*.tmp
+*.bak
+tmp/
+temp/
+
+# ========================================
+# Build Artifacts
+# ========================================
+build/
+dist/
+*.egg-info/
+wheels/
+
+# ========================================
+# Logs
+# ========================================
+logs/

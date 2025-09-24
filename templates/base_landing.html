@@ -1,0 +1,102 @@
+{% extends 'base_master.html' %}
+
+{% comment %}
+Template base para páginas públicas del sitio (landing, noticias, etc.)
+Mantiene el header y footer estándar
+{% endcomment %}
+
+{% block main_content %}
+    <!-- Header -->
+    {% block header %}
+        {% include 'snippets/landing/header_section.html' %}
+    {% endblock header %}
+    <!-- end: Header -->
+
+    <!-- Content -->
+    {% block content %}
+    <!-- El contenido específico de cada página va aquí -->
+    {% endblock content %}
+    <!-- end: Content -->
+
+    <!-- Footer -->
+    {% block footer %}
+        {% include 'snippets/landing/footer_section.html' %}
+    {% endblock footer %}
+    <!-- end: Footer -->
+{% endblock main_content %}
+
+{% block custom_js %}
+    <!-- Smooth scroll para navegación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleccionar todos los enlaces que empiezan con #
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    // Prevenir el comportamiento por defecto
+                    e.preventDefault();
+
+                    // Obtener el target
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+
+                    if (targetSection) {
+                        // Obtener la altura del navbar para compensar
+                        const navbar = document.querySelector('.navbar');
+                        const navbarHeight = navbar ? navbar.offsetHeight : 0;
+
+                        // Calcular la posición final
+                        const targetPosition = targetSection.offsetTop - navbarHeight - 20; // 20px de margen extra
+
+                        // Hacer el scroll suave
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        // Cerrar el menú móvil si está abierto
+                        const navbarToggler = document.querySelector('.navbar-toggler');
+                        const navbarCollapse = document.querySelector('#navbarNav');
+
+                        if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                            navbarToggler.click();
+                        }
+                    }
+                });
+            });
+
+            // Agregar clase activa al enlace correspondiente durante el scroll
+            const sections = document.querySelectorAll('section[id]');
+            const navItems = document.querySelectorAll('.navbar-nav .nav-link');
+
+            function setActiveNavItem() {
+                let current = '';
+                const scrollPosition = window.scrollY + 100; // Offset para activar antes
+
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('href') === `#${current}`) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
+            // Ejecutar al hacer scroll
+            window.addEventListener('scroll', setActiveNavItem);
+
+            // Ejecutar al cargar la página
+            setActiveNavItem();
+        });
+    </script>
+    {{ block.super }}
+{% endblock custom_js %}

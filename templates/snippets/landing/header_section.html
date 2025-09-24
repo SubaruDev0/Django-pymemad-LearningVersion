@@ -1,0 +1,89 @@
+{% load static %}
+{% load i18n %}
+<!-- Navbar. Remove 'fixed-top' class to make the navigation bar scrollable with the page -->
+<header data-bs-theme="dark">
+    <div class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+
+            <!-- Navbar brand (Logo) -->
+            <a class="navbar-brand pe-sm-3" href="{% url 'landing:home' %}">
+                <img src="{% static 'assets/img/logo_pymemad_inverter.webp' %}" alt="PymeMad Nacional" width="180" height="30" class="d-block">
+            </a>
+
+            <a class="btn btn-primary btn-sm fs-sm order-lg-3 d-none d-sm-inline-flex" href="{% url 'landing:join' %}">
+                <i class="ai-user-plus fs-xl me-2 ms-n1"></i>
+                {% trans "Únete a PymeMad" %}
+            </a>
+
+            <!-- Mobile menu toggler (Hamburger) -->
+            <button class="navbar-toggler ms-sm-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar collapse (Main navigation) -->
+            <nav class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav navbar-nav-scroll bg-transparent me-auto" style="--ar-scroll-height: 520px;">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">{% trans "Nosotros" %}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'landing:about' %}#quienes-somos">{% trans "¿Quiénes somos?" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'landing:about' %}#mision-vision">{% trans "Misión y Visión" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'landing:about' %}#objetivos">{% trans "Objetivos" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'landing:about' %}#directorio">{% trans "Directorio" %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">{% trans "Socios" %}</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'landing:members' %}#directory">{% trans "Directorio de Socios" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'landing:members' %}#beneficios">{% trans "Beneficios" %}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'landing:members' %}#como-asociarse">{% trans "¿Cómo asociarse?" %}</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing:news_list' %}">{% trans "Noticias" %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing:magazine' %}">{% trans "Revista Digital" %}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            {% trans "Recursos" %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- Sección: Área de Socios -->
+                            <li class="dropdown-header">{% trans "Área de Socios" %}</li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'accounts:login' %}">
+                                    <i class="ai-user me-2"></i>{% trans "Mi Cuenta" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="ai-award me-2"></i>{% trans "PymeMad Academy" %}
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="#">
+                                    <i class="ai-shopping-bag me-2"></i>{% trans "Marketplace B2B" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'landing:contact' %}">{% trans "Contacto" %}</a>
+                    </li>
+                </ul>
+                <div class="d-sm-none p-3 mt-n3">
+                    <a class="btn btn-primary w-100 mb-1" href="{% url 'landing:join' %}">
+                        <i class="ai-user-plus fs-xl me-2 ms-n1"></i>
+                        {% trans "Únete a PymeMad" %}
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>

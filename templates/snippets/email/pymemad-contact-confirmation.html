@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Contacto - PymeMad</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Reset styles */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+
+        /* Main styles */
+        body {
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            min-width: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333333;
+            background-color: #f5f7fa;
+        }
+
+        .email-wrapper {
+            width: 100%;
+            background-color: #f5f7fa;
+            padding: 40px 0;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Header with gradient */
+        .header {
+            background: #2f2f2ff2;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 180px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .success-icon {
+            background-color: rgba(255, 255, 255, 0.2);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: table;
+            text-align: center;
+        }
+
+        .success-icon-inner {
+            display: table-cell;
+            vertical-align: middle;
+            font-size: 32px;
+            color: white;
+        }
+
+        .header-title {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        /* Content area */
+        .content {
+            padding: 40px 30px;
+        }
+
+        .greeting {
+            font-size: 20px;
+            color: #1e3a8a;
+            font-weight: 600;
+            margin: 0 0 16px 0;
+        }
+
+        .intro-text {
+            color: #4b5563;
+            font-size: 15px;
+            line-height: 1.6;
+            margin: 0 0 30px 0;
+        }
+
+        /* Status card */
+        .status-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #bfdbfe;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .status-title {
+            color: #1e3a8a;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 8px 0;
+        }
+
+        .subject-highlight {
+            background-color: #3b82f6;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-size: 14px;
+            margin: 8px 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            margin: 32px 0;
+        }
+
+        .timeline-title {
+            color: #1e3a8a;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #dbeafe;
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .timeline-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #dbeafe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #1e3a8a;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .timeline-content {
+            margin-left: 16px;
+            flex: 1;
+        }
+
+        .timeline-content h4 {
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .timeline-content p {
+            color: #6b7280;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 19px;
+            top: 45px;
+            width: 2px;
+            height: 30px;
+            background-color: #e5e7eb;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background-color: #f8fafc;
+            border-radius: 12px;
+            padding: 28px;
+            text-align: center;
+            margin: 32px 0;
+            border: 1px solid #e5e7eb;
+        }
+
+        .cta-title {
+            color: #1e3a8a;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 12px 0;
+        }
+
+        .cta-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin: 0 0 20px 0;
+            line-height: 1.5;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #2c5530;
+            color: white !important;
+            text-decoration: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: #2563eb;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Contact info */
+        .contact-section {
+            background-color: #fafbfc;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 32px 0;
+        }
+
+        .contact-title {
+            color: #1e3a8a;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .contact-grid {
+            width: 100%;
+        }
+
+        .contact-table {
+            width: 100%;
+            border-spacing: 8px;
+        }
+
+        .contact-cell {
+            padding: 12px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            vertical-align: top;
+            text-align: center;
+        }
+
+        .contact-label {
+            color: #9ca3af;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+
+        .contact-value {
+            color: #1e3a8a;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        /* Services grid */
+        .services-grid {
+            margin: 32px 0;
+        }
+
+        .services-title {
+            color: #1e3a8a;
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .service-item {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 3px solid #3b82f6;
+        }
+
+        .service-name {
+            color: #1f2937;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0 0 4px 0;
+        }
+
+        .service-description {
+            color: #6b7280;
+            font-size: 13px;
+            margin: 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .footer-logo {
+            width: 100px;
+            margin-bottom: 16px;
+        }
+
+        .footer-text {
+            color: #6b7280;
+            font-size: 13px;
+            margin: 0 0 8px 0;
+        }
+
+        .footer-links {
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            display: inline-block;
+            margin: 0 12px;
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+
+        .footer-disclaimer {
+            color: #9ca3af;
+            font-size: 11px;
+            margin: 16px 0 0 0;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                border-radius: 0 !important;
+            }
+            .header, .content, .footer {
+                padding-left: 20px !important;
+                padding-right: 20px !important;
+            }
+            .header-title {
+                font-size: 22px !important;
+            }
+            .logo {
+                width: 140px !important;
+            }
+            .contact-table {
+                display: block;
+            }
+            .contact-cell {
+                display: block;
+                width: 100%;
+                margin-bottom: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-wrapper">
+        <div class="email-container">
+            <!-- Header with logo -->
+            <div class="header">
+                <div class="logo-container">
+                    <img src="https://pymemad-cdn.s3.amazonaws.com/static/assets/img/logo_pymemad_inverter.webp"
+                         alt="PymeMad Logo"
+                         class="logo"
+                         style="width: 180px; height: auto;">
+                </div>
+                <div class="success-icon">
+                    <div class="success-icon-inner">✓</div>
+                </div>
+                <h1 class="header-title">¡Mensaje Recibido!</h1>
+                <p class="header-subtitle">Gracias por contactar a PymeMad</p>
+            </div>
+
+            <!-- Main content -->
+            <div class="content">
+                <h2 class="greeting">Hola {{ name }},</h2>
+
+                <p class="intro-text">
+                    Hemos recibido exitosamente tu mensaje y queremos agradecerte por ponerte en contacto
+                    con la La Asociación Gremial de Pequeñas y Medianas Industriales de la Madera. Tu consulta es
+                    importante para nosotros y será atendida con la mayor brevedad posible.
+                </p>
+
+                <!-- Status card -->
+                <div class="status-card">
+                    <h3 class="status-title">Tu consulta sobre:</h3>
+                    <span class="subject-highlight">
+                        {% if subject == 'join' %}
+                            Quiero ser socio
+                        {% elif subject == 'advertising' %}
+                            Publicidad en revista/web
+                        {% elif subject == 'services' %}
+                            Consulta sobre servicios
+                        {% elif subject == 'events' %}
+                            Eventos y capacitaciones
+                        {% elif subject == 'commercial' %}
+                            Oportunidades comerciales
+                        {% elif subject == 'press' %}
+                            Prensa y comunicaciones
+                        {% elif subject == 'support' %}
+                            Soporte técnico
+                        {% elif subject == 'complaints' %}
+                            Reclamos, sugerencias o denuncias
+                        {% else %}
+                            {{ subject }}
+                        {% endif %}
+                    </span>
+                    <p style="color: #6b7280; font-size: 14px; margin: 12px 0 0 0;">
+                        Ha sido asignada a nuestro equipo correspondiente
+                    </p>
+                </div>
+
+                <!-- Timeline -->
+                <div class="timeline">
+                    <h3 class="timeline-title">¿Qué sucederá ahora?</h3>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">1</div>
+                        <div class="timeline-content">
+                            <h4>Revisión inmediata</h4>
+                            <p>Tu mensaje está siendo revisado por nuestro equipo de atención</p>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">2</div>
+                        <div class="timeline-content">
+                            <h4>Análisis y asignación</h4>
+                            <p>Un miembro del directorio será asignado según la naturaleza de tu consulta</p>
+                        </div>
+                        <div class="timeline-line"></div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">3</div>
+                        <div class="timeline-content">
+                            <h4>Respuesta personalizada</h4>
+                            <p>Recibirás una respuesta detallada en las próximas 48 horas hábiles</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                <div class="services-grid">
+                    <h3 class="services-title">Conoce nuestros principales servicios</h3>
+
+                    <div class="service-item">
+                        <div class="service-name">Representación Gremial</div>
+                        <div class="service-description">Defensa de los intereses de las pymes locales ante autoridades</div>
+                    </div>
+
+                    <div class="service-item">
+                        <div class="service-name">Capacitaciones y Talleres</div>
+                        <div class="service-description">Programas de formación para emprendedores y empresarios</div>
+                    </div>
+
+                    <div class="service-item">
+                        <div class="service-name">Asesoría Empresarial</div>
+                        <div class="service-description">Apoyo en gestión, finanzas y desarrollo de negocios</div>
+                    </div>
+
+                    <div class="service-item">
+                        <div class="service-name">Networking y Alianzas</div>
+                        <div class="service-description">Conexión con otras empresas y oportunidades de colaboración</div>
+                    </div>
+                </div>
+
+                <!-- CTA Section -->
+                <div class="cta-section">
+                    <h3 class="cta-title">Mientras esperas nuestra respuesta</h3>
+                    <p class="cta-description">
+                        Descubre cómo PymeMad está fortaleciendo el ecosistema empresarial
+                        desde la Región del Maule hasta la Región de los Ríos
+                    </p>
+                    <a href="https://www.pymemad.cl" class="cta-button">
+                        Visitar Nuestro Sitio Web
+                    </a>
+                </div>
+
+                <!-- Contact info -->
+                <div class="contact-section">
+                    <h3 class="contact-title">¿Necesitas contactarnos de inmediato?</h3>
+                    <div class="contact-grid">
+                        <table class="contact-table">
+                            <tr>
+                                <td class="contact-cell">
+                                    <p class="contact-label">Teléfono</p>
+                                    <p class="contact-value">+56 9 XXXX XXXX</p>
+                                </td>
+                                <td class="contact-cell">
+                                    <p class="contact-label">Email</p>
+                                    <p class="contact-value">contacto@pymemad.cl</p>
+                                </td>
+                                <td class="contact-cell">
+                                    <p class="contact-label">Horario</p>
+                                    <p class="contact-value">Lun-Vie: 9:00-18:00</p>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <img src="https://pymemad-cdn.s3.amazonaws.com/static/assets/img/logo_pymemad_inverter.webp"
+                     alt="PymeMad"
+                     class="footer-logo"
+                     style="width: 100px; height: auto;">
+
+                <p class="footer-text">
+                    <strong>La Asociación Gremial de Pequeñas y Medianas Industriales de la Madera</strong><br>
+                    Fortaleciendo el desarrollo empresarial local
+                </p>
+
+                <div class="footer-links">
+                    <a href="https://www.pymemad.cl">Sitio Web</a>
+                    <a href="https://www.pymemad.cl/servicios">Servicios</a>
+                    <a href="https://www.pymemad.cl/socios">Hazte Socio</a>
+                    <a href="https://www.pymemad.cl/contacto">Contacto</a>
+                </div>
+
+                <p class="footer-disclaimer">
+                    Este es un mensaje automático de confirmación. Por favor no respondas a este correo.<br>
+                    Si no realizaste esta consulta, puedes ignorar este mensaje de manera segura.<br><br>
+                    PymeMad - Balmaceda, Región de Los Lagos, Chile
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

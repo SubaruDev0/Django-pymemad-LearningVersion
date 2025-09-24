@@ -1,0 +1,42 @@
+{% load i18n %}
+
+<section class="position-relative mt-n5 mt-lg-0">
+    <div class="bg-secondary position-absolute bottom-0 start-0 w-100" style="height: calc(100% - 3rem);"></div>
+    <div class="container position-relative z-2">
+        <div class="row">
+            <div class="col-lg-6 py-5 pb-lg-0 mb-sm-2 mb-md-3 mb-lg-0 mt-3 mt-sm-4 mt-md-5">
+                <h2 class="h1 text-center text-lg-start pt-3 mt-3 mb-4">{% trans "Únete a la red PyME forestal más grande de Chile" %}</h2>
+                <div class="d-flex justify-content-between mx-auto mx-lg-0" style="max-width: 420px;">
+                    <ul class="ps-4 me-3">
+                        <li class="mt-2">{% trans "Representación gremial efectiva" %}</li>
+                        <li class="mt-2">{% trans "Capacitación especializada" %}</li>
+                        <li class="mt-2">{% trans "Asesoría técnica y legal" %}</li>
+                    </ul>
+                    <ul class="ps-4">
+                        <li class="mt-2">{% trans "Networking empresarial" %}</li>
+                        <li class="mt-2">{% trans "Oportunidades comerciales" %}</li>
+                        <li class="mt-2">{% trans "Certificaciones forestales" %}</li>
+                    </ul>
+                </div>
+                <div class="text-center text-lg-start pt-4 pb-5 mb-lg-5">
+                    <a class="btn btn-outline-dark" href="#">
+                        {% trans "Únete a PymeMad" %}
+                        <i class="ai-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-primary d-flex flex-column align-items-center justify-content-center position-relative h-100 rounded-1 rounded-bottom-0 p-5">
+                    <div class="position-relative z-2 py-sm-3 py-md-4" style="max-width: 400px;" data-bs-theme="dark">
+                        <h2 class="h1 text-white">{% trans "¿Conversemos?" %}</h2>
+                        <p class="text-white mb-0">{% trans "Somos la asociación que representa los intereses de las PyMEs madereras ante autoridades y grandes empresas del sector." %}</p>
+                        <div class="d-flex flex-column flex-sm-row align-items-center pt-3 mt-3 mt-lg-4">
+                            <a class="btn btn-light w-100 w-sm-auto me-sm-4 mb-2 mb-sm-0" href="#">{% trans "Contáctanos" %}</a>
+                            <a class="d-inline-block text-white fw-medium p-2" href="mailto:contacto@pymemad.cl">contacto@pymemad.cl</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

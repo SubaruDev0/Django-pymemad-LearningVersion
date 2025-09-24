@@ -1,0 +1,81 @@
+{% load i18n %}
+{% load static %}
+<section class="container py-5 my-lg-3 my-xl-4 my-xxl-5">
+        <h2 class="h1 text-center pt-2 pt-sm-3 pt-md-4 pt-xl-5 mt-lg-2 mt-xl-1">{% trans "Más de 100 empresas confían en nosotros" %}</h2>
+        <p class="text-center pb-2 pb-sm-3">{% trans "PyMEs madereras que juntas generan empleo para miles de familias chilenas" %}</p>
+
+        <!-- Mapa de regiones -->
+        <div class="row mb-5">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="card border-0 bg-secondary rounded-1 p-4">
+                    <h3 class="h4 text-center mb-4">{% trans "Presencia en 4 Regiones" %}</h3>
+                    <div class="row g-3">
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-start">
+                                <i class="ai-map-pin text-primary fs-5 me-2 mt-1"></i>
+                                <div>
+                                    <h4 class="h6 mb-1">{% trans "Región de Los Ríos" %}</h4>
+                                    <p class="fs-sm mb-0">{% trans "Especializada en madera nativa y Pino Oregón" %}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-start">
+                                <i class="ai-map-pin text-primary fs-5 me-2 mt-1"></i>
+                                <div>
+                                    <h4 class="h6 mb-1">{% trans "Región de La Araucanía" %}</h4>
+                                    <p class="fs-sm mb-0">{% trans "Producción de Pino y Nativo, polo madera Villarrica" %}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-start">
+                                <i class="ai-map-pin text-primary fs-5 me-2 mt-1"></i>
+                                <div>
+                                    <h4 class="h6 mb-1">{% trans "Región del Biobío" %}</h4>
+                                    <p class="fs-sm mb-0">{% trans "Aserraderos grandes, orientados a exportación" %}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="d-flex align-items-start">
+                                <i class="ai-map-pin text-primary fs-5 me-2 mt-1"></i>
+                                <div>
+                                    <h4 class="h6 mb-1">{% trans "Región del Maule" %}</h4>
+                                    <p class="fs-sm mb-0">{% trans "Pino para construcción y mercado nacional" %}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logos de socios destacados -->
+        <div class="row row-cols-3 row-cols-md-4 g-2 g-md-4 pb-2 pb-sm-3 pb-md-4 pb-xl-5">
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-center p-3">
+                    <img class="d-block mx-auto" src="{% static 'assets/img/home/socios/collicura.webp' %}" width="200" alt="Socio 1">
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-center p-3">
+                    <img class="d-block mx-auto" src="{% static 'assets/img/home/socios/poco_a_poco.webp' %}" width="200" alt="Socio 2">
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-center p-3">
+                    <img class="d-block mx-auto" src="{% static 'assets/img/home/socios/vicsa.webp' %}" width="200" alt="Socio 3">
+                </div>
+            </div>
+            <div class="col">
+                <div class="d-flex align-items-center justify-content-center p-3">
+                    <img class="d-block mx-auto" src="{% static 'assets/img/home/socios/laminas_chile.webp' %}" width="200" alt="Socio 4">
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a class="btn btn-outline-primary" href="#directorio-socios">{% trans "Ver directorio completo" %}</a>
+        </div>
+    </section>

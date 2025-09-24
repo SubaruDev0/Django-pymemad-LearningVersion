@@ -1,0 +1,359 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Contacto - PymeMad" %}{% endblock %}
+{% block description %}{% trans "Contáctanos para conocer más sobre PymeMad, la asociación de pequeñas y medianas empresas forestales de Chile." %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-info-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .contact-info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(var(--ar-primary-rgb), 0.1);
+        border-radius: 50%;
+        flex-shrink: 0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+    <!-- Hero con imagen de fondo -->
+    <section id="contact-hero" class="position-relative bg-dark py-5">
+        <!-- Imagen de fondo con jarallax -->
+        <div class="jarallax position-absolute top-0 start-0 w-100 h-100" data-jarallax data-speed="0.4">
+            <div class="jarallax-img" style="background-image: url({% static 'assets/img/about/about.webp' %});"></div>
+        </div>
+
+        <!-- Overlay para mejorar legibilidad -->
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.6); z-index: 1;"></div>
+
+        <!-- Contenido -->
+        <div class="container position-relative z-2 py-5" data-bs-theme="dark">
+            <div class="row py-5">
+                <div class="col-lg-10 col-xl-9">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="pt-lg-3 pb-lg-4 pb-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">{% trans "Contacto" %}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-2 text-white pb-2 pb-sm-3">{% trans "Contáctanos" %}</h1>
+                    <p class="fs-xl text-white mb-4">
+                        {% trans "Estamos aquí para apoyar a las PyMEs madereras. Contáctanos para conocer más sobre nuestros servicios y cómo podemos ayudarte." %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulario de contacto -->
+    <section class="container pt-5 pb-lg-2 pb-xl-4 py-xxl-5 my-5">
+        <div class="row pb-1 pb-sm-3 pb-lg-4">
+            <div class="col-lg-4 pe-xxl-4">
+                <!-- Título de la sección -->
+                <h2 class="h1 pb-3">{% trans "¿Cómo podemos ayudarte?" %}</h2>
+                <p class="fs-lg pb-4 mb-0 mb-sm-2">
+                    {% trans "Completa el formulario o contáctanos directamente a través de nuestros canales de comunicación." %}
+                </p>
+
+                <!-- Información rápida -->
+                <div class="d-none d-lg-block">
+                    <h3 class="h5 mb-3">{% trans "Horario de atención" %}</h3>
+                    <p class="mb-1">{% trans "Lunes a Viernes" %}: 9:00 - 18:00</p>
+                    <p class="mb-4">{% trans "Sábado" %}: 9:00 - 13:00</p>
+
+                    <h3 class="h5 mb-3">{% trans "Respuesta esperada" %}</h3>
+                    <p class="mb-0">{% trans "Nos comprometemos a responder todas las consultas en un plazo máximo de 48 horas hábiles." %}</p>
+                </div>
+            </div>
+
+            <div class="col-lg-8 col-xl-7 offset-xl-1">
+                <!-- Formulario de contacto -->
+                <form id="contact-form" class="row g-4 needs-validation" method="post" action="{{ form_action }}" novalidate>
+                    {% csrf_token %}
+
+                    <div class="col-sm-6">
+                        {{ form.name.label_tag }}
+                        {{ form.name }}
+                        <div class="invalid-feedback" id="error_name">
+                            {% if form.name.errors %}
+                                {{ form.name.errors.0 }}
+                            {% else %}
+                                {% trans "Por favor ingresa tu nombre" %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        <div class="invalid-feedback" id="error_email">
+                            {% if form.email.errors %}
+                                {{ form.email.errors.0 }}
+                            {% else %}
+                                {% trans "Por favor ingresa un email válido" %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        {{ form.phone.label_tag }}
+                        {{ form.phone }}
+                        <div class="invalid-feedback" id="error_phone">
+                            {% if form.phone.errors %}
+                                {{ form.phone.errors.0 }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        {{ form.company.label_tag }}
+                        {{ form.company }}
+                        <div class="invalid-feedback" id="error_company">
+                            {% if form.company.errors %}
+                                {{ form.company.errors.0 }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        {{ form.subject.label_tag }}
+                        {{ form.subject }}
+                        <div class="invalid-feedback" id="error_subject">
+                            {% if form.subject.errors %}
+                                {{ form.subject.errors.0 }}
+                            {% else %}
+                                {% trans "Por favor selecciona un asunto" %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        {{ form.message.label_tag }}
+                        {{ form.message }}
+                        <div class="invalid-feedback" id="error_message">
+                            {% if form.message.errors %}
+                                {{ form.message.errors.0 }}
+                            {% else %}
+                                {% trans "Por favor ingresa tu mensaje" %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Campo de Captcha -->
+                    {% if form.captcha %}
+                        <div class="col-12">
+                            <label for="id_captcha_1" class="form-label">
+                                {% trans "Código de verificación" %}
+                                <span class="text-danger">*</span>
+                            </label>
+                            <div class="input-group">
+                                {{ form.captcha }}
+                                <button type="button" class="btn btn-outline-secondary js-captcha-refresh" title="{% trans 'Refrescar captcha' %}">
+                                    <i class="ai-refresh"></i>
+                                </button>
+                            </div>
+                            <div class="invalid-feedback" id="error_captcha">
+                                {% if form.captcha.errors %}
+                                    {{ form.captcha.errors.0 }}
+                                {% else %}
+                                    {% trans "Por favor ingrese el código captcha correctamente" %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="col-12 pt-2">
+                        <button class="btn btn-lg btn-primary" type="submit" id="btn_submit">
+                            <i class="ai-send me-2"></i>
+                            {% trans "Enviar mensaje" %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Información de contacto por región -->
+    <section class="bg-secondary py-5">
+        <div class="container py-lg-3 py-xl-4 py-xxl-5">
+            <h2 class="h1 text-center mb-5">{% trans "Contacto por Región" %}</h2>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <!-- Maule -->
+                <div class="col">
+                    <div class="card contact-info-card h-100 border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon text-primary me-3">
+                                    <i class="ai-map-pin fs-4"></i>
+                                </div>
+                                <h3 class="h5 mb-0">{% trans "Maule" %}</h3>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-3">
+                                    <i class="ai-phone text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="tel:+56712123456" class="text-decoration-none">+56 71 212 3456</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex mb-3">
+                                    <i class="ai-mail text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="mailto:maule@pymemad.cl" class="text-decoration-none">maule@pymemad.cl</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="ai-map text-primary me-2 mt-1"></i>
+                                    <div class="fs-sm">
+                                        <span class="text-muted">Talca, Maule</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                 <!-- Biobío -->
+                <div class="col">
+                    <div class="card contact-info-card h-100 border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon text-primary me-3">
+                                    <i class="ai-map-pin fs-4"></i>
+                                </div>
+                                <h3 class="h5 mb-0">{% trans "Biobío" %}</h3>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-3">
+                                    <i class="ai-phone text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="tel:+56412123456" class="text-decoration-none">+56 41 212 3456</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex mb-3">
+                                    <i class="ai-mail text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="mailto:biobio@pymemad.cl" class="text-decoration-none">biobio@pymemad.cl</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="ai-map text-primary me-2 mt-1"></i>
+                                    <div class="fs-sm">
+                                        <span class="text-muted">Concepción, Biobío</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- La Araucanía -->
+                <div class="col">
+                    <div class="card contact-info-card h-100 border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon text-primary me-3">
+                                    <i class="ai-map-pin fs-4"></i>
+                                </div>
+                                <h3 class="h5 mb-0">{% trans "La Araucanía" %}</h3>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-3">
+                                    <i class="ai-phone text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="tel:+56452123456" class="text-decoration-none">+56 45 212 3456</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex mb-3">
+                                    <i class="ai-mail text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="mailto:araucania@pymemad.cl" class="text-decoration-none">araucania@pymemad.cl</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="ai-map text-primary me-2 mt-1"></i>
+                                    <div class="fs-sm">
+                                        <span class="text-muted">Temuco, La Araucanía</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Los Ríos -->
+                <div class="col">
+                    <div class="card contact-info-card h-100 border-0">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="contact-icon text-primary me-3">
+                                    <i class="ai-map-pin fs-4"></i>
+                                </div>
+                                <h3 class="h5 mb-0">{% trans "Los Ríos" %}</h3>
+                            </div>
+                            <ul class="list-unstyled mb-0">
+                                <li class="d-flex mb-3">
+                                    <i class="ai-phone text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="tel:+56632123456" class="text-decoration-none">+56 63 212 3456</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex mb-3">
+                                    <i class="ai-mail text-primary me-2 mt-1"></i>
+                                    <div>
+                                        <a href="mailto:losrios@pymemad.cl" class="text-decoration-none">losrios@pymemad.cl</a>
+                                    </div>
+                                </li>
+                                <li class="d-flex">
+                                    <i class="ai-map text-primary me-2 mt-1"></i>
+                                    <div class="fs-sm">
+                                        <span class="text-muted">Valdivia, Los Ríos</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+    <script type="text/javascript">
+        // Configuración global con URLs y constantes generadas por Django
+        var contactConfig = {
+            currentLanguage: '{{ LANGUAGE_CODE }}',
+            urls: {
+                formAction: '{{ form_action }}',
+                refreshCaptcha: '{{ refresh_captcha_url }}'
+            },
+            messages: {
+                buttonText: '{{ button_text }}',
+                pageTitle: '{{ page_title }}',
+                description: '{{ description }}'
+            },
+            csrfToken: getCSRFToken(),
+        };
+    </script>
+    <script src="{% static 'assets/js/front/contact-form.js' %}"></script>
+{% endblock %}

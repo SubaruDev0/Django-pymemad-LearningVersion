@@ -1,0 +1,606 @@
+{% extends 'base_landing.html' %}
+{% load blog_extras %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{{ post.title|capfirst }} - {{ block.super }}{% endblock %}
+{% block description %}{{ meta_description|default:"Mantente informado sobre las últimas novedades, eventos y logros del sector forestal PyME en Chile" }}{% endblock %}
+
+{% comment %}Canonical URL is now handled in canonical block{% endcomment %}
+
+{% block seo %}
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="keywords" content="{% if post_tags %}{% for tag in post_tags %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}" />
+    <meta name="author" content="{{ post.author.get_full_name|default:post.author.username }}" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Facebook Open Graph Meta Tags -->
+    <meta property="og:title" content="{{ post.title }}" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+    {% get_post_image_url post as og_image %}
+    {% if og_image %}
+        <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="{{ post.title }}" />
+    {% endif %}
+    <meta property="og:description" content="{% if meta_description %}{{ meta_description }}{% else %}{{ post.body|striptags|truncatechars:160 }}{% endif %}" />
+    <meta property="og:site_name" content="Loginfor" />
+    <meta property="og:locale" content="es_CL" />
+    <meta property="article:published_time" content="{{ post.publish|date:'c' }}" />
+    <meta property="article:modified_time" content="{{ post.updated|date:'c' }}" />
+    <meta property="article:author" content="{{ post.author.get_full_name|default:post.author.username }}" />
+    {% if post.category %}
+        <meta property="article:section" content="{{ post.category.name }}" />
+    {% endif %}
+    {% for tag in post_tags %}
+        <meta property="article:tag" content="{{ tag.name }}" />
+    {% endfor %}
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta property="twitter:domain" content="{{ request.get_host }}">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:title" content="{{ post.title }}">
+    <meta name="twitter:description" content="{% if meta_description %}{{ meta_description }}{% else %}{{ post.body|striptags|truncatechars:160 }}{% endif %}">
+    {% if og_image %}
+        <meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+    {% endif %}
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "{{ request.build_absolute_uri }}"
+            },
+            "headline": "{{ post.title|escapejs }}",
+        {% if og_image %}
+            "image": "{{ request.scheme }}://{{ request.get_host }}{{ og_image }}",
+        {% endif %}
+        "datePublished": "{{ post.publish|date:'c' }}",
+            "dateModified": "{{ post.updated|date:'c' }}",
+            "author": {
+                "@type": "Person",
+                "name": "{{ post.author.get_full_name|default:post.author.username|escapejs }}"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Loginfor",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'assets/img/loginfor-icon.png' %}"
+                }
+            },
+            "description": "{% if meta_description %}{{ meta_description|escapejs }}{% else %}{{ post.body|striptags|truncatechars:160|escapejs }}{% endif %}",
+        {% if post.category %}
+            "articleSection": "{{ post.category.name|escapejs }}",
+        {% endif %}
+        "keywords": "{% if post_tags %}{% for tag in post_tags %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}"
+        }
+    </script>
+{% endblock %}
+
+{% block canonical %}
+    <link rel="canonical" href="{{ canonical_url }}" />
+{% endblock %}
+
+{% block hreflang %}
+    <!-- hreflang links para idiomas disponibles -->
+    {% for lang_code, url in language_urls.items %}
+        <link rel="alternate" hreflang="{{ lang_code }}" href="{{ url }}" />
+    {% endfor %}
+    <!-- x-default para idioma por defecto -->
+    {% if language_urls.es %}
+        <link rel="alternate" hreflang="x-default" href="{{ language_urls.es }}" />
+    {% endif %}
+{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .post-content {
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .post-content h2,
+        .post-content h3,
+        .post-content h4 {
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 0.5rem;
+        }
+        .tag-link {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            margin: 0.25rem;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 1rem;
+            text-decoration: none;
+            color: #6c757d;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .tag-link:hover {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        .related-post {
+            transition: transform 0.2s;
+        }
+        .related-post:hover {
+            transform: translateY(-2px);
+        }
+        .sidebar-widget {
+            margin-bottom: 2rem;
+        }
+        .sidebar-widget h4 {
+            margin-bottom: 1.5rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <section id="news-hero" class="position-relative bg-dark py-5">
+         <!-- Imagen de fondo con jarallax -->
+        <div class="jarallax position-absolute top-0 start-0 w-100 h-100" data-jarallax data-speed="0.4">
+            <div class="jarallax-img" style="background-image: url({% static 'assets/img/about/about.webp' %});"></div>
+        </div>
+
+        <div class="position-absolute top-0 start-0 w-100 h-100" style="background: rgba(0, 0, 0, 0.6); z-index: 1;"></div>
+
+        <div class="container position-relative z-2 py-5" data-bs-theme="dark">
+            <div class="row py-5">
+                <div class="col-lg-10 col-xl-9">
+                    <!-- Breadcrumb -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="pt-lg-3 pb-lg-4 pb-2 breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'landing:home' %}">{% trans "Inicio" %}</a>
+                            </li>
+                            <li class="breadcrumb-item">
+                                <a href="{% url 'landing:news_list' %}">{% trans "Noticias" %}</a>
+                            </li>
+                            {% if post.category %}
+                                <li class="breadcrumb-item">
+                                    <a href="{% url 'landing:news_list' %}?category={{ post.category.slug }}">{{ post.category.name }}</a>
+                                </li>
+                            {% endif %}
+                            <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatechars:50 }}</li>
+                        </ol>
+                    </nav>
+
+                    <h1 class="display-2 text-white pb-2 pb-sm-3">{{ title }}</h1>
+                    <p class="fs-xl text-white mb-4">{{ subtitle }}</p>
+
+                    {% if search_query %}
+                        <div class="alert alert-info d-inline-block">
+                            <i class="ai-search me-2"></i>
+                            {% blocktrans with query=search_query %}Resultados para: "{{ query }}"{% endblocktrans %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Botón de búsqueda visible en móvil -->
+                    <button class="btn btn-primary d-lg-none" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#sidebarNews" aria-controls="sidebarNews">
+                        <i class="ai-search me-2"></i>
+                        {% trans "Buscar noticias" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Page container -->
+    <section class="container pt-5 mt-5">
+
+        <div class="row">
+            <div class="col-lg-9 col-xl-8 pe-lg-4 pe-xl-0">
+
+                <!-- Post title + post meta -->
+                <h1 class="pb-2 pb-lg-3">{{ post.title }}</h1>
+                <div class="d-flex flex-wrap align-items-center justify-content-between border-bottom mb-4">
+                    <div class="d-flex align-items-center mb-4 me-4">
+                        <span class="fs-sm me-2">{% trans "Por" %}:</span>
+                        <a class="nav-link position-relative fw-semibold p-0" href="#author" data-scroll data-scroll-offset="80">
+                            {{ post.author.get_full_name|default:post.author.username }}
+                            <span class="d-block position-absolute start-0 bottom-0 w-100" style="background-color: currentColor; height: 1px;"></span>
+                        </a>
+                        <span class="fs-sm ms-3">{{ post.publish|date:"d M Y" }}</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-4">
+                        <span class="fs-sm me-2">{% trans "Compartir:" %}</span>
+                        <div class="d-flex">
+                            <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('facebook')" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
+                                <i class="ai-facebook"></i>
+                            </a>
+                            <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('twitter')" data-bs-toggle="tooltip" data-bs-placement="top" title="X" aria-label="X">
+                                <i class="ai-x"></i>
+                            </a>
+                            <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('linkedin')" data-bs-toggle="tooltip" data-bs-placement="top" title="LinkedIn" aria-label="LinkedIn">
+                                <i class="ai-linkedin"></i>
+                            </a>
+                            <a class="nav-link p-2" href="#" onclick="shareOnSocial('whatsapp')" data-bs-toggle="tooltip" data-bs-placement="top" title="WhatsApp" aria-label="WhatsApp">
+                                <i class="ai-phone"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Featured image -->
+                {% get_post_image_url post as post_image %}
+                {% if post_image %}
+                    <div class="mb-4 mb-lg-5">
+                        <img class="rounded-5 w-100" src="{{ post_image }}" alt="{{ post.title }}">
+                    </div>
+                {% endif %}
+
+                <!-- Post content -->
+                <div class="post-content">
+                    {{ post.body|safe }}
+                </div>
+
+                <!-- Tags -->
+                {% if post_tags %}
+                    <div class="d-flex flex-wrap pb-5 pt-3 pt-md-4 pt-xl-5 mt-xl-n2">
+                        <h3 class="h6 py-1 mb-0 me-4">{% trans "Etiquetas relevantes:" %}</h3>
+                        {% for tag in post_tags %}
+                            <a class="tag-link" href="{% url 'landing:news_list_by_tag' tag.slug %}">
+                                <span class="text-primary">#</span>{{ tag.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Author widget -->
+                {#                    <div class="author-card border-top border-bottom py-4 my-5">#}
+                {#                        <div class="d-flex align-items-start">#}
+                {#                            <img class="d-block rounded-circle"#}
+                {#                                 src="{% static 'assets/img/loginfor-icon.png' %}"#}
+                {#                                 width="64" height="64" alt="{{ post.author.get_full_name|default:post.author.username }}">#}
+                {#                            <div class="d-md-flex w-100 ps-4">#}
+                {#                                <div style="max-width: 26rem;">#}
+                {#                                    <h3 class="h5 mb-2">{{ post.author.get_full_name|default:post.author.username }}</h3>#}
+                {#                                    <p class="fs-sm mb-0">#}
+                {#                                        {% blocktrans %}Especialista en servicios de trituración forestal y habilitación de terrenos. Comprometido con la innovación y el desarrollo sostenible en la industria forestal chilena.{% endblocktrans %}#}
+                {#                                    </p>#}
+                {#                                </div>#}
+                {#                                <div class="pt-4 pt-md-0 ps-md-4 ms-md-auto">#}
+                {#                                    <h3 class="h5">{% trans "Compartir artículo:" %}</h3>#}
+                {#                                    <div class="d-flex">#}
+                {#                                        <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('facebook')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Facebook" aria-label="Facebook">#}
+                {#                                            <i class="ai-facebook"></i>#}
+                {#                                        </a>#}
+                {#                                        <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('twitter')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="X" aria-label="X">#}
+                {#                                            <i class="ai-x"></i>#}
+                {#                                        </a>#}
+                {#                                        <a class="nav-link p-2 me-2" href="#" onclick="shareOnSocial('linkedin')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="LinkedIn" aria-label="LinkedIn">#}
+                {#                                            <i class="ai-linkedin"></i>#}
+                {#                                        </a>#}
+                {#                                        <a class="nav-link p-2" href="#" onclick="shareOnSocial('whatsapp')" data-bs-toggle="tooltip" data-bs-placement="bottom" title="WhatsApp" aria-label="WhatsApp">#}
+                {#                                            <i class="ai-phone"></i>#}
+                {#                                        </a>#}
+                {#                                    </div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    </div>#}
+
+                <!-- Comments section -->
+                {% if comments %}
+                    <div class="pt-4 pt-xl-5 mt-4" id="comments">
+                        <h2 class="h1 py-lg-1 py-xl-3">{{ comments.count }} {% if comments.count == 1 %}{% trans "comentario" %}{% else %}{% trans "comentarios" %}{% endif %}</h2>
+
+                        {% for comment in comments %}
+                            <div class="border-bottom py-4 mt-2 mb-4">
+                                <div class="d-flex align-items-center pb-1 mb-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                                        <span class="fw-bold">{{ comment.name|first|upper }}</span>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6 class="mb-0">{{ comment.name }}</h6>
+                                        <span class="fs-sm text-body-secondary">{{ comment.created_at|date:"d M Y H:i" }}</span>
+                                    </div>
+                                </div>
+                                <p class="mb-0">{{ comment.body|linebreaks }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Comment form -->
+                <div class="card border-0 bg-secondary pt-2 p-md-2 p-xl-3 p-xxl-4 mt-4">
+                    <div class="card-body">
+                        <h2 class="pb-2 pb-lg-3 pb-xl-4">{% trans "Deja un comentario" %}</h2>
+                        <form method="post" action="{% url 'landing:comment_ajax' %}" id="comment-form" class="row needs-validation g-4" novalidate>
+                            {% csrf_token %}
+
+                            <!-- Hidden fields -->
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <input type="hidden" id="refresh-captcha-url" value="{{ refresh_captcha_url }}">
+
+                            {% for field in comment_form %}
+                                {% if field.name != 'captcha' %}
+                                    <div class="{% if field.name == 'body' %}col-12{% else %}col-sm-6{% endif %}">
+                                        <label for="{{ field.id_for_label }}" class="form-label">
+                                            {{ field.label }}
+                                            {% if field.field.required %}<span class="text-danger">*</span>{% endif %}
+                                        </label>
+                                        {{ field }}
+                                        {% if field.help_text %}
+                                            <div class="form-text">{{ field.help_text }}</div>
+                                        {% endif %}
+                                        <div class="invalid-feedback" id="error_{{ field.name }}">
+                                            {% if field.errors %}
+                                                {{ field.errors.0 }}
+                                            {% else %}
+                                                {% trans "Este campo es requerido" %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+
+                            <!-- Campo de Captcha -->
+                            {% if comment_form.captcha %}
+                                <div class="col-12">
+                                    <label for="id_captcha_1" class="form-label">
+                                        {% trans "Código de verificación" %}
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        {{ comment_form.captcha }}
+                                        <button type="button" class="btn btn-outline-secondary js-captcha-refresh" title="{% trans 'Refrescar captcha' %}">
+                                            <i class="ai-refresh"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="error_captcha">
+                                        {% if comment_form.captcha.errors %}
+                                            {{ comment_form.captcha.errors.0 }}
+                                        {% else %}
+                                            {% trans "Por favor ingrese el código captcha correctamente" %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <!-- Botón de envío -->
+                            <div class="col-12 pt-3">
+                                <button type="submit" class="btn btn-primary" id="btn_submit">
+                                    {% trans "Publicar comentario" %}
+                                    <i class="ai-send ms-2"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="col-lg-3 offset-xl-1">
+                <div class="offcanvas-lg offcanvas-end" id="sidebar">
+                    <div class="offcanvas-header">
+                        <h4 class="offcanvas-title">{% trans "Más contenido" %}</h4>
+                        <button class="btn-close ms-auto" type="button" data-bs-dismiss="offcanvas" data-bs-target="#sidebar" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+
+                        <!-- Search box -->
+                        <div class="sidebar-widget">
+                            <div class="position-relative">
+                                <form method="get" action="{% url 'landing:news_list' %}">
+                                    <i class="ai-search position-absolute top-50 start-0 translate-middle-y ms-3"></i>
+                                    <input class="form-control ps-5" type="search" name="search" placeholder="{% trans 'Buscar noticias...' %}">
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Recent posts -->
+                        {% if similar_posts %}
+                            <div class="sidebar-widget">
+                                <h4>{% trans "Artículos relacionados:" %}</h4>
+                                {% for related_post in similar_posts %}
+                                    <article class="d-flex mb-4">
+                                        {% get_post_image_url related_post as related_image %}
+                                        {% if related_image %}
+                                            <div class="flex-shrink-0 me-3">
+                                                <a href="{% post_link_url related_post %}">
+                                                    <img class="rounded" src="{{ related_image }}" width="80" height="60" style="object-fit: cover;" alt="{{ related_post.title }}">
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-2">
+                                                <a class="text-decoration-none" href="{% post_link_url related_post %}">{{ related_post.title|truncatechars:60 }}</a>
+                                            </h6>
+                                            <span class="fs-sm text-body-secondary">{{ related_post.publish|date:"d M Y" }}</span>
+                                        </div>
+                                    </article>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <!-- Popular tags -->
+                        {% if tags %}
+                            <div class="sidebar-widget">
+                                <h4>{% trans "Etiquetas populares:" %}</h4>
+                                <div class="d-flex flex-wrap">
+                                    {% for tag in tags %}
+                                        <a class="tag-link" href="{% url 'landing:news_list_by_tag' tag.slug %}">
+                                            {{ tag.name }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <!-- Social links -->
+                        <div class="sidebar-widget">
+                            <h4>{% trans "Síguenos:" %}</h4>
+                            <div class="d-flex">
+                                <a class="btn btn-outline-primary btn-sm rounded-pill me-2" href="#" aria-label="Instagram">
+                                    <i class="ai-instagram me-1"></i>Instagram
+                                </a>
+                                <a class="btn btn-outline-primary btn-sm rounded-pill me-2" href="#" aria-label="LinkedIn">
+                                    <i class="ai-linkedin me-1"></i>LinkedIn
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+            <!-- Navigation buttons -->
+            {% if previous_post or next_post %}
+                <div class="row mt-5 pt-4 pb-5 border-top">
+                    <div class="col-md-6">
+                        {% if previous_post %}
+                            <a href="{% post_link_url previous_post %}" class="d-flex align-items-center text-decoration-none">
+                                <i class="ai-arrow-left fs-xl me-3"></i>
+                                <div>
+                                    <div class="fs-sm text-body-secondary">{% trans "Artículo anterior" %}</div>
+                                    <div class="fw-semibold">{{ previous_post.title|truncatechars:50 }}</div>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        {% if next_post %}
+                            <a href="{% post_link_url next_post %}" class="d-flex align-items-center justify-content-md-end text-decoration-none">
+                                <div class="text-md-end">
+                                    <div class="fs-sm text-body-secondary">{% trans "Siguiente artículo" %}</div>
+                                    <div class="fw-semibold">{{ next_post.title|truncatechars:50 }}</div>
+                                </div>
+                                <i class="ai-arrow-right fs-xl ms-3"></i>
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+    </section>
+
+    <!-- Related articles (carousel) -->
+    {% if similar_posts %}
+        <section class="bg-secondary py-5 mt-sm-2 my-md-4 my-xl-5" style="margin-bottom: -2rem !important;">
+            <div class="container">
+                <div class="d-flex align-items-center pb-3 mb-3 mb-lg-4 mt-2 mt-xxl-3">
+                <h2 class="mb-0 me-4">{% trans "Artículos relacionados" %}</h2>
+                <div class="d-flex ms-auto">
+                    <button class="btn btn-prev btn-icon btn-sm btn-outline-primary rounded-circle me-3" type="button" id="prev-post" aria-label="Prev">
+                        <i class="ai-arrow-left"></i>
+                    </button>
+                    <button class="btn btn-next btn-icon btn-sm btn-outline-primary rounded-circle" type="button" id="next-post" aria-label="Next">
+                        <i class="ai-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="swiper pb-2 pb-sm-3 pb-md-4" data-swiper-options='{
+                "spaceBetween": 24,
+                "loop": true,
+                "autoHeight": true,
+                "navigation": {
+                    "prevEl": "#prev-post",
+                    "nextEl": "#next-post"
+                },
+                "breakpoints": {
+                    "576": { "slidesPerView": 2 },
+                    "1000": { "slidesPerView": 3 }
+                }
+            }'>
+                <div class="swiper-wrapper">
+                    {% for related_post in similar_posts %}
+                        <!-- Post -->
+                        <article class="swiper-slide">
+                            <div class="position-relative">
+                                {% get_post_image_url related_post as related_image %}
+                                {% if related_image %}
+                                    <img class="rounded-5 w-100" src="{{ related_image }}" alt="{{ related_post.title }}" style="height: 200px; object-fit: cover;">
+                                {% endif %}
+                                <h3 class="h4 mt-4 mb-0">
+                                    <a class="stretched-link text-decoration-none" href="{% post_link_url related_post %}">{{ related_post.title }}</a>
+                                </h3>
+                                <div class="d-flex align-items-center mt-2">
+                                    <span class="fs-sm text-body-secondary me-2">{{ related_post.publish|date:"d M Y" }}</span>
+                                    {% if related_post.category %}
+                                        <span class="fs-xs opacity-20 mx-2">|</span>
+                                        <span class="badge bg-light text-dark fs-xs">{{ related_post.category.name }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+            </div>
+            </div>
+
+        </section>
+    {% endif %}
+
+    <!-- Sidebar toggle button for mobile -->
+    <button class="d-lg-none btn btn-sm fs-sm btn-primary w-100 rounded-0 fixed-bottom" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        <i class="ai-layout-column me-2"></i>
+        {% trans "Barra lateral" %}
+    </button>
+{% endblock %}
+
+{% block extra_js %}
+    <!-- Comment form JS específico para comentarios -->
+    <script src="{% static 'assets/js/front/comment-form.js' %}"></script>
+
+    <script>
+        // Social sharing functions
+        function shareOnSocial(platform) {
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent('{{ post.title|addslashes }}');
+            const description = encodeURIComponent('{{ meta_description|addslashes }}');
+
+            let shareUrl;
+
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${url}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${title} ${url}`;
+                    break;
+            }
+
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+{% endblock extra_js %}

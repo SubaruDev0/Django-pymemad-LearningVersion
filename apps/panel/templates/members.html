@@ -1,0 +1,846 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Gestión de Socios - PymeMad Nacional{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 24px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-icon i {
+            font-size: 1.5rem;
+            line-height: 1;
+            z-index: 2;
+        }
+
+        .bg-primary.bg-opacity-10 {
+            background-color: rgba(26, 95, 63, 0.1) !important;
+        }
+
+        .bg-success.bg-opacity-10 {
+            background-color: rgba(76, 175, 80, 0.1) !important;
+        }
+
+        .bg-warning.bg-opacity-10 {
+            background-color: rgba(255, 152, 0, 0.1) !important;
+        }
+
+        .bg-info.bg-opacity-10 {
+            background-color: rgba(33, 150, 243, 0.1) !important;
+        }
+
+        .bg-danger.bg-opacity-10 {
+            background-color: rgba(244, 67, 54, 0.1) !important;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .icon {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 3rem;
+            opacity: 0.2;
+        }
+
+        .stat-card.active-members {
+            border-top: 4px solid #4caf50;
+        }
+
+        .stat-card.inactive-members {
+            border-top: 4px solid #f44336;
+        }
+
+        .stat-card.pending-members {
+            border-top: 4px solid #ff9800;
+        }
+
+        .stat-card.suspended-members {
+            border-top: 4px solid #6c757d;
+        }
+
+        .quick-stats {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-stats .stat-item {
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        .quick-stats .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a5f3f;
+        }
+
+        .quick-stats .stat-label {
+            font-size: 0.875rem;
+            color: #6c757d;
+        }
+
+        .member-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .growth-positive {
+            color: #4caf50;
+        }
+
+        .growth-negative {
+            color: #f44336;
+        }
+
+        .member-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 5px;
+            border-radius: 8px;
+        }
+
+        .payment-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .payment-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .payment-indicator.paid {
+            background-color: #4caf50;
+        }
+
+        .payment-indicator.pending {
+            background-color: #ff9800;
+        }
+
+        .payment-indicator.overdue {
+            background-color: #f44336;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .filter-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: #e3f2fd;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .filter-tag:hover {
+            background-color: #bbdefb;
+        }
+
+        .filter-tag.active {
+            background-color: #1a5f3f;
+            color: white;
+        }
+
+        .timeline-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 767px) {
+            .stat-value {
+                font-size: 1.5rem;
+            }
+            
+            .stat-label {
+                font-size: 0.75rem;
+            }
+            
+            .table-responsive {
+                font-size: 0.875rem;
+            }
+            
+            .member-logo {
+                width: 32px;
+                height: 32px;
+            }
+            
+            /* Hide less important columns on mobile */
+            .d-mobile-none {
+                display: none !important;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .d-mobile-none {
+                display: table-cell !important;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+    <div class="pt-4 pb-2 pb-sm-4">
+        <!-- Header -->
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-4 gap-3">
+            <div>
+                <h2 class="h2 mb-0">Panel de Socios</h2>
+                <p class="text-muted mb-0">Gestion y monitoreo de empresas asociadas</p>
+            </div>
+            <div class="d-flex gap-2 w-100 w-sm-auto">
+                <button class="btn btn-sm btn-outline-secondary d-none d-sm-inline-flex">
+                    <i class="ai-download me-1"></i>Exportar
+                </button>
+                <button class="btn btn-sm btn-outline-secondary d-sm-none" title="Exportar">
+                    <i class="ai-download"></i>
+                </button>
+                <button class="btn btn-primary flex-fill flex-sm-grow-0" data-bs-toggle="modal" data-bs-target="#newMemberModal">
+                    <i class="ai-user-plus me-2"></i><span class="d-none d-sm-inline">Nueva Solicitud</span>
+                    <span class="d-sm-none">Nueva</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats Bar -->
+        <div class="row g-3 g-lg-4 mb-4">
+            <!-- Total Empresas -->
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                                <i class="ai-briefcase"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-primary" id="total-empresas">95</div>
+                                <div class="stat-label">Total Empresas</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-muted">
+                                <i class="ai-info-circle me-1"></i>Registradas
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empresas Activas -->
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success bg-opacity-10 text-success me-3">
+                                <i class="ai-check-alt"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-success" id="empresas-activas">78</div>
+                                <div class="stat-label">Activas</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>82% del total
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tasa de Retencion -->
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                                <i class="ai-repeat"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-info" id="tasa-retencion">82%</div>
+                                <div class="stat-label">Tasa de Retencion</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>+2% vs año anterior
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empleos Generados -->
+            <div class="col-6 col-sm-6 col-lg-3">
+                <div class="card stat-card border-0 h-100">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-danger bg-opacity-10 text-danger me-3">
+                                <i class="ai-user-group"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="stat-value text-danger" id="empleos">10.5K+</div>
+                                <div class="stat-label">Empleos Generados</div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-success">
+                                <i class="ai-trending-up me-1"></i>+1,200 este año
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Region Selector -->
+        <div class="alert alert-light">
+            <div class="row align-items-center g-3">
+                <div class="col-12 col-md-3">
+                    <h5 class="mb-0 text-center text-md-start">Filtrar por Region</h5>
+                </div>
+                <div class="col-12 col-md-9">
+                    <div class="btn-group-vertical btn-group-sm d-md-none w-100" role="group">
+                        <button type="button" class="btn btn-outline-primary active text-start" data-region="all">
+                            <i class="ai-globe me-2"></i> Nacional
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="biobio">
+                            <i class="ai-map-pin me-2"></i> Biobio/Nuble
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="maule">
+                            <i class="ai-map-pin me-2"></i> Maule
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="araucania">
+                            <i class="ai-map-pin me-2"></i> Araucania
+                        </button>
+                        <button type="button" class="btn btn-outline-primary text-start" data-region="rios">
+                            <i class="ai-map-pin me-2"></i> Los Rios
+                        </button>
+                    </div>
+                    <div class="btn-group d-none d-md-flex w-100" role="group">
+                        <button type="button" class="btn btn-outline-primary active" data-region="all">
+                            <i class="ai-globe me-1"></i> <span class="d-none d-lg-inline">Nacional</span>
+                            <span class="d-lg-none">Nac.</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="biobio">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Biobio/Nuble</span>
+                            <span class="d-lg-none">BB/Ñ</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="maule">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Maule</span>
+                            <span class="d-lg-none">Maule</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="araucania">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Araucania</span>
+                            <span class="d-lg-none">Arauc.</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary" data-region="rios">
+                            <i class="ai-map-pin me-1"></i> <span class="d-none d-lg-inline">Los Rios</span>
+                            <span class="d-lg-none">Rios</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card stat-card active-members">
+                    <div class="card-body">
+                        <i class="ai-check-circle icon text-success"></i>
+                        <h6 class="text-muted mb-2">Socios Activos</h6>
+                        <h3 class="mb-0">78</h3>
+                        <small>
+                            <span class="growth-indicator growth-positive">
+                                <i class="ai-trending-up"></i> +5
+                            </span>
+                            vs mes anterior
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card pending-members">
+                    <div class="card-body">
+                        <i class="ai-clock icon text-warning"></i>
+                        <h6 class="text-muted mb-2">Solicitudes Pendientes</h6>
+                        <h3 class="mb-0">8</h3>
+                        <small>
+                            <span class="growth-indicator growth-negative">
+                                <i class="ai-trending-down"></i> -2
+                            </span>
+                            vs mes anterior
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card inactive-members">
+                    <div class="card-body">
+                        <i class="ai-x-circle icon text-danger"></i>
+                        <h6 class="text-muted mb-2">Socios Inactivos</h6>
+                        <h3 class="mb-0">5</h3>
+                        <small>
+                            <span class="text-muted">
+                                Sin cambios
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card stat-card suspended-members">
+                    <div class="card-body">
+                        <i class="ai-alert-triangle icon text-secondary"></i>
+                        <h6 class="text-muted mb-2">Suspendidos</h6>
+                        <h3 class="mb-0">4</h3>
+                        <small>
+                            <span class="text-muted">
+                                Por pagos pendientes
+                            </span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="row">
+            <!-- Members List -->
+            <div class="col-12 col-lg-8 mb-4 mb-lg-0">
+                <!-- Search and Filters -->
+                <div class="alert alert-light">
+                    <div class="row g-2 g-md-3">
+                        <div class="col-12 col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="ai-search"></i>
+                                </span>
+                                <input type="text" class="form-control" placeholder="Buscar..." aria-label="Buscar empresas">
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <select class="form-select" aria-label="Filtrar por estado">
+                                <option>Estados</option>
+                                <option>Activos</option>
+                                <option>Pendientes</option>
+                                <option>Inactivos</option>
+                                <option>Suspendidos</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <select class="form-select" aria-label="Ordenar resultados">
+                                <option>Ordenar</option>
+                                <option>Nombre A-Z</option>
+                                <option>Nombre Z-A</option>
+                                <option>Fecha ingreso</option>
+                                <option>Actividad</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Members Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Empresa</th>
+                                        <th class="d-none d-md-table-cell">Contacto</th>
+                                        <th class="d-none d-sm-table-cell">Region</th>
+                                        <th>Estado</th>
+                                        <th class="d-none d-lg-table-cell">Pagos</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Maderas San Jose</h6>
+                                                    <small class="text-muted">RUT: 76.123.456-7</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-md-table-cell">
+                                            <div>
+                                                <div>Juan Perez</div>
+                                                <small class="text-muted">+56 9 1234 5678</small>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            <span class="badge bg-light text-dark">Biobio</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success">Activo</span>
+                                        </td>
+                                        <td class="d-none d-lg-table-cell">
+                                            <div class="payment-status">
+                                                <span class="payment-indicator paid"></span>
+                                                <small>Al dia</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button class="btn btn-outline-secondary d-none d-sm-inline-block" title="Editar">
+                                                    <i class="ai-edit-alt"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary d-none d-md-inline-block" title="Historial">
+                                                    <i class="ai-clock"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Forestal del Sur</h6>
+                                                    <small class="text-muted">RUT: 76.987.654-3</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-md-table-cell">
+                                            <div>
+                                                <div>Maria Gonzalez</div>
+                                                <small class="text-muted">+56 9 9876 5432</small>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            <span class="badge bg-light text-dark">Los Rios</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-warning">Pendiente</span>
+                                        </td>
+                                        <td class="d-none d-lg-table-cell">
+                                            <div class="payment-status">
+                                                <span class="payment-indicator pending"></span>
+                                                <small>30 dias</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button class="btn btn-outline-secondary d-none d-sm-inline-block" title="Editar">
+                                                    <i class="ai-edit-alt"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary d-none d-md-inline-block" title="Historial">
+                                                    <i class="ai-clock"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0">Aserradero Los Pinos</h6>
+                                                    <small class="text-muted">RUT: 76.555.444-2</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-md-table-cell">
+                                            <div>
+                                                <div>Carlos Munoz</div>
+                                                <small class="text-muted">+56 9 5555 4444</small>
+                                            </div>
+                                        </td>
+                                        <td class="d-none d-sm-table-cell">
+                                            <span class="badge bg-light text-dark">Maule</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-danger">Suspendido</span>
+                                        </td>
+                                        <td class="d-none d-lg-table-cell">
+                                            <div class="payment-status">
+                                                <span class="payment-indicator overdue"></span>
+                                                <small>60+ dias</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button class="btn btn-outline-secondary d-none d-sm-inline-block" title="Editar">
+                                                    <i class="ai-edit"></i>
+                                                </button>
+                                                <button class="btn btn-outline-secondary d-none d-md-inline-block" title="Historial">
+                                                    <i class="ai-clock"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="col-12 col-lg-4">
+                <!-- Distribution Chart -->
+                <div class="card mb-4">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">Distribucion por Region</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="regionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card mb-4">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">Actividad Reciente</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline">
+                            <div class="timeline-item mb-3">
+                                <div class="d-flex">
+                                    <div class="timeline-icon bg-success rounded-circle p-2 me-3">
+                                        <i class="ai-user-plus text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Nueva solicitud aprobada</h6>
+                                        <p class="text-muted small mb-0">Maderas del Pacifico - Los Rios</p>
+                                        <small class="text-muted">Hace 2 horas</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item mb-3">
+                                <div class="d-flex">
+                                    <div class="timeline-icon bg-warning rounded-circle p-2 me-3">
+                                        <i class="ai-triangle-alert text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Socio suspendido</h6>
+                                        <p class="text-muted small mb-0">Aserradero Los Pinos - Pagos pendientes</p>
+                                        <small class="text-muted">Hace 1 dia</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="timeline-item mb-3">
+                                <div class="d-flex">
+                                    <div class="timeline-icon bg-info rounded-circle p-2 me-3">
+                                        <i class="ai-refresh text-white"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1">Actualizacion de datos</h6>
+                                        <p class="text-muted small mb-0">15 socios actualizaron informacion</p>
+                                        <small class="text-muted">Hace 3 dias</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                        <h5 class="mb-0">Acciones Rapidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary">
+                                <i class="ai-file-text me-2"></i>Generar Reporte
+                            </button>
+                            <button class="btn btn-outline-primary">
+                                <i class="ai-mail me-2"></i>Enviar Comunicado
+                            </button>
+                            <button class="btn btn-outline-secondary">
+                                <i class="ai-download me-2"></i>Exportar Base de Datos
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Member Modal -->
+    <div class="modal fade" id="newMemberModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nueva Solicitud de Socio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Razon Social</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">RUT Empresa</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Nombre Contacto</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Telefono</label>
+                                <input type="tel" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Region</label>
+                                <select class="form-select" required>
+                                    <option value="">Seleccionar...</option>
+                                    <option>Biobio/Nuble</option>
+                                    <option>Maule</option>
+                                    <option>Araucania</option>
+                                    <option>Los Rios</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Direccion</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Actividad Principal</label>
+                                <textarea class="form-control" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary">Crear Solicitud</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function() {
+            // Initialize region distribution chart
+            const ctx = document.getElementById('regionChart');
+            if (ctx) {
+                new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Biobio/Nuble', 'Maule', 'Araucania', 'Los Rios'],
+                        datasets: [{
+                            data: [35, 25, 20, 15],
+                            backgroundColor: [
+                                '#1a5f3f',
+                                '#4caf50',
+                                '#ff9800',
+                                '#2196f3'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // Region filter buttons - updated for both mobile and desktop
+            $('.btn-group[role="group"] button, .btn-group-vertical[role="group"] button').on('click', function() {
+                $('.btn-group[role="group"] button, .btn-group-vertical[role="group"] button').removeClass('active');
+                $(this).addClass('active');
+                
+                const region = $(this).data('region');
+                // Here you would filter the table based on the selected region
+                console.log('Filtering by region:', region);
+            });
+
+            // Search functionality
+            $('input[placeholder*="Buscar"]').on('keyup', function() {
+                const searchTerm = $(this).val().toLowerCase();
+                // Implement search logic here
+                console.log('Searching for:', searchTerm);
+            });
+        });
+    </script>
+{% endblock %}
