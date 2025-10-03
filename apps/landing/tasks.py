@@ -15,7 +15,7 @@ def send_contact_email_task(contact_data):
     """
     Tarea asíncrona para enviar un correo con los detalles del formulario de contacto de PymeMad.
     """
-    template = get_template('snippets/email/pymemad-contact-email.html')
+    template = get_template('email/contact_notification_email.html')
 
     # Crear el contexto para la plantilla
     ctx = {
@@ -58,7 +58,7 @@ def send_contact_confirmation_email_task(contact_data):
     """
     Tarea opcional para enviar email de confirmación al usuario que llenó el formulario.
     """
-    template = get_template('snippets/email/pymemad-contact-confirmation.html')
+    template = get_template('email/contact_confirmation_email.html')
 
     # Crear el contexto para la plantilla
     ctx = {
@@ -82,3 +82,40 @@ def send_contact_confirmation_email_task(contact_data):
         logger.info(f"Email de confirmación enviado a {contact_data['email']}")
     except Exception as e:
         logger.error(f"Error al enviar email de confirmación: {str(e)}")
+
+
+@shared_task(queue='short_tasks')
+def send_contact_reply_email_task(reply_data):
+    """
+    Tarea Celery para enviar respuestas a mensajes de contacto
+    """
+    try:
+        # Renderizar el template
+        template = get_template('email/contact_reply_email.html')
+        ctx = {
+            'name': reply_data['name'],
+            'subject': reply_data['subject'],
+            'message': reply_data['message'],
+            'original_message': reply_data.get('original_message', ''),
+        }
+
+        contenido = template.render(ctx)
+
+        # Crear el mensaje de email
+        msg = EmailMultiAlternatives(
+            subject=reply_data['subject'],
+            body=contenido,
+            from_email=settings.DEFAULT_FROM_EMAIL or 'contacto@pymemad.cl',
+            to=[reply_data['email']],
+        )
+        msg.attach_alternative(contenido, "text/html")
+
+        # Enviar el email
+        msg.send(fail_silently=False)
+
+        logger.info(f"Respuesta enviada exitosamente a {reply_data['email']}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Error al enviar respuesta: {str(e)}")
+        return False

@@ -1008,170 +1008,170 @@ msgstr "Acesso a financiamento"
 
 #: templates/base.html:716
 msgid "Gestión de recursos y subsidios para PyMEs"
-msgstr ""
+msgstr "Gestão de recursos e subsídios para PMEs"
 
 #: templates/base.html:735
 msgid "Comunicación y Posicionamiento Sectorial"
-msgstr ""
+msgstr "Comunicação e Posicionamento Setorial"
 
 #: templates/base.html:738
 msgid ""
 "Visibiliza tu empresa y fortalece la identidad del sector PyME forestal."
-msgstr ""
+msgstr "Dê visibilidade à sua empresa e fortaleça a identidade do setor PME florestal."
 
 #: templates/base.html:745
 msgid "Revista Digital PymeMad"
-msgstr ""
+msgstr "Revista Digital PymeMad"
 
 #: templates/base.html:746
 msgid "Publicación trimestral destacando casos de éxito"
-msgstr ""
+msgstr "Publicação trimestral destacando casos de sucesso"
 
 #: templates/base.html:754
 msgid "Plataforma digital"
-msgstr ""
+msgstr "Plataforma digital"
 
 #: templates/base.html:755
 msgid "Directorio empresarial y vitrina comercial online"
-msgstr ""
+msgstr "Diretório empresarial e vitrine comercial online"
 
 #: templates/base.html:763
 msgid "Promoción sostenible"
-msgstr ""
+msgstr "Promoção sustentável"
 
 #: templates/base.html:764
 msgid "Certificaciones ambientales y prácticas responsables"
-msgstr ""
+msgstr "Certificações ambientais e práticas responsáveis"
 
 #: templates/base.html:772
 msgid "Presencia en medios"
-msgstr ""
+msgstr "Presença na mídia"
 
 #: templates/base.html:773
 msgid "Difusión de logros y participación en eventos del sector"
-msgstr ""
+msgstr "Divulgação de conquistas e participação em eventos do setor"
 
 #: templates/base.html:798
 msgid "Red de Colaboración y Apoyo"
-msgstr ""
+msgstr "Rede de Colaboração e Apoio"
 
 #: templates/base.html:801
 msgid ""
 "Forma parte de una comunidad activa que comparte conocimientos y "
 "oportunidades."
-msgstr ""
+msgstr "Faça parte de uma comunidade ativa que compartilha conhecimentos e oportunidades."
 
 #: templates/base.html:809
 msgid "Conexión con más de 100 empresas del sector"
-msgstr ""
+msgstr "Conexão com mais de 100 empresas do setor"
 
 #: templates/base.html:817
 msgid "Proyectos conjuntos"
-msgstr ""
+msgstr "Projetos conjuntos"
 
 #: templates/base.html:818
 msgid "Consorcios para acceder a grandes contratos"
-msgstr ""
+msgstr "Consórcios para acessar grandes contratos"
 
 #: templates/base.html:826
 msgid "Intercambio de experiencias"
-msgstr ""
+msgstr "Troca de experiências"
 
 #: templates/base.html:827
 msgid "Mejores prácticas y soluciones compartidas"
-msgstr ""
+msgstr "Melhores práticas e soluções compartilhadas"
 
 #: templates/base.html:835
 msgid "Apoyo regional"
-msgstr ""
+msgstr "Apoio regional"
 
 #: templates/base.html:836
 msgid "Presencia activa en 4 regiones del país"
-msgstr ""
+msgstr "Presença ativa em 4 regiões do país"
 
 #: templates/base.html:849 templates/snippets/home/header.html:15
 #: templates/snippets/home/header.html:68
 msgid "Únete a PymeMad"
-msgstr ""
+msgstr "Junte-se à PymeMad"
 
 #: templates/snippets/home/footer.html:12
 msgid ""
 "Asociación gremial que representa a las pequeñas y medianas empresas del "
 "sector forestal en Chile."
-msgstr ""
+msgstr "Associação sindical que representa as pequenas e médias empresas do setor florestal no Chile."
 
 #: templates/snippets/home/footer.html:17
 #: templates/snippets/home/header.html:30
 msgid "Nosotros"
-msgstr ""
+msgstr "Nós"
 
 #: templates/snippets/home/footer.html:20
 #: templates/snippets/home/header.html:32
 msgid "¿Quiénes somos?"
-msgstr ""
+msgstr "Quem somos?"
 
 #: templates/snippets/home/footer.html:23
 #: templates/snippets/home/header.html:33
 msgid "Misión y Visión"
-msgstr ""
+msgstr "Missão e Visão"
 
 #: templates/snippets/home/footer.html:37
 #: templates/snippets/home/header.html:42
 msgid "Beneficios"
-msgstr ""
+msgstr "Benefícios"
 
 #: templates/snippets/home/footer.html:40
 msgid "Hazte Socio"
-msgstr ""
+msgstr "Torne-se sócio"
 
 #: templates/snippets/home/footer.html:45
 #: templates/snippets/home/footer.html:70
 #: templates/snippets/home/header.html:62
 msgid "Contacto"
-msgstr ""
+msgstr "Contato"
 
 #: templates/snippets/home/footer.html:67
 msgid "Revista"
-msgstr ""
+msgstr "Revista"
 
 #: templates/snippets/home/footer.html:68
 #: templates/snippets/home/header.html:54
 msgid "Recursos"
-msgstr ""
+msgstr "Recursos"
 
 #: templates/snippets/home/footer.html:69
 #: templates/snippets/home/header.html:57
 msgid "Normativas"
-msgstr ""
+msgstr "Normativas"
 
 #: templates/snippets/home/footer.html:90
 msgid "Política de privacidad"
-msgstr ""
+msgstr "Política de privacidade"
 
 #: templates/snippets/home/footer.html:92
 msgid "Todos los derechos reservados."
-msgstr ""
+msgstr "Todos os direitos reservados."
 
 #: templates/snippets/home/header.html:34
 msgid "Objetivos"
-msgstr ""
+msgstr "Objetivos"
 
 #: templates/snippets/home/header.html:41
 msgid "Directorio de Socios"
-msgstr ""
+msgstr "Diretório de Sócios"
 
 #: templates/snippets/home/header.html:43
 msgid "¿Cómo asociarse?"
-msgstr ""
+msgstr "Como se associar?"
 
 #: templates/snippets/home/header.html:44
 msgid "Formulario de Postulación"
-msgstr ""
+msgstr "Formulário de Inscrição"
 
 #: templates/snippets/home/header.html:51
 msgid "Revista Digital"
-msgstr ""
+msgstr "Revista Digital"
 
 #: templates/snippets/home/header.html:56
 msgid "Documentos"
-msgstr ""
+msgstr "Documentos"

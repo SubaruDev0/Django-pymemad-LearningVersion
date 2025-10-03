@@ -1,0 +1,1111 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Gestión de Módulos - PyMEMAD{% endblock %}
+
+{% block extra_css %}
+<style>
+    .module-card {
+        border: 1px solid var(--ar-gray-300);
+        border-radius: 0.5rem;
+        padding: 1.25rem;
+        margin-bottom: 1.25rem;
+        transition: all 0.3s;
+        background: white;
+    }
+
+    .module-card:hover {
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transform: translateY(-2px);
+    }
+
+    .module-icon {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 0.625rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+
+    .module-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .module-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .status-badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 1.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-inactive {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .submodule-card {
+        margin-left: 3.75rem;
+        border-left: 3px solid var(--ar-primary);
+        background: #f8f9fe;
+    }
+
+    .hierarchy-indicator {
+        color: var(--ar-gray-600);
+        font-weight: normal;
+        font-size: 0.875rem;
+        margin-right: 0.3rem;
+    }
+
+    .level-badge {
+        padding: 0.125rem 0.5rem;
+        border-radius: 0.625rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        margin-left: 0.625rem;
+    }
+
+    .level-top {
+        background: var(--ar-primary);
+        color: white;
+    }
+
+    .level-sub {
+        background: var(--ar-gray-600);
+        color: white;
+    }
+
+    .expand-toggle {
+        cursor: pointer;
+        width: 1.875rem;
+        height: 1.875rem;
+        border-radius: 50%;
+        background: var(--ar-gray-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .expand-toggle:hover {
+        background: var(--ar-primary);
+        color: white;
+        border-color: var(--ar-primary);
+    }
+
+    .expand-toggle.collapsed i {
+        transform: rotate(-90deg);
+    }
+
+    .expand-toggle i {
+        transition: transform 0.3s;
+        font-size: 1rem;
+    }
+
+    .submodules-container {
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+
+    .submodules-container.collapsed {
+        max-height: 0 !important;
+    }
+
+    .module-count-badge {
+        background: var(--ar-danger);
+        color: white;
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.625rem;
+        font-size: 0.625rem;
+        position: absolute;
+        top: -0.3rem;
+        right: -0.3rem;
+        font-weight: bold;
+    }
+
+    .expand-toggle-wrapper {
+        position: relative;
+    }
+
+    .collapse-all-btn {
+        margin-left: 0.625rem;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+        <h1 class="h2 mb-0">
+            <i class="ai-folder text-primary me-2"></i>
+            Gestión de Módulos del Sistema
+        </h1>
+        <div class="d-flex gap-2">
+            <button class="btn btn-secondary btn-sm" onclick="toggleAllModules()">
+                <i class="ai-minimize-2 me-1"></i>
+                <span id="toggleAllText">Colapsar Todo</span>
+            </button>
+            <button class="btn btn-primary" onclick="openCreateModal()">
+                <i class="ai-plus-circle me-2"></i>Nuevo Módulo
+            </button>
+        </div>
+    </div>
+
+    <!-- Search Bar & Stats -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="input-group">
+                <span class="input-group-text">
+                    <i class="ai-search"></i>
+                </span>
+                <input type="text" class="form-control" id="searchModules" placeholder="Buscar módulos...">
+            </div>
+        </div>
+        <div class="col-md-6 text-end">
+            <span class="badge bg-primary">{{ parent_modules|length }} módulos</span>
+            <span class="badge bg-info ms-2">{{ total_submodules|default:0 }} submódulos</span>
+        </div>
+    </div>
+
+    <!-- Modules List -->
+    <div class="row">
+        <div class="col-12">
+            <div id="modulesList">
+                {% for module in parent_modules %}
+                <!-- Módulo Principal -->
+                <div class="module-card" data-module-id="{{ module.id }}">
+                    <div class="module-header">
+                        {% if module.submodules.all %}
+                        <div class="expand-toggle-wrapper">
+                            <div class="expand-toggle" onclick="toggleModule({{ module.id }})" id="toggle-{{ module.id }}">
+                                <i class="ai-chevron-down"></i>
+                                <span class="module-count-badge">{{ module.submodules.count }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="module-icon bg-primary bg-opacity-10 text-primary">
+                            <i class="{{ module.icon|default:'ai-folder' }}"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h4 class="mb-1">
+                                {{ module.name }}
+                                <span class="level-badge level-top">Principal</span>
+                                <span class="status-badge {% if module.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                    {% if module.is_active %}Activo{% else %}Inactivo{% endif %}
+                                </span>
+                            </h4>
+                            <p class="text-muted mb-2">{{ module.description }}</p>
+                            <div class="small">
+                                <span class="text-muted">Código:</span> <code>{{ module.code }}</code>
+                                <span class="ms-3 text-muted">App:</span> <code>{{ module.app_label|default:"N/A" }}</code>
+                                {% if module.url_namespace %}
+                                <span class="ms-3 text-muted">Namespace:</span> <code>{{ module.url_namespace }}</code>
+                                {% endif %}
+                                <span class="ms-3 text-muted">Orden:</span> <strong>{{ module.order }}</strong>
+                                {% if module.submodules.all %}
+                                <span class="ms-3 text-muted">Submódulos:</span> <strong>{{ module.submodules.count }}</strong>
+                                {% endif %}
+                            </div>
+                            <div class="small mt-2">
+                                <span class="text-muted">Acciones disponibles:</span>
+                                {% if module.available_actions %}
+                                    {% for action in module.available_actions %}
+                                        {% if action == 'view' %}
+                                            <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-show fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'add' %}
+                                            <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-plus fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'change' %}
+                                            <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-edit-alt fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'delete' %}
+                                            <span class="badge bg-danger bg-opacity-10 text-danger ms-1"><i class="ai-trash fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'export' %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-download fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'import' %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-upload fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'approve' %}
+                                            <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-checks fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'reject' %}
+                                            <span class="badge bg-danger bg-opacity-10 text-danger ms-1"><i class="ai-cross-alt fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'bulk_update' %}
+                                            <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-refresh fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'publish' %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-globe fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'audit' %}
+                                            <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-activity fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'send' %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-send fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'generate' %}
+                                            <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-zap fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'reconcile' %}
+                                            <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-refresh-cw fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'pay' %}
+                                            <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-credit-card fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'register' %}
+                                            <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-user-plus fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'share' %}
+                                            <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-share-2 fs-xs me-1"></i>{{ action }}</span>
+                                        {% elif action == 'comment' %}
+                                            <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-message-circle fs-xs me-1"></i>{{ action }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary bg-opacity-10 text-secondary ms-1">{{ action }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <span class="badge bg-secondary ms-1">CRUD Básico</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="module-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editModule({{ module.id }})">
+                                <i class="ai-edit-3"></i> Editar
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteModule({{ module.id }}, '{{ module.name }}')">
+                                <i class="ai-trash-2"></i> Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contenedor de Submódulos -->
+                {% if module.submodules.all %}
+                <div class="submodules-container" id="submodules-{{ module.id }}">
+                    {% for submodule in module.submodules.all %}
+                    <div class="module-card submodule-card" data-module-id="{{ submodule.id }}" data-parent-id="{{ module.id }}">
+                        <div class="module-header">
+                            <div class="module-icon bg-info bg-opacity-10 text-info">
+                                <i class="{{ submodule.icon|default:'ai-file' }}"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="mb-1">
+                                    <span class="hierarchy-indicator">└─</span>
+                                    {{ submodule.name }}
+                                    <span class="level-badge level-sub">Submódulo</span>
+                                    <span class="status-badge {% if submodule.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                        {% if submodule.is_active %}Activo{% else %}Inactivo{% endif %}
+                                    </span>
+                                </h4>
+                                <p class="text-muted mb-2">{{ submodule.description }}</p>
+                                <div class="small">
+                                    <span class="text-muted">Código:</span> <code>{{ submodule.code }}</code>
+                                    <span class="ms-3 text-muted">App:</span> <code>{{ submodule.app_label|default:"N/A" }}</code>
+                                    {% if submodule.url_namespace %}
+                                    <span class="ms-3 text-muted">Namespace:</span> <code>{{ submodule.url_namespace }}</code>
+                                    {% endif %}
+                                    <span class="ms-3 text-muted">Orden:</span> <strong>{{ submodule.order }}</strong>
+                                    <span class="ms-3 text-muted">Padre:</span> <strong>{{ module.name }}</strong>
+                                </div>
+                                <div class="small mt-2">
+                                    <span class="text-muted">Acciones disponibles:</span>
+                                    {% if submodule.available_actions %}
+                                        {% for action in submodule.available_actions %}
+                                            {% if action == 'view' %}
+                                                <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-show fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'add' %}
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-plus fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'change' %}
+                                                <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-edit-alt fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'delete' %}
+                                                <span class="badge bg-danger bg-opacity-10 text-danger ms-1"><i class="ai-trash fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'export' %}
+                                                <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-download fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'import' %}
+                                                <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-upload fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'approve' %}
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-checks fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'reject' %}
+                                                <span class="badge bg-danger bg-opacity-10 text-danger ms-1"><i class="ai-cross-alt fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'bulk_update' %}
+                                                <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-refresh fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'publish' %}
+                                                <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-globe fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'audit' %}
+                                                <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-activity fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'send' %}
+                                                <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-send fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'generate' %}
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-zap fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'reconcile' %}
+                                                <span class="badge bg-warning bg-opacity-10 text-warning ms-1"><i class="ai-refresh-cw fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'pay' %}
+                                                <span class="badge bg-success bg-opacity-10 text-success ms-1"><i class="ai-credit-card fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'register' %}
+                                                <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-user-plus fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'share' %}
+                                                <span class="badge bg-primary bg-opacity-10 text-primary ms-1"><i class="ai-share-2 fs-xs me-1"></i>{{ action }}</span>
+                                            {% elif action == 'comment' %}
+                                                <span class="badge bg-info bg-opacity-10 text-info ms-1"><i class="ai-message-circle fs-xs me-1"></i>{{ action }}</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary bg-opacity-10 text-secondary ms-1">{{ action }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% else %}
+                                        <span class="badge bg-secondary ms-1">CRUD Básico</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="module-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editModule({{ submodule.id }})">
+                                    <i class="ai-edit-3"></i> Editar
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteModule({{ submodule.id }}, '{{ submodule.name }}')">
+                                    <i class="ai-trash-2"></i> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% empty %}
+                <div class="text-center py-5">
+                    <div class="stat-icon bg-secondary bg-opacity-10 text-secondary mx-auto mb-3" style="width: 4rem; height: 4rem;">
+                        <i class="ai-folder fs-2"></i>
+                    </div>
+                    <p class="text-muted">No hay módulos configurados</p>
+                    <button class="btn btn-primary btn-sm" onclick="openCreateModal()">
+                        <i class="ai-plus-circle me-2"></i>Crear primer módulo
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Crear/Editar Módulo -->
+<div class="modal fade" id="moduleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="moduleModalTitle">Crear Nuevo Módulo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="moduleForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="moduleId" name="module_id">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label">Módulo Padre</label>
+                                <select class="form-select" name="parent" id="moduleParent">
+                                    <option value="">-- Ninguno (Módulo Principal) --</option>
+                                    {% for mod in parent_modules %}
+                                    <option value="{{ mod.id }}">{{ mod.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="text-muted">Selecciona si este es un submódulo</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Código <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="code" id="moduleCode" required
+                                       pattern="^[a-z_]+$"
+                                       placeholder="ej: members, billing">
+                                <small class="text-muted">Solo minúsculas y guión bajo</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name" id="moduleName" required
+                                       placeholder="ej: Gestión de Miembros">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">App Django</label>
+                                <input type="text" class="form-control" name="app_label" id="moduleAppLabel"
+                                       placeholder="ej: members, billing">
+                                <small class="text-muted">Nombre de la aplicación Django</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">URL Namespace</label>
+                                <input type="text" class="form-control" name="url_namespace" id="moduleUrlNamespace"
+                                       placeholder="ej: members, billing">
+                                <small class="text-muted">Namespace para las URLs (opcional)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descripción</label>
+                        <textarea class="form-control" name="description" id="moduleDescription" rows="3"
+                                  placeholder="Descripción del módulo y sus funcionalidades"></textarea>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Icono</label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="iconPreview">
+                                        <i class="ai-folder"></i>
+                                    </span>
+                                    <input type="text" class="form-control" name="icon" id="moduleIcon"
+                                           placeholder="ai-folder" value="ai-folder"
+                                           onkeyup="updateIconPreview(this.value)">
+                                </div>
+                                <small class="text-muted">
+                                    Clase CSS del icono (Arco Icons)
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">Orden</label>
+                                <input type="number" class="form-control" name="order" id="moduleOrder"
+                                       value="0" min="0">
+                                <small class="text-muted">Orden de visualización</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">Estado</label>
+                                <div class="form-check form-switch mt-2">
+                                    <input type="checkbox" class="form-check-input" id="moduleIsActive"
+                                           name="is_active" checked>
+                                    <label class="form-check-label" for="moduleIsActive">
+                                        Módulo activo
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección de Acciones Disponibles -->
+                    <div class="mb-3">
+                        <label class="form-label">Acciones Disponibles <span class="text-danger">*</span></label>
+                        <div class="mb-2">
+                            <button type="button" class="btn btn-sm btn-outline-primary" onclick="selectAllActions()">
+                                Seleccionar Todas
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAllActions()">
+                                Deseleccionar Todas
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-info" onclick="selectBasicActions()">
+                                Solo CRUD Básico
+                            </button>
+                        </div>
+
+                        <div class="row" id="actionsContainer">
+                            <!-- Se llenará dinámicamente con las acciones desde ACTION_CHOICES -->
+                        </div>
+                        <small class="text-muted mt-2">
+                            Selecciona las acciones que estarán disponibles para asignar a los roles en este módulo
+                        </small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ai-save me-2"></i>Guardar Módulo
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Bloque de configuración con URLs generadas por Django -->
+<script type="text/javascript">
+    var modulesConfig = {
+        urls: {
+            modulesList: "{% url 'permissions:modules_management' %}",
+            moduleCreate: "{% url 'permissions:module_create' %}",
+            moduleEdit: function(moduleId) {
+                return `/es/permissions/modules/${moduleId}/edit/`;
+            },
+            apiModules: "{% url 'permissions:api_create_module' %}",
+            apiModuleDetail: function(moduleId) {
+                return "{% url 'permissions:api_module_detail' 0 %}".replace('0', moduleId);
+            },
+            getCsrfToken: function() { return getCSRFToken(); }
+        },
+        permissions: {
+            canCreate: true,  // Podríamos obtenerlo del contexto
+            canEdit: true,
+            canDelete: true
+        },
+        // Acciones cargadas dinámicamente desde el servidor
+        actions: {
+            {% for category, actions in action_categories.items %}
+            '{{ category }}': [
+                {% for action in actions %}
+                {
+                    code: '{{ action.code }}',
+                    name: '{{ action.name }}',
+                    icon: '{{ action.icon }}'
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ]{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        },
+        messages: {
+            saveSuccess: 'Módulo guardado exitosamente',
+            deleteConfirm: '¿Estás seguro de eliminar el módulo',
+            deleteWarning: 'Esta acción no se puede deshacer',
+            errorLoading: 'Error al cargar los datos del módulo',
+            errorSaving: 'Error al guardar el módulo',
+            errorDeleting: 'Error al eliminar el módulo'
+        }
+    };
+</script>
+
+<!-- JavaScript funcional separado -->
+<script>
+// Buscar módulos
+document.getElementById('searchModules').addEventListener('keyup', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const modules = document.querySelectorAll('.module-card');
+
+    modules.forEach(module => {
+        const text = module.textContent.toLowerCase();
+        if (text.includes(searchTerm)) {
+            module.style.display = 'block';
+
+            // Si es un submódulo, asegurar que el contenedor padre esté visible
+            const parentId = module.dataset.parentId;
+            if (parentId) {
+                const parentContainer = document.getElementById(`submodules-${parentId}`);
+                if (parentContainer) {
+                    parentContainer.classList.remove('collapsed');
+                    parentContainer.style.maxHeight = parentContainer.scrollHeight + 'px';
+                }
+            }
+        } else {
+            module.style.display = 'none';
+        }
+    });
+
+    // Si se borra la búsqueda, restaurar estados colapsados
+    if (!searchTerm) {
+        loadCollapsedStates();
+    }
+});
+
+// Actualizar preview del icono
+function updateIconPreview(iconClass) {
+    const preview = document.getElementById('iconPreview');
+    preview.innerHTML = `<i class="${iconClass || 'ai-folder'}"></i>`;
+}
+
+// Abrir modal para crear
+function openCreateModal() {
+    // Verificar permisos
+    if (!modulesConfig.permissions.canCreate) {
+        Swal.fire({
+            title: 'Sin permisos',
+            text: 'No tiene permisos para crear módulos',
+            icon: 'warning',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    document.getElementById('moduleModalTitle').textContent = 'Crear Nuevo Módulo';
+    document.getElementById('moduleForm').reset();
+    document.getElementById('moduleId').value = '';
+    document.getElementById('moduleIsActive').checked = true;
+    updateIconPreview('ai-folder');
+
+    // Recargar las acciones disponibles con defaults para nuevo módulo
+    loadAvailableActions(true);
+
+    new bootstrap.Modal(document.getElementById('moduleModal')).show();
+}
+
+// Editar módulo
+function editModule(moduleId) {
+    // Obtener datos del módulo vía API
+    fetch(modulesConfig.urls.apiModuleDetail(moduleId))
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cargar datos en el modal
+                document.getElementById('moduleModalTitle').textContent = 'Editar Módulo';
+                document.getElementById('moduleId').value = data.module.id;
+                document.getElementById('moduleCode').value = data.module.code;
+                document.getElementById('moduleName').value = data.module.name;
+                document.getElementById('moduleAppLabel').value = data.module.app_label || '';
+                document.getElementById('moduleUrlNamespace').value = data.module.url_namespace || '';
+                document.getElementById('moduleDescription').value = data.module.description || '';
+                document.getElementById('moduleIcon').value = data.module.icon || 'ai-folder';
+                document.getElementById('moduleOrder').value = data.module.order;
+                document.getElementById('moduleIsActive').checked = data.module.is_active;
+                document.getElementById('moduleParent').value = data.module.parent || '';
+
+                // Actualizar preview del icono
+                updateIconPreview(data.module.icon || 'ai-folder');
+
+                // Recargar las acciones disponibles sin defaults (es edición)
+                loadAvailableActions(false);
+
+                // Esperar un momento para que el DOM se actualice, luego marcar las acciones
+                setTimeout(() => {
+                    // Limpiar todas las checkboxes de acciones
+                    document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+                        checkbox.checked = false;
+                    });
+
+                        // Marcar las acciones disponibles del módulo
+                    if (data.module.available_actions && Array.isArray(data.module.available_actions)) {
+                        data.module.available_actions.forEach(action => {
+                            const checkbox = document.getElementById(`action_${action}`);
+                            if (checkbox) {
+                                checkbox.checked = true;
+                            }
+                        });
+                    } else {
+                        // Si no hay acciones, marcar las básicas por defecto
+                        selectBasicActions();
+                    }
+
+                    // Actualizar la action del formulario para edición
+                    document.getElementById('moduleForm').action = modulesConfig.urls.moduleEdit(moduleId);
+
+                    // Mostrar el modal
+                    new bootstrap.Modal(document.getElementById('moduleModal')).show();
+                }, 100); // Esperar 100ms para que el DOM se actualice
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: modulesConfig.messages.errorLoading || 'Error al cargar los datos del módulo',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            Swal.fire({
+                title: 'Error',
+                text: modulesConfig.messages.errorLoading || 'Error al cargar los datos del módulo',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        });
+}
+
+// Funciones para gestionar acciones disponibles
+function selectAllActions() {
+    document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function deselectAllActions() {
+    document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+
+function selectBasicActions() {
+    // Usar las acciones básicas desde la configuración
+    const basicActions = modulesConfig.actions['Básicas'] ?
+        modulesConfig.actions['Básicas'].map(a => a.code) :
+        ['view', 'add', 'change', 'delete'];
+
+    document.querySelectorAll('.action-checkbox').forEach(checkbox => {
+        checkbox.checked = basicActions.includes(checkbox.value);
+    });
+}
+
+// Guardar módulo
+document.getElementById('moduleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const moduleId = document.getElementById('moduleId').value;
+    const isEdit = moduleId !== '';
+
+    // Recolectar datos del formulario
+    const formData = new FormData(this);
+    const data = {};
+
+    // Campos básicos
+    data.code = document.getElementById('moduleCode').value;
+    data.name = document.getElementById('moduleName').value;
+    data.app_label = document.getElementById('moduleAppLabel').value || null;
+    data.url_namespace = document.getElementById('moduleUrlNamespace').value || null;
+    data.description = document.getElementById('moduleDescription').value || '';
+    data.icon = document.getElementById('moduleIcon').value || 'ai-folder';
+    data.order = parseInt(document.getElementById('moduleOrder').value) || 0;
+    data.is_active = document.getElementById('moduleIsActive').checked;
+
+    const parentValue = document.getElementById('moduleParent').value;
+    data.parent = parentValue ? parseInt(parentValue) : null;
+
+    // Recolectar las acciones seleccionadas
+    const availableActions = [];
+    document.querySelectorAll('.action-checkbox:checked').forEach(checkbox => {
+        availableActions.push(checkbox.value);
+    });
+
+    // Si no hay acciones seleccionadas, establecer las básicas por defecto desde la configuración
+    const defaultActions = modulesConfig.actions['Básicas'] ?
+        modulesConfig.actions['Básicas'].map(a => a.code) :
+        ['view', 'add', 'change', 'delete'];
+    data.available_actions = availableActions.length > 0 ? availableActions : defaultActions;
+
+    // Determinar URL y método según si es crear o editar
+    const url = isEdit
+        ? modulesConfig.urls.apiModuleDetail(moduleId)
+        : modulesConfig.urls.apiModules;
+    const method = isEdit ? 'PUT' : 'POST';
+
+    // Enviar petición AJAX
+    fetch(url, {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': modulesConfig.urls.getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            // Cerrar el modal
+            bootstrap.Modal.getInstance(document.getElementById('moduleModal')).hide();
+
+            // Mostrar mensaje de éxito con SweetAlert
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.message || 'Módulo guardado exitosamente',
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true
+            }).then(() => {
+                // Recargar la página después del mensaje
+                location.reload();
+            });
+        } else {
+            // Manejar error con la función de common.js
+            if (result.errors) {
+                showErrorAlert(result);
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: result.message || 'Error al guardar el módulo',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (error.errors) {
+            showErrorAlert(error);
+        } else if (error.message) {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        } else {
+            showGenericError();
+        }
+    });
+});
+
+// Eliminar módulo
+function deleteModule(moduleId, moduleName) {
+    Swal.fire({
+        title: '¿Eliminar módulo?',
+        html: `¿Estás seguro de que deseas eliminar el módulo <strong>${moduleName}</strong>?<br><br>
+               <span class="text-danger">${modulesConfig.messages.deleteWarning || 'Esta acción no se puede deshacer'}</span>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        // Proceder con la eliminación
+        deleteModuleConfirmed(moduleId, moduleName);
+    });
+}
+
+function deleteModuleConfirmed(moduleId, moduleName) {
+    // Enviar petición DELETE vía AJAX
+    fetch(modulesConfig.urls.apiModuleDetail(moduleId), {
+        method: 'DELETE',
+        headers: {
+            'X-CSRFToken': modulesConfig.urls.getCsrfToken(),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            // Mostrar mensaje de éxito
+            Swal.fire({
+                title: '¡Eliminado!',
+                text: result.message || `Módulo ${moduleName} eliminado exitosamente`,
+                icon: 'success',
+                timer: 1500,
+                showConfirmButton: false,
+                timerProgressBar: true
+            }).then(() => {
+                // Recargar la página
+                location.reload();
+            });
+        } else {
+            // Mostrar error
+            Swal.fire({
+                title: 'Error',
+                text: result.message || 'No se pudo eliminar el módulo',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        if (error.message) {
+            Swal.fire({
+                title: 'Error',
+                text: error.message,
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+        } else {
+            showGenericError();
+        }
+    });
+}
+
+// === FUNCIONES DE COLAPSO/EXPANSIÓN ===
+
+// Estado global de expansión
+let allExpanded = true;
+
+// Cargar acciones disponibles del sistema
+function loadAvailableActions(checkDefaults = false) {
+    const actions = modulesConfig.actions;
+
+    const container = document.getElementById('actionsContainer');
+    container.innerHTML = '';
+
+    let colIndex = 0;
+    let currentCol = null;
+
+    Object.entries(actions).forEach(([category, categoryActions]) => {
+        // Crear nueva columna cada 2 categorías
+        if (colIndex % 2 === 0) {
+            currentCol = document.createElement('div');
+            currentCol.className = 'col-md-6';
+            container.appendChild(currentCol);
+        }
+
+        // Crear título de categoría
+        const categoryTitle = document.createElement('h6');
+        categoryTitle.className = 'text-muted mb-2' + (colIndex % 2 === 1 ? ' mt-3' : '');
+        categoryTitle.innerHTML = `<i class="ai-folder-open fs-6 me-1"></i>${category}`;
+        currentCol.appendChild(categoryTitle);
+
+        // Crear checkboxes para cada acción
+        categoryActions.forEach(action => {
+            const checkDiv = document.createElement('div');
+            checkDiv.className = 'form-check mb-1';
+
+            // Solo marcar por defecto si se indica explícitamente
+            const isChecked = checkDefaults && ['view', 'add', 'change', 'delete'].includes(action.code);
+
+            checkDiv.innerHTML = `
+                <input type="checkbox" class="form-check-input action-checkbox"
+                       id="action_${action.code}" name="available_actions"
+                       value="${action.code}"
+                       ${isChecked ? 'checked' : ''}>
+                <label class="form-check-label small" for="action_${action.code}">
+                    <i class="${action.icon} fs-xs me-1"></i>
+                    <strong>${action.name}</strong>
+                </label>
+            `;
+
+            currentCol.appendChild(checkDiv);
+        });
+
+        colIndex++;
+    });
+}
+
+// Inicializar estados al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    loadCollapsedStates();
+    initializeContainerHeights();
+    // No cargar acciones en el inicio, se cargan al abrir el modal
+});
+
+// Cargar estados colapsados desde localStorage
+function loadCollapsedStates() {
+    const collapsedModules = JSON.parse(localStorage.getItem('collapsedModules') || '[]');
+
+    collapsedModules.forEach(moduleId => {
+        const container = document.getElementById(`submodules-${moduleId}`);
+        const toggle = document.getElementById(`toggle-${moduleId}`);
+
+        if (container && toggle) {
+            container.classList.add('collapsed');
+            toggle.classList.add('collapsed');
+        }
+    });
+
+    updateToggleAllButton();
+}
+
+// Guardar estado en localStorage
+function saveCollapsedState(moduleId, isCollapsed) {
+    let collapsedModules = JSON.parse(localStorage.getItem('collapsedModules') || '[]');
+
+    if (isCollapsed) {
+        if (!collapsedModules.includes(moduleId)) {
+            collapsedModules.push(moduleId);
+        }
+    } else {
+        collapsedModules = collapsedModules.filter(id => id !== moduleId);
+    }
+
+    localStorage.setItem('collapsedModules', JSON.stringify(collapsedModules));
+}
+
+// Inicializar alturas de contenedores
+function initializeContainerHeights() {
+    document.querySelectorAll('.submodules-container').forEach(container => {
+        if (!container.classList.contains('collapsed')) {
+            container.style.maxHeight = container.scrollHeight + 'px';
+        }
+    });
+}
+
+// Toggle individual de módulo
+function toggleModule(moduleId) {
+    const container = document.getElementById(`submodules-${moduleId}`);
+    const toggle = document.getElementById(`toggle-${moduleId}`);
+
+    if (!container || !toggle) return;
+
+    const isCollapsed = container.classList.contains('collapsed');
+
+    if (isCollapsed) {
+        // Expandir
+        container.classList.remove('collapsed');
+        container.style.maxHeight = container.scrollHeight + 'px';
+        toggle.classList.remove('collapsed');
+        saveCollapsedState(moduleId, false);
+    } else {
+        // Colapsar
+        container.style.maxHeight = '0';
+        container.classList.add('collapsed');
+        toggle.classList.add('collapsed');
+        saveCollapsedState(moduleId, true);
+    }
+
+    updateToggleAllButton();
+}
+
+// Toggle todos los módulos
+function toggleAllModules() {
+    const containers = document.querySelectorAll('.submodules-container');
+    const toggles = document.querySelectorAll('.expand-toggle');
+
+    if (allExpanded) {
+        // Colapsar todos
+        containers.forEach(container => {
+            container.style.maxHeight = '0';
+            container.classList.add('collapsed');
+
+            const moduleId = container.id.replace('submodules-', '');
+            saveCollapsedState(parseInt(moduleId), true);
+        });
+
+        toggles.forEach(toggle => {
+            toggle.classList.add('collapsed');
+        });
+
+        document.getElementById('toggleAllText').textContent = 'Expandir Todo';
+        allExpanded = false;
+    } else {
+        // Expandir todos
+        containers.forEach(container => {
+            container.classList.remove('collapsed');
+            container.style.maxHeight = container.scrollHeight + 'px';
+
+            const moduleId = container.id.replace('submodules-', '');
+            saveCollapsedState(parseInt(moduleId), false);
+        });
+
+        toggles.forEach(toggle => {
+            toggle.classList.remove('collapsed');
+        });
+
+        document.getElementById('toggleAllText').textContent = 'Colapsar Todo';
+        allExpanded = true;
+    }
+}
+
+// Actualizar texto del botón "Colapsar/Expandir Todo"
+function updateToggleAllButton() {
+    const containers = document.querySelectorAll('.submodules-container');
+    const collapsedCount = document.querySelectorAll('.submodules-container.collapsed').length;
+
+    if (containers.length > 0) {
+        if (collapsedCount === containers.length) {
+            document.getElementById('toggleAllText').textContent = 'Expandir Todo';
+            allExpanded = false;
+        } else if (collapsedCount === 0) {
+            document.getElementById('toggleAllText').textContent = 'Colapsar Todo';
+            allExpanded = true;
+        } else {
+            document.getElementById('toggleAllText').textContent = 'Expandir Todo';
+            allExpanded = false;
+        }
+    }
+}
+</script>
+{% endblock %}

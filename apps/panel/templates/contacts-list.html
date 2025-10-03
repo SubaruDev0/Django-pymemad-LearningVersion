@@ -1,0 +1,818 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+{% block title %}Gestión de Contactos{% endblock %}
+
+{% block inline_styles %}
+    {{ block.super }}
+    <style>
+        .bulk-actions {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="pb-2 pb-sm-4">
+    <!-- Page Header -->
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h1 class="h2 mb-0">{{ title_page|default:"Gestión de Contactos" }}</h1>
+            <p class="text-muted mb-0">Administra los mensajes de contacto recibidos</p>
+        </div>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="stat-icon bg-primary bg-opacity-10 text-primary me-3">
+                        <i class="ai-message-plus"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value text-dark">{{ total_contacts }}</div>
+                        <div class="stat-label">Total de contactos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="stat-icon bg-warning bg-opacity-10 text-warning me-3">
+                        <i class="ai-mail"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value text-dark">{{ unread_contacts }}</div>
+                        <div class="stat-label">No leídos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card">
+                <div class="card-body d-flex align-items-center">
+                    <div class="stat-icon bg-info bg-opacity-10 text-info me-3">
+                        <i class="ai-clock"></i>
+                    </div>
+                    <div>
+                        <div class="stat-value text-dark">{{ unanswered_contacts }}</div>
+                        <div class="stat-label">Pendientes de respuesta</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Contactos por Tema</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="subjectChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Evolución Temporal (Últimos 30 días)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="card border-0 mb-4">
+        <div class="card-header bg-transparent">
+            <h5 class="card-title mb-0">
+                <i class="ai-filter me-2"></i>Filtros de Búsqueda
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="GET" id="contactFilterForm">
+                <div class="row g-3">
+                    <!-- Tema -->
+                    <div class="col-md-3">
+                        <label for="id_subject" class="form-label">Tema</label>
+                        {{ filter.form.subject }}
+                    </div>
+                    <!-- Estado Lectura -->
+                    <div class="col-md-3">
+                        <label for="id_is_read" class="form-label">Estado de Lectura</label>
+                        {{ filter.form.is_read }}
+                    </div>
+                    <!-- Estado Respuesta -->
+                    <div class="col-md-3">
+                        <label for="id_is_answered" class="form-label">Estado de Respuesta</label>
+                        {{ filter.form.is_answered }}
+                    </div>
+                    <!-- Rango Fechas -->
+                    <div class="col-md-3">
+                        <label for="id_created_date_range" class="form-label">Rango de Fechas</label>
+                        {{ filter.form.created_date_range }}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" id="clearFiltersButton" class="btn btn-outline-secondary">
+                        <i class="ai-x-circle me-1"></i>Limpiar
+                    </button>
+                    <button type="submit" class="btn btn-primary" id="filterButton">
+                        <i class="ai-filter me-1"></i>Aplicar Filtros
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Table Card -->
+    <div class="card border-0">
+        <div class="card-body">
+            <!-- Bulk Actions -->
+            <div id="bulk-actions" class="bulk-actions d-none p-3 mb-3">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <i class="ai-check-square me-2"></i>
+                        <strong><span id="selected-count">0</span></strong> contacto(s) seleccionado(s)
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="bulk-export-btn" class="btn btn-sm btn-outline-primary">
+                            <i class="ai-download me-1"></i>Exportar
+                        </button>
+                        <button id="bulk-delete-btn" class="btn btn-sm btn-outline-danger">
+                            <i class="ai-trash-2 me-1"></i>Eliminar
+                        </button>
+                        <button id="clear-selection-btn" class="btn btn-sm btn-secondary">
+                            <i class="ai-x me-1"></i>Limpiar Selección
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="table-responsive">
+                <table class="table table-hover" id="contactsTable">
+                    <thead>
+                    <tr>
+                        <th width="30">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="select-all-contacts">
+                            </div>
+                        </th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Empresa</th>
+                        <th>Tema</th>
+                        <th width="200">Estado</th>
+                        <th>Fecha</th>
+                        <th width="120">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- DataTable will populate this -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal ver contacto -->
+<div class="modal fade" id="viewContactModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Contacto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Información del contacto -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Nombre:</strong>
+                        <p id="modalName"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Email:</strong>
+                        <p id="modalEmail"></p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Teléfono:</strong>
+                        <p id="modalPhone"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Empresa:</strong>
+                        <p id="modalCompany"></p>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Tema:</strong>
+                        <p id="modalSubject"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Fecha:</strong>
+                        <p id="modalDate"></p>
+                    </div>
+                </div>
+
+                <!-- Historial de conversación -->
+                <div class="row">
+                    <div class="col-12">
+                        <h6 class="fw-bold mb-3">Historial de Conversación</h6>
+                        <div id="conversationHistory" style="max-height: 400px; overflow-y: auto;">
+                            <!-- Mensaje original -->
+                            <div class="conversation-item mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <span class="badge bg-primary">Mensaje Original</span>
+                                    <small class="text-muted" id="originalMessageDate"></small>
+                                </div>
+                                <div class="message-content border rounded p-3 bg-light" id="modalMessage"></div>
+                            </div>
+
+                            <!-- Respuestas (se cargarán dinámicamente) -->
+                            <div id="repliesContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success reply-from-modal" data-id="">
+                    <i class="ai-messages me-1"></i>Responder
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Respuesta -->
+<div class="modal fade" id="replyModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Responder Mensaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="replyForm">
+                    <div class="mb-3">
+                        <label class="form-label">Para:</label>
+                        <input type="email" class="form-control" id="replyEmail" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Asunto:</label>
+                        <input type="text" class="form-control" id="replySubject" value="Re: ">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mensaje:</label>
+                        <div id="replyEditor" style="height: 300px;"></div>
+                        <textarea id="replyContent" name="message" style="display:none;"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="sendReply">
+                    <i class="ai-send me-1"></i>Enviar Respuesta
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Configuración global
+    var contactsConfig = {
+        urls: {
+            list: '{% url "dashboard:contact-list" %}',
+            delete: '{% url "dashboard:contact-delete" pk=0 %}',
+            answer: '{% url "dashboard:contact-answer" pk=0 %}',
+            export: '{% url "dashboard:contact-export" %}',
+            markRead: '{% url "dashboard:contact-mark-read" pk=0 %}',
+            getReplies: '{% url "dashboard:contact-replies" pk=0 %}',
+            dataTableLanguage: '//cdn.datatables.net/plug-ins/1.11.5/i18n/es-ES.json'
+        },
+        chartData: {
+            subjects: {
+                labels: {{ chart_data.subjects.labels|safe }},
+                data: {{ chart_data.subjects.data|safe }},
+                colors: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF']
+            },
+            timeline: {
+                labels: {{ chart_data.timeline.labels|safe }},
+                data: {{ chart_data.timeline.data|safe }}
+            }
+        },
+        csrfToken: '{{ csrf_token }}'
+    };
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar Flatpickr
+    flatpickr("#id_created_date_range", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        locale: "es",
+        rangeSeparator: " a ",
+        onChange: function(selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+                const start = selectedDates[0].toISOString().split('T')[0];
+                const end = selectedDates[1].toISOString().split('T')[0];
+                instance.input.value = start + ' a ' + end;
+            }
+        }
+    });
+
+    // Inicializar Select2
+    $('.select2-subject').select2({
+        placeholder: 'Seleccionar tema',
+        allowClear: true
+    });
+
+    // DataTables
+    const table = $('#contactsTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: contactsConfig.urls.list,
+            type: 'GET',
+            data: function(d) {
+                d.subject = $('#id_subject').val() || '';
+                d.is_read = $('#id_is_read').val() || '';
+                d.is_answered = $('#id_is_answered').val() || '';
+                d.created_date_range = $('#id_created_date_range').val() || '';
+            }
+        },
+        columns: [
+            {
+                data: 'id',
+                orderable: false,
+                render: function(data) {
+                    return `<div class="form-check">
+                        <input class="form-check-input select-contact" type="checkbox" value="${data}">
+                    </div>`;
+                }
+            },
+            { data: 'name' },
+            { data: 'email' },
+            { data: 'company' },
+            { data: 'subject' },
+            {
+                data: 'status',
+                render: function(data, type, row) {
+                    let badges = '';
+
+                    // Estado de lectura
+                    if (row.is_read) {
+                        badges += '<span class="badge bg-light text-dark me-1" title="Mensaje leído"><i class="ai-check-circle me-1"></i>Leído</span>';
+                    } else {
+                        badges += '<span class="badge bg-warning text-dark me-1" title="Mensaje sin leer"><i class="ai-circle me-1"></i>No leído</span>';
+                    }
+
+                    // Estado de respuesta
+                    if (row.is_answered) {
+                        badges += '<span class="badge bg-success" title="Mensaje respondido"><i class="ai-check-double me-1"></i>Respondido</span>';
+                    } else {
+                        badges += '<span class="badge bg-danger" title="Pendiente de respuesta"><i class="ai-clock me-1"></i>Sin responder</span>';
+                    }
+
+                    return badges;
+                }
+            },
+            { data: 'created_at' },
+            { data: 'actions', orderable: false }
+        ],
+        order: [[6, 'desc']],
+        pageLength: 25,
+        lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+        language: {
+            url: contactsConfig.urls.dataTableLanguage
+        },
+        dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+            '<"row"<"col-sm-12"tr>>' +
+            '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>'
+    });
+
+    // Inicializar Quill para respuestas
+    let replyQuill = null;
+
+    // Select all checkbox
+    $('#select-all-contacts').on('change', function() {
+        $('.select-contact').prop('checked', $(this).is(':checked'));
+        updateBulkActions();
+    });
+
+    // Individual checkbox
+    $(document).on('change', '.select-contact', function() {
+        updateBulkActions();
+    });
+
+    // Clear selection
+    $('#clear-selection-btn').on('click', function() {
+        $('.select-contact').prop('checked', false);
+        $('#select-all-contacts').prop('checked', false);
+        updateBulkActions();
+    });
+
+    // Update bulk actions visibility
+    function updateBulkActions() {
+        const selectedCount = $('.select-contact:checked').length;
+        if (selectedCount > 0) {
+            $('#bulk-actions').removeClass('d-none');
+            $('#selected-count').text(selectedCount);
+        } else {
+            $('#bulk-actions').addClass('d-none');
+        }
+    }
+
+    // Bulk delete
+    $('#bulk-delete-btn').on('click', function() {
+        const selectedIds = $('.select-contact:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selectedIds.length === 0) return;
+
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: `Se eliminarán ${selectedIds.length} contacto(s). Esta acción no se puede deshacer.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Eliminar contactos seleccionados
+                Promise.all(selectedIds.map(id =>
+                    $.ajax({
+                        url: contactsConfig.urls.delete.replace('0', id),
+                        type: 'DELETE',
+                        headers: { 'X-CSRFToken': contactsConfig.csrfToken }
+                    })
+                )).then(() => {
+                    Swal.fire('Eliminado', 'Los contactos seleccionados han sido eliminados.', 'success');
+                    table.ajax.reload();
+                    updateBulkActions();
+                }).catch(() => {
+                    Swal.fire('Error', 'No se pudieron eliminar todos los contactos', 'error');
+                });
+            }
+        });
+    });
+
+    // Bulk export
+    $('#bulk-export-btn').on('click', function() {
+        const selectedIds = $('.select-contact:checked').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (selectedIds.length === 0) {
+            Swal.fire('Atención', 'Por favor selecciona al menos un contacto para exportar', 'warning');
+            return;
+        }
+
+        exportContacts(selectedIds);
+    });
+
+    // Export function
+    function exportContacts(contactIds) {
+        Swal.fire({
+            title: 'Exportando...',
+            text: 'Generando archivo Excel',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        const data = {
+            csrfmiddlewaretoken: contactsConfig.csrfToken,
+            contact_ids: contactIds
+        };
+
+        $.ajax({
+            url: contactsConfig.urls.export,
+            type: 'POST',
+            data: data,
+            success: function(response) {
+                Swal.close();
+                if (response.success) {
+                    // Abrir el archivo en una nueva pestaña
+                    window.open(response.download_url, '_blank');
+
+                    // Mostrar notificación de éxito
+                    Swal.fire({
+                        title: 'Exportación Exitosa',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Limpiar selección
+                    $('.select-contact').prop('checked', false);
+                    $('#select-all-contacts').prop('checked', false);
+                    updateBulkActions();
+
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.close();
+                Swal.fire('Error', 'No se pudo exportar los contactos', 'error');
+            }
+        });
+    }
+
+    // Ver contacto con historial de respuestas
+    $(document).on('click', '.view-contact', function() {
+        const name = $(this).data('name');
+        const email = $(this).data('email');
+        const phone = $(this).data('phone');
+        const company = $(this).data('company');
+        const subject = $(this).data('subject');
+        const message = $(this).data('message');
+        const date = $(this).data('date');
+        const contactId = $(this).data('id');
+
+        // Llenar información básica
+        $('#modalName').text(name);
+        $('#modalEmail').text(email);
+        $('#modalPhone').text(phone || 'No especificado');
+        $('#modalCompany').text(company || 'No especificada');
+        $('#modalSubject').text(subject);
+        $('#modalMessage').text(message);
+        $('#modalDate').text(date);
+        $('#originalMessageDate').text(date);
+
+        // Guardar datos para el botón de responder
+        $('.reply-from-modal').data('id', contactId)
+            .data('email', email)
+            .data('name', name);
+
+        // Limpiar respuestas anteriores
+        $('#repliesContainer').empty();
+
+        // Cargar respuestas del contacto
+        $.ajax({
+            url: contactsConfig.urls.getReplies.replace('0', contactId),
+            type: 'GET',
+            headers: { 'X-CSRFToken': contactsConfig.csrfToken },
+            success: function(response) {
+                if (response.replies && response.replies.length > 0) {
+                    response.replies.forEach(function(reply) {
+                        const replyHtml = `
+                            <div class="conversation-item mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <span class="badge bg-success">Respuesta</span>
+                                        <small class="text-muted ms-2">
+                                            por ${reply.sent_by || 'Sistema'}
+                                        </small>
+                                    </div>
+                                    <small class="text-muted">${reply.sent_at}</small>
+                                </div>
+                                <div class="message-content border rounded p-3"
+                                     style="background-color: #e8f5e9;">
+                                    <strong>${reply.subject}</strong>
+                                    <div class="mt-2">${reply.message}</div>
+                                </div>
+                            </div>
+                        `;
+                        $('#repliesContainer').append(replyHtml);
+                    });
+                } else {
+                    $('#repliesContainer').html(
+                        '<p class="text-muted text-center">No hay respuestas aún</p>'
+                    );
+                }
+            },
+            error: function() {
+                $('#repliesContainer').html(
+                    '<p class="text-danger text-center">Error al cargar respuestas</p>'
+                );
+            }
+        });
+
+        $('#viewContactModal').modal('show');
+
+        // Marcar como leído
+        $.ajax({
+            url: contactsConfig.urls.markRead.replace('0', contactId),
+            type: 'POST',
+            headers: { 'X-CSRFToken': contactsConfig.csrfToken },
+            success: function() {
+                table.ajax.reload(null, false);
+            }
+        });
+    });
+
+    // Botón de responder desde el modal de detalles
+    $(document).on('click', '.reply-from-modal', function() {
+        const contactId = $(this).data('id');
+        const email = $(this).data('email');
+        const name = $(this).data('name');
+
+        // Cerrar modal de detalles
+        $('#viewContactModal').modal('hide');
+
+        // Abrir modal de respuesta
+        setTimeout(function() {
+            $('.answer-contact[data-id="' + contactId + '"]').click();
+        }, 500);
+    });
+
+    // Responder mensaje con Quill
+    $(document).on('click', '.answer-contact', function() {
+        const contactId = $(this).data('id');
+        const email = $(this).data('email');
+        const name = $(this).data('name');
+
+        // Configurar el modal
+        $('#replyEmail').val(email);
+        $('#replySubject').val(`Re: Consulta de ${name}`);
+
+        // Inicializar Quill si no existe
+        if (!replyQuill) {
+            replyQuill = new Quill('#replyEditor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, false] }],
+                        ['bold', 'italic', 'underline'],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Escribe tu respuesta aquí...'
+            });
+
+            // Template de respuesta predeterminado
+            const defaultTemplate = `<p>Estimado/a ${name},</p>
+<p>Gracias por contactarnos. Hemos recibido su consulta y le respondemos a continuación:</p>
+<p><br></p>
+<p>[Escribe tu respuesta aquí]</p>
+<p><br></p>
+<p>Saludos cordiales,<br>Equipo PymeMad</p>`;
+
+            replyQuill.root.innerHTML = defaultTemplate;
+        } else {
+            // Actualizar el template con el nombre actual
+            const template = `<p>Estimado/a ${name},</p>
+<p>Gracias por contactarnos. Hemos recibido su consulta y le respondemos a continuación:</p>
+<p><br></p>
+<p>[Escribe tu respuesta aquí]</p>
+<p><br></p>
+<p>Saludos cordiales,<br>Equipo PymeMad</p>`;
+            replyQuill.root.innerHTML = template;
+        }
+
+        // Guardar el ID del contacto
+        $('#sendReply').data('contact-id', contactId);
+
+        // Mostrar el modal
+        const modal = new bootstrap.Modal(document.getElementById('replyModal'));
+        modal.show();
+    });
+
+    // Enviar respuesta
+    $('#sendReply').on('click', function() {
+        const contactId = $(this).data('contact-id');
+        const email = $('#replyEmail').val();
+        const subject = $('#replySubject').val();
+        const content = replyQuill.root.innerHTML;
+
+        // Validar contenido
+        if (!content || content.includes('[Escribe tu respuesta aquí]')) {
+            Swal.fire('Atención', 'Por favor escribe tu respuesta antes de enviar', 'warning');
+            return;
+        }
+
+        // Simular envío y marcar como respondido
+        Swal.fire({
+            title: 'Enviando respuesta...',
+            text: 'Por favor espera',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+
+        // Marcar como respondido
+        $.ajax({
+            url: contactsConfig.urls.answer.replace('0', contactId),
+            type: 'POST',
+            headers: { 'X-CSRFToken': contactsConfig.csrfToken },
+            data: {
+                email: email,
+                subject: subject,
+                message: content
+            },
+            success: function(response) {
+                Swal.close();
+                if (response.success) {
+                    Swal.fire({
+                        title: '¡Respuesta enviada!',
+                        text: 'El mensaje ha sido enviado y marcado como respondido',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
+                    // Cerrar modal y recargar tabla
+                    $('#replyModal').modal('hide');
+                    table.ajax.reload();
+                } else {
+                    Swal.fire('Error', response.message, 'error');
+                }
+            },
+            error: function() {
+                Swal.close();
+                Swal.fire('Error', 'No se pudo enviar la respuesta', 'error');
+            }
+        });
+    });
+
+    // Gráfico de temas
+    const subjectCtx = document.getElementById('subjectChart').getContext('2d');
+    new Chart(subjectCtx, {
+        type: 'doughnut',
+        data: {
+            labels: contactsConfig.chartData.subjects.labels,
+            datasets: [{
+                data: contactsConfig.chartData.subjects.data,
+                backgroundColor: contactsConfig.chartData.subjects.colors,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+
+    // Gráfico de timeline
+    const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+    new Chart(timelineCtx, {
+        type: 'line',
+        data: {
+            labels: contactsConfig.chartData.timeline.labels,
+            datasets: [{
+                label: 'Contactos',
+                data: contactsConfig.chartData.timeline.data,
+                borderColor: '#36A2EB',
+                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { stepSize: 1 } }
+            }
+        }
+    });
+
+    // Aplicar filtros
+    $('#contactFilterForm').on('submit', function(e) {
+        e.preventDefault();
+        table.ajax.reload();
+    });
+
+    // Limpiar filtros
+    $('#clearFiltersButton').on('click', function() {
+        $('#id_subject').val('').trigger('change');
+        $('#id_is_read').val('');
+        $('#id_is_answered').val('');
+        $('#id_created_date_range').val('');
+        const fp = document.getElementById('id_created_date_range')._flatpickr;
+        if (fp) fp.clear();
+        table.ajax.reload();
+    });
+});
+</script>
+{% endblock %}

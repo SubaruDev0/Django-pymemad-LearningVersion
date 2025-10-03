@@ -27,6 +27,8 @@ app.conf.task_queues = (
     Queue('long_tasks', Exchange('long_tasks'), routing_key='long.tasks'),
     Queue('short_tasks', Exchange('short_tasks'), routing_key='short.tasks'),
 )
+# Explicitly include accounts tasks
+app.autodiscover_tasks(['apps.accounts']) #NUEVO
 
 # Update configuration
 app.conf.update(

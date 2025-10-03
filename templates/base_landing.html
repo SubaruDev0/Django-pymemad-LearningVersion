@@ -98,5 +98,7 @@ Mantiene el header y footer estándar
             setActiveNavItem();
         });
     </script>
+    {% load static %}
+    <script src="{% static 'assets/js/theme.min.js' %}"></script>
     {{ block.super }}
 {% endblock custom_js %}

@@ -1,0 +1,83 @@
+{% extends "email/base_email.html" %}
+{% load i18n %}
+
+{% block email_title %}{{ subject }} - PymeMad{% endblock %}
+
+{% block header_icon %}
+    <div class="header-icon">
+        <div class="header-icon-inner">
+            <span>💬</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header_title %}{% trans "Respuesta a tu consulta" %}{% endblock %}
+{% block header_subtitle %}{{ subject }}{% endblock %}
+
+{% block content %}
+    <h2 class="greeting">{% trans "Estimado(a)" %} {{ name }},</h2>
+
+    <p class="intro-text">
+        {% trans "Gracias por contactarnos. Te enviamos la siguiente respuesta a tu consulta:" %}
+    </p>
+
+    <!-- Mensaje de respuesta -->
+    <div class="alternative-section" style="background: #ffffff; border: 2px solid #2c5530;">
+        <h4 class="alternative-title" style="color: #2c5530;">{% trans "Nuestra respuesta" %}</h4>
+        <div style="color: #333333; font-size: 15px; line-height: 1.6; white-space: pre-wrap;">{{ message }}</div>
+    </div>
+
+    {% if original_message %}
+    <!-- Mensaje original -->
+    <div class="tips-section">
+        <h3 class="tips-title">
+            <span style="display: inline-block; width: 30px; height: 30px; background: #6b7280; color: white; border-radius: 50%; line-height: 30px; text-align: center; margin-right: 8px; vertical-align: middle;">📋</span>
+            {% trans "Tu mensaje original" %}
+        </h3>
+        <div style="background: #f8fafc; padding: 15px; border-radius: 8px; color: #6b7280; font-size: 13px; line-height: 1.5; white-space: pre-wrap;">{{ original_message }}</div>
+    </div>
+    {% endif %}
+
+    <!-- CTA Button -->
+    <div class="cta-container">
+        <a href="mailto:contacto@pymemad.cl?subject=Re: {{ subject }}" class="cta-button secondary">
+            {% trans "Responder este mensaje" %}
+        </a>
+    </div>
+
+    <!-- Información de contacto -->
+    <div class="contact-section">
+        <h3 class="contact-title">{% trans "¿Tienes más preguntas?" %}</h3>
+        <p style="text-align: center; color: #6b7280; font-size: 14px; margin: 0 0 20px 0;">
+            {% trans "Estamos aquí para ayudarte. No dudes en contactarnos." %}
+        </p>
+        <div class="contact-grid">
+            <table class="contact-table">
+                <tr>
+                    <td class="contact-cell" style="width: 100%;">
+                        <p class="contact-name">{% trans "Atención al Cliente" %}</p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">📞</span>
+                            <a href="tel:+56999182981">+56 9 12345678</a>
+                        </p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">✉</span>
+                            <a href="mailto:contacto@pymemad.cl">contacto@pymemad.cl</a>
+                        </p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">🌐</span>
+                            <a href="https://www.pymemad.cl">www.pymemad.cl</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer_disclaimer %}
+    <p class="footer-disclaimer">
+        {% trans "Este mensaje fue enviado por el equipo de PymeMad en respuesta a tu consulta." %}<br>
+        {% trans "Si no esperabas este mensaje, por favor contáctanos inmediatamente." %}
+    </p>
+{% endblock %}

@@ -137,6 +137,42 @@
             display: none;
         }
     }
+
+    /* Fix para mantener iconos con autocompletado */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px white inset !important;
+        box-shadow: 0 0 0 30px white inset !important;
+        -webkit-text-fill-color: #495057 !important;
+    }
+
+    /* Asegurar que los iconos siempre sean visibles */
+    .position-relative .ai-mail,
+    .position-relative .ai-lock-closed {
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    /* Mantener padding consistente con autocompletado */
+    input.form-control:-webkit-autofill {
+        padding-left: 3rem !important;
+    }
+
+    /* Para navegadores basados en Firefox */
+    input.form-control:-moz-autofill {
+        padding-left: 3rem !important;
+    }
+
+    /* Asegurar que el contenedor de password toggle mantenga su estructura */
+    .password-toggle input.form-control {
+        padding-left: 3rem !important;
+    }
+
+    .password-toggle input.form-control:-webkit-autofill {
+        padding-left: 3rem !important;
+    }
 </style>
 {% endblock %}
 
@@ -165,7 +201,7 @@
             <h1 class="h2 mb-2">{% trans "Bienvenido de vuelta" %}</h1>
             <p class="text-muted pb-3 mb-3 mb-lg-4">
                 {% trans "¿No tienes una cuenta?" %}&nbsp;&nbsp;
-                <a href="#" class="text-decoration-none">{% trans "Contáctanos" %}</a>
+                <a href="{% url 'landing:contact' %}" class="text-decoration-none">{% trans "Contáctanos" %}</a>
             </p>
 
             <!-- Formulario -->
@@ -207,7 +243,7 @@
                                    placeholder="{% trans 'Contraseña' %}"
                                    required>
                             <label class="password-toggle-btn" aria-label="{% trans 'Mostrar/ocultar contraseña' %}">
-                                <input class="password-toggle-check" type="checkbox">
+                                <input class="password-toggle-check" type="checkbox" autocomplete="off">
                                 <span class="password-toggle-indicator"></span>
                             </label>
                         </div>
@@ -225,13 +261,13 @@
                             {% trans "Mantener sesión iniciada" %}
                         </label>
                     </div>
-                    <a class="fs-sm fw-semibold text-decoration-none my-1" href="#">
+                    <a class="fs-sm fw-semibold text-decoration-none my-1" href="{% url 'accounts:password_reset' %}">
                         {% trans "¿Olvidaste tu contraseña?" %}
                     </a>
                 </div>
 
                 <!-- Botón submit -->
-                <button class="btn btn-lg btn-primary w-100 mb-4" type="submit">
+                <button class="btn btn-lg btn-primary w-100 mb-4" type="submit" id="btn_login">
                     {% trans "Iniciar sesión" %}
                 </button>
 
@@ -268,4 +304,33 @@
 
 {% block extra_js %}
     <script src="{% static 'assets/js/front/login.js' %}"></script>
+    <script>
+        // Fix: El tema tiene los iconos invertidos - checked muestra ojo tachado (contraseña oculta)
+        // Para que funcione correctamente, el checkbox debe iniciar checked cuando la contraseña está oculta
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar password toggle correctamente
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+
+            passwordToggles.forEach(function(toggle) {
+                const input = toggle.querySelector('input.form-control');
+                const checkbox = toggle.querySelector('.password-toggle-check');
+
+                if (input && checkbox) {
+                    // Estado inicial: password oculto = checkbox checked (para mostrar icono correcto)
+                    input.type = 'password';
+                    checkbox.checked = true;
+
+                    // Limpiar cualquier event listener previo
+                    const newCheckbox = checkbox.cloneNode(true);
+                    checkbox.parentNode.replaceChild(newCheckbox, checkbox);
+
+                    // Agregar el comportamiento correcto
+                    newCheckbox.addEventListener('change', function() {
+                        // Invertir la lógica: checked = password oculto, unchecked = password visible
+                        input.type = this.checked ? 'password' : 'text';
+                    });
+                }
+            });
+        });
+    </script>
 {% endblock extra_js %}

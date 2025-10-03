@@ -22,7 +22,8 @@ from django.core.cache import cache
 from django.core.mail import EmailMessage
 from django_redis import get_redis_connection
 from parler.utils.context import switch_language
-
+from typing import Union, IO # para save_file_to_s3
+from datetime import datetime # para save_file_to_s3
 # =====================================================================
 # IMPORTACIONES LOCALES
 # =====================================================================
@@ -412,3 +413,100 @@ def clear_panel_cache():
     except Exception as e:
         logger.error(f"Error limpiando cache del panel: {e}")
         return 0
+
+
+# =====================================================================
+# =====================================================================
+#                    SECCIÓN (MOVIDO DE CORE): ALMACENAMIENTO EN S3
+# =====================================================================
+# =====================================================================
+
+def save_file_to_s3(
+        file_obj: Union[IO, any],
+        filename: str,
+        folder_path: str = "uploads",
+        bucket_name: str = None,
+        file_extension: str = None,
+        add_timestamp: bool = True
+):
+    """
+    Función genérica para subir archivos a Amazon S3.
+
+    NOTA: El bucket debe tener configuradas las políticas de acceso público
+    ya que no se usa ACL en la subida para compatibilidad con buckets modernos.
+
+    Args:
+        file_obj: Objeto de archivo temporal o file-like object
+        filename (str): Nombre base del archivo (sin extensión si se proporciona file_extension)
+        folder_path (str, optional): Ruta de la carpeta en S3. Default: "uploads"
+        bucket_name (str, optional): Nombre del bucket S3. Default: desde settings
+        file_extension (str, optional): Extensión del archivo (ej: "xlsx", "pdf"). Default: detectada del filename
+        add_timestamp (bool, optional): Si agregar timestamp al nombre. Default: True
+
+    Returns:
+        str: URL pública del archivo en S3 si la carga fue exitosa
+        None: Si ocurre un error
+
+    Ejemplos:
+        # Para Excel
+        save_file_to_s3(temp_file, "reporte_informes", "excel/informes", file_extension="xlsx")
+
+        # Para PDF
+        save_file_to_s3(pdf_file, "documento", "pdfs/contratos", file_extension="pdf")
+    """
+
+    # Configuración de AWS desde settings o valores por defecto
+    aws_access_key = getattr(settings, 'AWS_ACCESS_KEY_ID', None)
+    aws_secret_key = getattr(settings, 'AWS_SECRET_ACCESS_KEY', None)
+    aws_region = getattr(settings, 'AWS_S3_REGION_NAME', 'us-east-1')
+    default_bucket = bucket_name or getattr(settings, 'AWS_STORAGE_BUCKET_NAME', 'loginfor-cdn')
+
+    if not aws_access_key or not aws_secret_key:
+        logger.error("Credenciales AWS no configuradas")
+        return None
+
+    # Detectar extensión si no se proporciona
+    if not file_extension:
+        if '.' in filename:
+            file_extension = filename.split('.')[-1]
+        else:
+            file_extension = 'bin'
+
+    # Limpiar nombre de archivo
+    clean_filename = filename.split('.')[0] if '.' in filename else filename
+
+    # Generar nombre único si se requiere timestamp
+    if add_timestamp:
+        timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+        unique_filename = f"{clean_filename}_{timestamp}.{file_extension}"
+    else:
+        unique_filename = f"{clean_filename}.{file_extension}"
+
+    # Construir ruta completa en S3
+    s3_key = f"{folder_path.strip('/')}/{unique_filename}"
+
+    try:
+        # Crear cliente S3
+        s3_client = boto3.client(
+            's3',
+            aws_access_key_id=aws_access_key,
+            aws_secret_access_key=aws_secret_key,
+            region_name=aws_region
+        )
+
+        # Subir archivo sin ACL (el bucket debe tener políticas públicas configuradas)
+        s3_client.upload_fileobj(
+            file_obj,
+            default_bucket,
+            s3_key
+        )
+
+        # Construir URL pública
+        file_url = f"https://{default_bucket}.s3.{aws_region}.amazonaws.com/{s3_key}"
+
+        logger.info(f"Archivo {unique_filename} subido exitosamente a S3: {s3_key}")
+        return file_url
+
+    except Exception as e:
+        logger.error(f'Error al subir archivo a S3: {str(e)}')
+        return None

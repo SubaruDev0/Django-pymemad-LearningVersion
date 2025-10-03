@@ -1,0 +1,1267 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Configuración de Rol - {{ role.name }} - PyMEMAD{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Wizard Steps */
+    .wizard-header {
+        background: var(--ar-white);
+        border-radius: .75rem;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 0.125rem 0.5rem rgba(31, 27, 45, .08);
+    }
+
+    .wizard-steps {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 2rem;
+        position: relative;
+    }
+
+    .wizard-steps::before {
+        content: '';
+        position: absolute;
+        top: 1.25rem;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--ar-gray-300);
+        z-index: 0;
+    }
+
+    .wizard-step {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        flex: 1;
+    }
+
+    .wizard-step-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background: var(--ar-gray-300);
+        color: var(--ar-gray-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 0.625rem;
+        font-weight: bold;
+        transition: all 0.3s;
+    }
+
+    .wizard-step.active .wizard-step-icon {
+        background: #0066cc;
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .wizard-step.completed .wizard-step-icon {
+        background: var(--ar-success);
+        color: white;
+    }
+
+    .wizard-step.completed .wizard-step-icon {
+        font-size: 0;
+    }
+
+    .wizard-step.completed .wizard-step-icon::after {
+        content: '\2713';
+        font-size: 1.2rem;
+    }
+
+    .wizard-step-title {
+        font-size: 0.875rem;
+        color: var(--ar-gray-600);
+        font-weight: 500;
+    }
+
+    .wizard-step.active .wizard-step-title {
+        color: #0066cc;
+        font-weight: 600;
+    }
+
+    /* Module Cards */
+    .module-card {
+        border: 2px solid var(--ar-gray-200);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s;
+    }
+
+    .module-card.selected {
+        border-color: var(--ar-primary);
+        background: rgba(157, 182, 49, 0.05);
+    }
+
+    .module-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .module-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.5rem;
+        background: var(--ar-primary-soft);
+        color: var(--ar-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        font-size: 1.25rem;
+    }
+
+    /* Permission Grid */
+    .permission-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+
+    .permission-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.625rem;
+        background: var(--ar-gray-100);
+        border-radius: 0.375rem;
+        transition: background 0.2s;
+    }
+
+    .permission-item:hover {
+        background: var(--ar-gray-200);
+    }
+
+    .permission-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .permission-icon {
+        color: var(--ar-gray-600);
+        font-size: 1rem;
+    }
+
+    /* Summary */
+    .summary-card {
+        background: #e6f2ff;
+        color: #333;
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid #b3d9ff;
+    }
+
+    .json-preview {
+        background: var(--ar-gray-900);
+        color: #4ade80;
+        padding: 1.25rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 0.8125rem;
+        line-height: 1.5;
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    /* Scope Selector */
+    .scope-selector {
+        margin-top: 1rem;
+        padding: 1rem;
+        background: var(--ar-gray-50);
+        border-radius: 0.375rem;
+    }
+
+    .scope-badge {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border-radius: 0.25rem;
+        margin-left: 0.5rem;
+    }
+
+    .scope-badge.national {
+        background: var(--ar-primary-soft);
+        color: var(--ar-primary);
+    }
+
+    .scope-badge.regional {
+        background: var(--ar-info-soft);
+        color: var(--ar-info);
+    }
+
+    .scope-badge.own {
+        background: var(--ar-warning-soft);
+        color: var(--ar-warning);
+    }
+
+    .module-permissions {
+        background-color: var(--ar-gray-50);
+        border-radius: 0.375rem;
+        padding: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .submodule-card {
+        background: white;
+        border: 1px solid var(--ar-gray-200);
+        border-radius: 0.375rem;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+        <div>
+            <h1 class="h2 mb-0">
+                <i class="ai-settings text-primary me-2"></i>
+                Configuración de Rol
+            </h1>
+            <p class="text-muted mb-0">Configurando: <strong>{{ role.name }}</strong></p>
+        </div>
+    </div>
+
+    <!-- Wizard Steps -->
+    <div class="wizard-header">
+        <!-- Navigation Controls -->
+        <div class="d-flex justify-content-end mb-4">
+            <button class="btn btn-primary" onclick="previousStep(currentStep - 1)" id="prevBtn" style="display: none;">
+                <i class="ai-arrow-left me-2"></i>Anterior
+            </button>
+            <button class="btn btn-primary ms-2" onclick="nextStep(currentStep + 1)" id="nextBtn">
+                Siguiente <i class="ai-arrow-right ms-2"></i>
+            </button>
+            <button class="btn btn-primary ms-2" onclick="saveConfiguration()" id="saveBtn" style="display: none;">
+                <i class="ai-check-circle me-2"></i>Guardar Configuración
+            </button>
+        </div>
+
+        <div class="wizard-steps">
+            <div class="wizard-step active" id="step1">
+                <div class="wizard-step-icon">1</div>
+                <div class="wizard-step-title">Gobernanza del Rol</div>
+            </div>
+            <div class="wizard-step" id="step2">
+                <div class="wizard-step-icon">2</div>
+                <div class="wizard-step-title">Permisos por Módulo</div>
+            </div>
+            <div class="wizard-step" id="step3">
+                <div class="wizard-step-icon">3</div>
+                <div class="wizard-step-title">Resumen y Confirmación</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Step 1: Scope Configuration -->
+    <div class="wizard-content" id="content-step1">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h3 class="mb-0">
+                            <i class="ai-globe me-2"></i>
+                            Gobernanza del Rol
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="text-muted mb-4">
+                            Define el límite territorial máximo de este rol. Los permisos por módulo operarán dentro de estos límites.
+                        </p>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Tipo de Gobernanza</label>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="governance" id="governanceNational"
+                                       value="national" {% if role.governance == 'national' %}checked{% endif %}>
+                                <label class="form-check-label" for="governanceNational">
+                                    <strong>Nacional</strong>
+                                    <span class="scope-badge national">NACIONAL</span>
+                                    <br>
+                                    <small class="text-muted">Acceso a todas las regiones y datos del país</small>
+                                </label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="radio" name="governance" id="governanceRegional"
+                                       value="regional" {% if role.governance == 'regional' or not role.governance %}checked{% endif %}>
+                                <label class="form-check-label" for="governanceRegional">
+                                    <strong>Regional</strong>
+                                    <span class="scope-badge regional">REGIONAL</span>
+                                    <br>
+                                    <small class="text-muted">Acceso limitado a regiones específicas</small>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Regional Selector (shown only when regional is selected) -->
+                        <div id="regionalSelector" class="scope-selector" style="display: none;">
+                            <h6 class="mb-3">Selecciona las regiones permitidas:</h6>
+                            <div class="row">
+                                {% for region in regions %}
+                                <div class="col-md-6 mb-2">
+                                    <div class="form-check">
+                                        <input class="form-check-input region-check" type="checkbox"
+                                               id="region{{ region.id }}" value="{{ region.id }}"
+                                               {% if region.id in role.scope_regions %}checked{% endif %}>
+                                        <label class="form-check-label" for="region{{ region.id }}">
+                                            {{ region.name }}
+                                        </label>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <div class="col-12">
+                                    <p class="text-muted">No hay regiones configuradas en el sistema.</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm bg-info bg-opacity-10">
+                    <div class="card-body">
+                        <h4 class="text-info">
+                            <i class="ai-info-circle me-2"></i>Ayuda
+                        </h4>
+                        <p>El alcance define qué datos puede ver y gestionar el usuario con este rol:</p>
+                        <ul class="mb-0">
+                            <li><strong>Nacional:</strong> Acceso completo a nivel país</li>
+                            <li><strong>Regional:</strong> Solo regiones asignadas</li>
+                            <li><strong>Propio:</strong> Solo sus registros personales</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation buttons removed - now in header -->
+    </div>
+
+    <!-- Step 2: Module Permissions -->
+    <div class="wizard-content" id="content-step2" style="display: none;">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h3 class="mb-0">
+                    <i class="ai-shield me-2"></i>
+                    Permisos por Módulo
+                </h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-4">
+                    Selecciona los módulos a los que tendrá acceso este rol y define las acciones permitidas en cada uno.
+                </p>
+
+                <!-- Quick Actions -->
+                <div class="mb-3">
+                    <button class="btn btn-sm btn-outline-primary me-2" onclick="selectAllModules()">
+                        Seleccionar Todos
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="deselectAllModules()">
+                        Deseleccionar Todos
+                    </button>
+                    <button class="btn btn-sm btn-outline-info" onclick="selectBasicPermissions()">
+                        Solo Lectura
+                    </button>
+                </div>
+
+                <div id="modulesContainer">
+                    <!-- Los módulos se cargarán dinámicamente aquí -->
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando módulos...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation buttons removed - now in header -->
+    </div>
+
+    <!-- Step 3: Summary -->
+    <div class="wizard-content" id="content-step3" style="display: none;">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-light">
+                        <h3 class="mb-0">
+                            <i class="ai-list me-2"></i>
+                            Resumen de Configuración
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="summary-card">
+                            <h4 class="mb-3" style="color: #0066cc;">Configuración del Rol: {{ role.name }}</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="mb-1"><strong>Alcance:</strong></p>
+                                    <p id="summaryScope">-</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-1"><strong>Módulos Activos:</strong></p>
+                                    <p id="summaryModules">0</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-1"><strong>Total Permisos:</strong></p>
+                                    <p id="summaryPermissions">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h5 class="mb-3">Vista Previa de la Configuración</h5>
+                        <div class="json-preview">
+                            <pre id="configPreview">{}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm bg-primary bg-opacity-10">
+                    <div class="card-body">
+                        <h4 class="text-primary">
+                            <i class="ai-check-circle me-2"></i>Listo para Guardar
+                        </h4>
+                        <p>Revisa la configuración antes de guardar:</p>
+                        <ul class="mb-3">
+                            <li>Los cambios se aplicarán inmediatamente</li>
+                            <li>Los usuarios con este rol verán los nuevos permisos</li>
+                            <li>Puedes modificar la configuración en cualquier momento</li>
+                        </ul>
+                        <div class="alert alert-info">
+                            <i class="ai-info-circle me-2"></i>
+                            Haz clic en "Guardar Configuración" arriba para aplicar los cambios.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation buttons removed - now in header -->
+    </div>
+</div>
+
+<!-- Hidden data -->
+<input type="hidden" id="roleId" value="{{ role.id }}">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Configuration object
+let currentStep = 1;
+var wizardConfig = {
+    roleId: {{ role.id }},
+    configuration: {
+        governance: '{{ role.governance|default:"regional" }}',
+        allowed_regions: [],  // Regiones permitidas para gobernanza regional
+        permissions: {},
+        moduleScopes: {},  // {moduleCode: {scope: 'own'|'all'}}
+    },
+    modules: [],
+    urls: {
+        getModules: "{% url 'permissions:api_modules_list' %}",
+        getRolePermissions: "{% url 'permissions:api_get_role_permissions' role.id %}",
+        saveConfiguration: "{% url 'permissions:api_configure_role_wizard' role.id %}",
+        getCsrfToken: function() { return getCSRFToken(); }
+    }
+};
+
+// Initialize on document ready
+document.addEventListener('DOMContentLoaded', function() {
+    loadModules();
+    loadCurrentPermissions();
+    setupScopeListeners();
+    updateNavigationButtons();
+});
+
+// Setup scope radio listeners
+function setupScopeListeners() {
+    // Governance selector handler
+    const governanceRadios = document.querySelectorAll('input[name="governance"]');
+
+    governanceRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            wizardConfig.configuration.governance = this.value;
+            document.getElementById('regionalSelector').style.display =
+                this.value === 'regional' ? 'block' : 'none';
+
+            // Clear regions if switching to national
+            if (this.value === 'national') {
+                wizardConfig.configuration.allowed_regions = [];
+                document.querySelectorAll('.region-check').forEach(cb => cb.checked = false);
+            }
+        });
+    });
+
+    // Region checkboxes handler
+    document.querySelectorAll('.region-check').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            wizardConfig.configuration.allowed_regions = Array.from(
+                document.querySelectorAll('.region-check:checked')
+            ).map(cb => cb.value);
+        });
+    });
+
+    // Show regional selector if needed on page load
+    const regionalRadio = document.getElementById('governanceRegional');
+
+    if (regionalRadio && regionalRadio.checked) {
+        document.getElementById('regionalSelector').style.display = 'block';
+    }
+}
+
+// Load modules from API
+function loadModules() {
+    fetch(wizardConfig.urls.getModules, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            wizardConfig.modules = data.modules;
+            renderModules();
+        } else {
+            document.getElementById('modulesContainer').innerHTML =
+                '<div class="alert alert-danger">Error al cargar los módulos</div>';
+        }
+    })
+    .catch(error => {
+        console.error('Error loading modules:', error);
+        document.getElementById('modulesContainer').innerHTML =
+            '<div class="alert alert-danger">Error al cargar los módulos</div>';
+    });
+}
+
+// Load current permissions and configuration
+function loadCurrentPermissions() {
+    // Construct the URL to get role configuration
+    const configUrl = `{% url 'permissions:api_get_role_configuration' 0 %}`.replace('0', wizardConfig.roleId);
+
+    fetch(configUrl, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.configuration) {
+            const config = data.configuration;
+
+            // Set governance
+            wizardConfig.configuration.governance = config.governance;
+            if (config.governance === 'national') {
+                document.getElementById('governanceNational').checked = true;
+                document.getElementById('regionalSelector').style.display = 'none';
+            } else if (config.governance === 'regional') {
+                document.getElementById('governanceRegional').checked = true;
+                document.getElementById('regionalSelector').style.display = 'block';
+
+                // Set allowed regions
+                wizardConfig.configuration.allowed_regions = config.allowed_regions.map(r => r.id.toString());
+                config.allowed_regions.forEach(region => {
+                    const checkbox = document.querySelector(`.region-check[value="${region.id}"]`);
+                    if (checkbox) checkbox.checked = true;
+                });
+            }
+
+            // Process permissions configuration
+            if (config.permissions_config) {
+                // Convert permissions_config to the format expected by the wizard
+                Object.keys(config.permissions_config).forEach(moduleId => {
+                    const moduleConfig = config.permissions_config[moduleId];
+                    const moduleCode = moduleConfig.module_code;
+
+                    // Extract enabled actions
+                    const enabledActions = [];
+                    Object.keys(moduleConfig.permissions).forEach(action => {
+                        if (moduleConfig.permissions[action]) {
+                            enabledActions.push(action);
+                        }
+                    });
+
+                    // Store permissions for this module
+                    wizardConfig.configuration.permissions[moduleCode] = enabledActions;
+
+                    // Store action scopes
+                    if (moduleConfig.action_scopes) {
+                        if (!wizardConfig.configuration.actionScopes) {
+                            wizardConfig.configuration.actionScopes = {};
+                        }
+                        wizardConfig.configuration.actionScopes[moduleCode] = moduleConfig.action_scopes;
+
+                        // Determine the module scope (if all actions have 'all' scope, module scope is 'all')
+                        const scopes = Object.values(moduleConfig.action_scopes);
+                        const moduleScope = scopes.every(s => s === 'all') ? 'all' : 'own';
+
+                        // Store module scope
+                        if (!wizardConfig.configuration.moduleScopes) {
+                            wizardConfig.configuration.moduleScopes = {};
+                        }
+                        wizardConfig.configuration.moduleScopes[moduleCode] = moduleScope;
+                    }
+                });
+
+                // Update UI with current permissions after modules are loaded
+                setTimeout(() => updatePermissionsUI(), 500);
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error loading permissions:', error);
+    });
+}
+
+// Render modules in step 2
+function renderModules() {
+    const container = document.getElementById('modulesContainer');
+    let html = '';
+
+    // Group modules by parent
+    const parentModules = wizardConfig.modules.filter(m => !m.parent);
+
+    parentModules.forEach(module => {
+        html += renderModuleCard(module);
+    });
+
+    container.innerHTML = html || '<div class="alert alert-info">No hay módulos disponibles</div>';
+}
+
+// Update permissions UI after loading configuration
+function updatePermissionsUI() {
+    // Re-render modules to show the loaded configuration
+    renderModules();
+}
+
+// Render individual module card
+function renderModuleCard(module) {
+    const submodules = wizardConfig.modules.filter(m => m.parent === module.id);
+    const modulePermissions = wizardConfig.configuration.permissions[module.code] || [];
+    const isChecked = modulePermissions.length > 0;
+    const moduleScope = wizardConfig.configuration.moduleScopes ?
+                       wizardConfig.configuration.moduleScopes[module.code] || 'own' : 'own';
+
+    let html = `
+        <div class="module-card ${isChecked ? 'selected' : ''}" id="module-${module.id}" data-module-code="${module.code}">
+            <div class="module-header">
+                <div class="d-flex align-items-center">
+                    <div class="module-icon">
+                        <i class="${module.icon || 'ai-folder'}"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-0">${module.name}</h5>
+                        <small class="text-muted">${module.description || ''}</small>
+                    </div>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input module-toggle" type="checkbox"
+                           id="moduleToggle${module.id}"
+                           data-module-id="${module.id}"
+                           data-module-code="${module.code}"
+                           ${isChecked ? 'checked' : ''}
+                           onchange="toggleModule('${module.code}', this.checked)">
+                </div>
+            </div>
+
+            <div class="module-permissions" id="permissions-${module.code}" style="${isChecked ? '' : 'display: none;'}">
+                <!-- Scope selector for this module -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        <i class="ai-eye text-muted me-1"></i>
+                        Alcance de datos para este módulo
+                    </label>
+                    <select class="form-select form-select-sm module-scope"
+                            id="scope-${module.code}"
+                            data-module-code="${module.code}"
+                            onchange="updateModuleScope('${module.code}')">
+                        <option value="all" ${moduleScope === 'all' ? 'selected' : ''}>Todos - Ve todos los datos dentro de su gobernanza</option>
+                        <option value="own" ${moduleScope === 'own' ? 'selected' : ''}>Propio - Solo sus propios datos</option>
+                    </select>
+                    <small class="text-muted">
+                        Define qué datos puede ver/gestionar dentro de los límites de su gobernanza
+                    </small>
+                </div>
+
+                <div class="permission-grid">`;
+
+    // Add available actions for this module
+    if (module.available_actions && module.available_actions.length > 0) {
+        module.available_actions.forEach(action => {
+            const actionInfo = getActionInfo(action);
+            const isActionChecked = modulePermissions.includes(action);
+
+            html += `
+                <div class="permission-item">
+                    <label class="permission-label">
+                        <i class="${actionInfo.icon} permission-icon"></i>
+                        <span>${actionInfo.name}</span>
+                    </label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input permission-toggle"
+                               type="checkbox"
+                               data-module="${module.code}"
+                               data-action="${action}"
+                               ${isActionChecked ? 'checked' : ''}
+                               onchange="togglePermission('${module.code}', '${action}', this.checked)">
+                    </div>
+                </div>`;
+        });
+    }
+
+    html += `
+                </div>`;
+
+    // Add submodules if any
+    if (submodules.length > 0) {
+        html += `
+                <div class="mt-3">
+                    <h6 class="text-muted mb-2">Submódulos</h6>`;
+
+        submodules.forEach(sub => {
+            const subPermissions = wizardConfig.configuration.permissions[sub.code] || [];
+            const isSubChecked = subPermissions.length > 0;
+
+            html += `
+                    <div class="submodule-card">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input submodule-toggle"
+                                       type="checkbox"
+                                       id="submodule${sub.id}"
+                                       data-module-code="${sub.code}"
+                                       data-parent-code="${module.code}"
+                                       ${isSubChecked ? 'checked' : ''}
+                                       onchange="toggleSubmodule('${sub.code}', '${module.code}', this.checked)">
+                                <label class="form-check-label fw-semibold" for="submodule${sub.id}">
+                                    ${sub.name}
+                                </label>
+                            </div>
+                        </div>`;
+
+            if (sub.available_actions && sub.available_actions.length > 0) {
+                html += `<div class="row g-2" id="subpermissions-${sub.code}" style="${isSubChecked ? '' : 'display: none;'}">`;
+
+                sub.available_actions.forEach(action => {
+                    const actionInfo = getActionInfo(action);
+                    const isActionChecked = subPermissions.includes(action);
+
+                    html += `
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input sub-permission-toggle"
+                                       type="checkbox"
+                                       id="subaction_${sub.code}_${action}"
+                                       data-module="${sub.code}"
+                                       data-action="${action}"
+                                       ${isActionChecked ? 'checked' : ''}
+                                       onchange="togglePermission('${sub.code}', '${action}', this.checked)">
+                                <label class="form-check-label small" for="subaction_${sub.code}_${action}">
+                                    ${actionInfo.name}
+                                </label>
+                            </div>
+                        </div>`;
+                });
+
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+        });
+
+        html += `
+                </div>`;
+    }
+
+    html += `
+            </div>
+        </div>`;
+
+    return html;
+}
+
+// Get action info (icon and name)
+function getActionInfo(action) {
+    const actionMap = {
+        'view': { icon: 'ai-show', name: 'Ver' },
+        'add': { icon: 'ai-plus', name: 'Crear' },
+        'change': { icon: 'ai-edit-alt', name: 'Modificar' },
+        'delete': { icon: 'ai-trash', name: 'Eliminar' },
+        'approve': { icon: 'ai-checks', name: 'Aprobar' },
+        'reject': { icon: 'ai-cross-alt', name: 'Rechazar' },
+        'assign': { icon: 'ai-user-check', name: 'Asignar' },
+        'transfer': { icon: 'ai-swap', name: 'Transferir' },
+        'export': { icon: 'ai-download', name: 'Exportar' },
+        'import': { icon: 'ai-upload', name: 'Importar' },
+        'backup': { icon: 'ai-database', name: 'Respaldar' },
+        'generate_report': { icon: 'ai-file-text', name: 'Generar Reporte' },
+        'manage_payments': { icon: 'ai-credit-card', name: 'Gestionar Pagos' },
+        'view_sensitive': { icon: 'ai-lock', name: 'Ver Datos Sensibles' },
+        'bulk_update': { icon: 'ai-copy', name: 'Actualización Masiva' },
+        'audit': { icon: 'ai-search', name: 'Auditar' },
+        'override': { icon: 'ai-shield-off', name: 'Anular Reglas' },
+        'restore': { icon: 'ai-rotate-ccw', name: 'Restaurar' }
+    };
+
+    return actionMap[action] || { icon: 'ai-circle', name: action };
+}
+
+// Toggle module
+function toggleModule(moduleCode, enabled) {
+    const moduleCard = document.querySelector(`[data-module-code="${moduleCode}"]`);
+    const permissionsDiv = document.getElementById(`permissions-${moduleCode}`);
+
+    if (enabled) {
+        moduleCard.classList.add('selected');
+        permissionsDiv.style.display = 'block';
+        // Initialize with view permission by default
+        if (!wizardConfig.configuration.permissions[moduleCode]) {
+            wizardConfig.configuration.permissions[moduleCode] = ['view'];
+            updateModulePermissionsUI(moduleCode);
+        }
+        // Initialize scope for this module (store as string, not object)
+        if (!wizardConfig.configuration.moduleScopes) {
+            wizardConfig.configuration.moduleScopes = {};
+        }
+        if (!wizardConfig.configuration.moduleScopes[moduleCode]) {
+            wizardConfig.configuration.moduleScopes[moduleCode] = 'own'; // Default scope is 'own'
+        }
+    } else {
+        moduleCard.classList.remove('selected');
+        permissionsDiv.style.display = 'none';
+        delete wizardConfig.configuration.permissions[moduleCode];
+        delete wizardConfig.configuration.moduleScopes[moduleCode];
+
+        // Also disable submodules
+        const submodules = document.querySelectorAll(`[data-parent-code="${moduleCode}"]`);
+        submodules.forEach(sub => {
+            sub.checked = false;
+            const subCode = sub.dataset.moduleCode;
+            document.getElementById(`subpermissions-${subCode}`).style.display = 'none';
+            delete wizardConfig.configuration.permissions[subCode];
+        });
+    }
+
+    updateSummary();
+}
+
+// Update module scope
+function updateModuleScope(moduleCode) {
+    const scopeSelect = document.getElementById(`scope-${moduleCode}`);
+    const selectedScope = scopeSelect.value;
+
+    // Initialize moduleScopes if not exists
+    if (!wizardConfig.configuration.moduleScopes) {
+        wizardConfig.configuration.moduleScopes = {};
+    }
+
+    // Update the module scope
+    wizardConfig.configuration.moduleScopes[moduleCode] = selectedScope;
+}
+
+// Toggle individual permission
+function togglePermission(moduleCode, action, enabled) {
+    if (!wizardConfig.configuration.permissions[moduleCode]) {
+        wizardConfig.configuration.permissions[moduleCode] = [];
+    }
+
+    const permissions = wizardConfig.configuration.permissions[moduleCode];
+    const index = permissions.indexOf(action);
+
+    if (enabled && index === -1) {
+        permissions.push(action);
+    } else if (!enabled && index > -1) {
+        permissions.splice(index, 1);
+    }
+
+    // If no permissions left, uncheck the module
+    if (permissions.length === 0) {
+        delete wizardConfig.configuration.permissions[moduleCode];
+        const moduleToggle = document.querySelector(`[data-module-code="${moduleCode}"].module-toggle`);
+        if (moduleToggle) {
+            moduleToggle.checked = false;
+            toggleModule(moduleCode, false);
+        }
+    }
+
+    updateSummary();
+}
+
+// Toggle submodule
+function toggleSubmodule(submoduleCode, parentCode, enabled) {
+    const subPermDiv = document.getElementById(`subpermissions-${submoduleCode}`);
+
+    if (enabled) {
+        // Enable parent if not already enabled
+        const parentToggle = document.querySelector(`#moduleToggle${wizardConfig.modules.find(m => m.code === parentCode)?.id}`);
+        if (parentToggle && !parentToggle.checked) {
+            parentToggle.checked = true;
+            toggleModule(parentCode, true);
+        }
+
+        // Show submodule permissions
+        if (subPermDiv) {
+            subPermDiv.style.display = 'block';
+        }
+
+        // Add submodule with default permissions
+        if (!wizardConfig.configuration.permissions[submoduleCode]) {
+            wizardConfig.configuration.permissions[submoduleCode] = ['view'];
+            updateModulePermissionsUI(submoduleCode);
+        }
+    } else {
+        // Hide submodule permissions
+        if (subPermDiv) {
+            subPermDiv.style.display = 'none';
+        }
+        delete wizardConfig.configuration.permissions[submoduleCode];
+    }
+
+    updateSummary();
+}
+
+// Update permissions UI from loaded data
+function updatePermissionsUI() {
+    Object.keys(wizardConfig.configuration.permissions).forEach(moduleCode => {
+        const moduleToggle = document.querySelector(`[data-module-code="${moduleCode}"].module-toggle`);
+        const submoduleToggle = document.querySelector(`[data-module-code="${moduleCode}"].submodule-toggle`);
+
+        if (moduleToggle) {
+            moduleToggle.checked = true;
+            toggleModule(moduleCode, true);
+        } else if (submoduleToggle) {
+            submoduleToggle.checked = true;
+            const parentCode = submoduleToggle.dataset.parentCode;
+            toggleSubmodule(moduleCode, parentCode, true);
+        }
+
+        // Update individual permissions
+        updateModulePermissionsUI(moduleCode);
+    });
+}
+
+// Update module permissions UI
+function updateModulePermissionsUI(moduleCode) {
+    const permissions = wizardConfig.configuration.permissions[moduleCode] || [];
+    permissions.forEach(action => {
+        const toggle = document.querySelector(`[data-module="${moduleCode}"][data-action="${action}"]`);
+        if (toggle) {
+            toggle.checked = true;
+        }
+    });
+}
+
+// Quick actions
+function selectAllModules() {
+    document.querySelectorAll('.module-toggle').forEach(toggle => {
+        if (!toggle.checked) {
+            toggle.checked = true;
+            toggleModule(toggle.dataset.moduleCode, true);
+        }
+    });
+}
+
+function deselectAllModules() {
+    document.querySelectorAll('.module-toggle').forEach(toggle => {
+        if (toggle.checked) {
+            toggle.checked = false;
+            toggleModule(toggle.dataset.moduleCode, false);
+        }
+    });
+}
+
+function selectBasicPermissions() {
+    Object.keys(wizardConfig.configuration.permissions).forEach(moduleCode => {
+        wizardConfig.configuration.permissions[moduleCode] = ['view'];
+        updateModulePermissionsUI(moduleCode);
+    });
+    updateSummary();
+}
+
+// Navigation
+function nextStep(step) {
+    if (step > 3) return;
+
+    // Validate current step
+    if (currentStep === 1 && wizardConfig.configuration.governance === 'regional') {
+        const selectedRegions = document.querySelectorAll('.region-check:checked');
+        if (selectedRegions.length === 0) {
+            Swal.fire({
+                title: 'Atención',
+                text: 'Debes seleccionar al menos una región para el alcance regional',
+                icon: 'warning',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+    }
+
+    // Update step icons
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    document.getElementById(`step${currentStep}`).classList.add('completed');
+
+    // Hide current content
+    document.getElementById(`content-step${currentStep}`).style.display = 'none';
+
+    // Show next step
+    currentStep = step;
+    document.getElementById(`content-step${step}`).style.display = 'block';
+    document.getElementById(`step${step}`).classList.add('active');
+
+    // Update navigation buttons
+    updateNavigationButtons();
+
+    // Update summary if we're on step 3
+    if (step === 3) {
+        updateSummary();
+    }
+}
+
+function previousStep(step) {
+    if (step < 1) return;
+
+    // Update step icons
+    document.getElementById(`step${currentStep}`).classList.remove('active');
+    document.getElementById(`step${step}`).classList.remove('completed');
+
+    // Hide current content
+    document.getElementById(`content-step${currentStep}`).style.display = 'none';
+
+    // Show previous step
+    currentStep = step;
+    document.getElementById(`content-step${step}`).style.display = 'block';
+    document.getElementById(`step${step}`).classList.add('active');
+
+    // Update navigation buttons
+    updateNavigationButtons();
+}
+
+function updateNavigationButtons() {
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const saveBtn = document.getElementById('saveBtn');
+
+    // Show/hide previous button
+    if (currentStep === 1) {
+        prevBtn.style.display = 'none';
+    } else {
+        prevBtn.style.display = 'inline-block';
+    }
+
+    // Show next or save button
+    if (currentStep === 3) {
+        nextBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+    } else {
+        nextBtn.style.display = 'inline-block';
+        saveBtn.style.display = 'none';
+    }
+}
+
+// Update summary
+function updateSummary() {
+    // Update governance
+    const governanceText = {
+        'national': 'Nacional - Acceso completo',
+        'regional': 'Regional - Regiones específicas'
+    };
+    document.getElementById('summaryScope').textContent =
+        governanceText[wizardConfig.configuration.governance] || '-';
+
+    // Count modules and permissions
+    const moduleCount = Object.keys(wizardConfig.configuration.permissions).length;
+    const permissionCount = Object.values(wizardConfig.configuration.permissions)
+        .reduce((sum, perms) => sum + perms.length, 0);
+
+    document.getElementById('summaryModules').textContent = moduleCount;
+    document.getElementById('summaryPermissions').textContent = permissionCount;
+
+    // Build preview in the required structure
+    const preview = {
+        role_id: wizardConfig.roleId,
+        governance: wizardConfig.configuration.governance,
+        allowed_regions: wizardConfig.configuration.allowed_regions.map(regionId => {
+            const regionEl = document.querySelector(`label[for="region${regionId}"]`);
+            return {
+                id: regionId.toString(),
+                name: regionEl ? regionEl.textContent.trim() : ''
+            };
+        }),
+        permissions_config: {}
+    };
+
+    // Build permissions_config
+    for (const [moduleCode, actions] of Object.entries(wizardConfig.configuration.permissions)) {
+        const module = wizardConfig.modules.find(m => m.code === moduleCode);
+        if (!module) continue;
+
+        const moduleScope = wizardConfig.configuration.moduleScopes ?
+                           wizardConfig.configuration.moduleScopes[moduleCode] || 'own' : 'own';
+        const permissions = {};
+        const action_scopes = {};
+
+        actions.forEach(action => {
+            permissions[action] = true;
+            action_scopes[action] = moduleScope; // Use moduleScope directly as it's a string
+        });
+
+        preview.permissions_config[moduleCode] = {
+            module_name: module.name,
+            module_code: moduleCode,
+            permissions: permissions,
+            action_scopes: action_scopes
+        };
+    }
+
+    document.getElementById('configPreview').textContent =
+        JSON.stringify(preview, null, 2);
+}
+
+// Save configuration
+function saveConfiguration() {
+    // Collect selected regions if governance is regional
+    if (wizardConfig.configuration.governance === 'regional') {
+        wizardConfig.configuration.allowed_regions = [];
+        document.querySelectorAll('.region-check:checked').forEach(checkbox => {
+            wizardConfig.configuration.allowed_regions.push(parseInt(checkbox.value));
+        });
+
+        if (wizardConfig.configuration.allowed_regions.length === 0) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Debes seleccionar al menos una región para la gobernanza regional',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
+            return;
+        }
+    }
+
+    // Check if any modules are selected
+    if (Object.keys(wizardConfig.configuration.permissions).length === 0) {
+        Swal.fire({
+            title: 'Atención',
+            text: '¿Estás seguro de guardar sin ningún permiso asignado?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, guardar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                performSave();
+            }
+        });
+    } else {
+        performSave();
+    }
+}
+
+function performSave() {
+    // Prepare data in the required structure
+    const data = {
+        role_id: wizardConfig.roleId,
+        role_name: document.querySelector('h1.h2').textContent.replace('Configuración de Rol', '').trim(),
+        governance: wizardConfig.configuration.governance,
+        allowed_regions: wizardConfig.configuration.allowed_regions.map(regionId => {
+            const regionEl = document.querySelector(`label[for="region${regionId}"]`);
+            return {
+                id: regionId.toString(),
+                name: regionEl ? regionEl.textContent.trim() : ''
+            };
+        }),
+        permissions_config: {}
+    };
+
+    // Build permissions_config with the required structure
+    for (const [moduleCode, actions] of Object.entries(wizardConfig.configuration.permissions)) {
+        const module = wizardConfig.modules.find(m => m.code === moduleCode);
+        if (!module) continue;
+
+        const moduleScope = wizardConfig.configuration.moduleScopes ?
+                           wizardConfig.configuration.moduleScopes[moduleCode] || 'own' : 'own';
+
+        // Build permissions object (boolean for each action)
+        const permissions = {};
+        const action_scopes = {};
+
+        actions.forEach(action => {
+            permissions[action] = true;
+            action_scopes[action] = moduleScope; // moduleScope is already a string ('all' or 'own')
+        });
+
+        data.permissions_config[module.id || moduleCode] = {
+            module_name: module.name,
+            module_code: moduleCode,
+            permissions: permissions,
+            action_scopes: action_scopes
+        };
+    }
+
+    // Disable save button
+    const saveBtn = document.getElementById('saveBtn');
+    saveBtn.disabled = true;
+    saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Guardando...';
+
+    // Send to API
+    fetch(wizardConfig.urls.saveConfiguration, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': wizardConfig.urls.getCsrfToken()
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(err => Promise.reject(err));
+        }
+        return response.json();
+    })
+    .then(result => {
+        if (result.success) {
+            Swal.fire({
+                title: '¡Configuración Guardada!',
+                text: result.message || 'La configuración del rol se ha guardado exitosamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                window.location.href = "{% url 'permissions:roles_management' %}";
+            });
+        } else {
+            throw new Error(result.message || 'Error al guardar la configuración');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire({
+            title: 'Error',
+            text: error.message || 'Error al guardar la configuración',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+    })
+    .finally(() => {
+        // Re-enable button
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="ai-save me-2"></i>Guardar Configuración';
+    });
+}
+</script>
+{% endblock %}

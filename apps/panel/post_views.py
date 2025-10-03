@@ -55,8 +55,9 @@ from apps.panel.tasks import (
     generate_post_translations_task,
     generate_all_metas_for_post
 )
-from apps.core.utils import save_file_to_s3, clear_panel_cache
+from apps.panel.utils import save_file_to_s3, clear_panel_cache # cambio de 'core' a 'panel'
 from apps.panel.utils import clear_cache_for_post
+from apps.permissions.mixins import ACLPermissionMixin
 
 # Configurar logger
 logger = logging.getLogger(__name__)
@@ -68,7 +69,9 @@ logger = logging.getLogger(__name__)
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class PostListView(LoginRequiredMixin, FilterView):
+class PostListView(ACLPermissionMixin, LoginRequiredMixin, FilterView):
+    module_code = 'news'
+    required_action = 'view'
     """
     Muestra una lista de publicaciones del blog con soporte para filtrado
     y solicitudes AJAX para integración con DataTables.
@@ -249,7 +252,9 @@ class PostListView(LoginRequiredMixin, FilterView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(ACLPermissionMixin, LoginRequiredMixin, CreateView):
+    module_code = 'news'
+    required_action = 'add'
     """
     Vista para manejar la creación de publicaciones en el blog.
     """
@@ -388,7 +393,9 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(ACLPermissionMixin, LoginRequiredMixin, UpdateView):
+    module_code = 'news'
+    required_action = 'change'
     model = Post
     form_class = PostForm
     template_name = 'posts/post-update.html'
@@ -708,7 +715,9 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class PostBulkDeleteView(LoginRequiredMixin, View):
+class PostBulkDeleteView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'delete'
     """
     Vista para eliminación masiva de publicaciones seleccionadas.
     """
@@ -819,7 +828,9 @@ class PostBulkDeleteView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostBulkStatusView(LoginRequiredMixin, View):
+class PostBulkStatusView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista para cambiar el estado de múltiples publicaciones.
     """
@@ -908,7 +919,9 @@ class PostBulkStatusView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostExportView(LoginRequiredMixin, View):
+class PostExportView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'export'
     """
     Vista para exportar publicaciones en formato Excel y subirlo a S3.
     """
@@ -1092,7 +1105,9 @@ class PostExportView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostClearCacheView(LoginRequiredMixin, View):
+class PostClearCacheView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista AJAX para limpiar el cache de un post específico
     """
@@ -1181,7 +1196,9 @@ class PostClearCacheView(LoginRequiredMixin, View):
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class GetNewPostAI(View):
+class GetNewPostAI(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'add'
     model = Post
 
     def decode_post_id(self, encoded_pk):
@@ -1265,7 +1282,9 @@ class GetNewPostAI(View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class GeneratePostTranslationsAI(View):
+class GeneratePostTranslationsAI(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     model = Post
 
     def decode_post_id(self, encoded_pk):
@@ -1347,7 +1366,9 @@ class GeneratePostTranslationsAI(View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostRegenerateMetaView(LoginRequiredMixin, View):
+class PostRegenerateMetaView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista AJAX para regenerar meta descripciones del post
     """
@@ -1394,7 +1415,9 @@ class PostRegenerateMetaView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CheckAITaskStatus(View):
+class CheckAITaskStatus(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'view'
     def get(self, request):
         task_id = request.GET.get('task_id')
 
@@ -1448,7 +1471,9 @@ class CheckAITaskStatus(View):
 # =====================================================================
 # =====================================================================
 
-class DashboardStatsAPIView(LoginRequiredMixin, TemplateView):
+class DashboardStatsAPIView(ACLPermissionMixin, LoginRequiredMixin, TemplateView):
+    module_code = 'dashboard'
+    required_action = 'view'
     """
     API endpoint para actualizar las estadísticas del dashboard.
     """
@@ -1491,7 +1516,9 @@ class DashboardStatsAPIView(LoginRequiredMixin, TemplateView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class PostSearchView(LoginRequiredMixin, View):
+class PostSearchView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'view'
     """
     Vista para búsqueda de posts en Select2
     """
@@ -1545,7 +1572,9 @@ class PostSearchView(LoginRequiredMixin, View):
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class CommentListView(LoginRequiredMixin, ListView):
+class CommentListView(ACLPermissionMixin, LoginRequiredMixin, ListView):
+    module_code = 'news'
+    required_action = 'view'
     """
     Vista principal para listar todos los comentarios del sistema
     """
@@ -1576,7 +1605,9 @@ class CommentListView(LoginRequiredMixin, ListView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CommentListView(LoginRequiredMixin, FilterView):
+class CommentListView(ACLPermissionMixin, LoginRequiredMixin, FilterView):
+    module_code = 'news'
+    required_action = 'view'
     """
     Vista para listar y filtrar comentarios con análisis gráfico
     """
@@ -1863,13 +1894,14 @@ class CommentListView(LoginRequiredMixin, FilterView):
         return super().render_to_response(context, **response_kwargs)
 
 @method_decorator(never_cache, name='dispatch')
-class CommentDeleteView(LoginRequiredMixin, DeleteView):
+class CommentDeleteView(ACLPermissionMixin, LoginRequiredMixin, DeleteView):
+    module_code = 'news'
+    required_action = 'delete'
     """
     Vista para eliminar un comentario específico
     """
     model = Comment
     success_url = reverse_lazy('dashboard:comment-list')
-    
     def delete(self, request, *args, **kwargs):
         """
         Elimina el comentario
@@ -1877,18 +1909,18 @@ class CommentDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         comment_id = self.object.pk
         self.object.delete()
-        
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({
                 'success': True,
                 'message': f'Comentario #{comment_id} eliminado correctamente'
             })
-        
         return HttpResponseRedirect(self.success_url)
 
 
 @method_decorator(never_cache, name='dispatch')
-class CommentManageView(LoginRequiredMixin, View):
+class CommentManageView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista para gestionar comentarios desde el panel de posts
     Maneja GET, POST, PUT y DELETE para operaciones CRUD
@@ -2112,7 +2144,9 @@ class CommentManageView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CommentUpdateView(LoginRequiredMixin, View):
+class CommentUpdateView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista para actualizar un comentario (aprobar/rechazar/editar)
     """
@@ -2209,7 +2243,9 @@ class CommentUpdateView(LoginRequiredMixin, View):
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class CategoryListView(LoginRequiredMixin, FilterView):
+class CategoryListView(ACLPermissionMixin, LoginRequiredMixin, FilterView):
+    module_code = 'news'
+    required_action = 'view'
     """
     Vista para listar y filtrar categorías
     """
@@ -2357,7 +2393,9 @@ class CategoryListView(LoginRequiredMixin, FilterView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CategoryCreateView(LoginRequiredMixin, View):
+class CategoryCreateView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'add'
     """
     Vista para crear una nueva categoría
     """
@@ -2409,7 +2447,9 @@ class CategoryCreateView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CategoryUpdateView(LoginRequiredMixin, View):
+class CategoryUpdateView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista para actualizar una categoría específica
     """
@@ -2493,7 +2533,9 @@ class CategoryUpdateView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class CategoryDeleteView(LoginRequiredMixin, View):
+class CategoryDeleteView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'delete'
     """
     Vista para eliminar una categoría específica
     """
@@ -2543,7 +2585,9 @@ class CategoryDeleteView(LoginRequiredMixin, View):
 # =====================================================================
 
 @method_decorator(never_cache, name='dispatch')
-class TagListView(LoginRequiredMixin, FilterView):
+class TagListView(ACLPermissionMixin, LoginRequiredMixin, FilterView):
+    module_code = 'news'
+    required_action = 'view'
     """
     Vista para listar y filtrar tags
     """
@@ -2691,7 +2735,9 @@ class TagListView(LoginRequiredMixin, FilterView):
 
 
 @method_decorator(never_cache, name='dispatch')
-class TagCreateView(LoginRequiredMixin, View):
+class TagCreateView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'add'
     """
     Vista para crear una nueva etiqueta
     """
@@ -2743,7 +2789,9 @@ class TagCreateView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class TagUpdateView(LoginRequiredMixin, View):
+class TagUpdateView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'change'
     """
     Vista para actualizar una etiqueta específica
     """
@@ -2827,7 +2875,9 @@ class TagUpdateView(LoginRequiredMixin, View):
 
 
 @method_decorator(never_cache, name='dispatch')
-class TagDeleteView(LoginRequiredMixin, View):
+class TagDeleteView(ACLPermissionMixin, LoginRequiredMixin, View):
+    module_code = 'news'
+    required_action = 'delete'
     """
     Vista para eliminar una etiqueta específica
     """

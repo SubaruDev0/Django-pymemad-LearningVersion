@@ -56,6 +56,7 @@ LOCAL_APPS = [
     'apps.documents',
     'apps.strategy',
     'apps.panel',
+    'apps.permissions',  # Sistema ACL
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -93,6 +94,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'apps.permissions.context_processors.user_permissions_context',
+                'apps.permissions.context_processors.user_quick_info',
             ],
         },
     },

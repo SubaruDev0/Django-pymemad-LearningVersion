@@ -1,0 +1,285 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Auditoría de Permisos - PyMEMAD{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+        <h1 class="h2 mb-0">
+            <i class="ai-activity text-primary me-2"></i>
+            Auditoría de Permisos
+        </h1>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" onclick="exportLogs()">
+                <i class="ai-download me-2"></i>Exportar
+            </button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                <i class="ai-filter me-2"></i>Filtrar
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="ai-activity fs-1 text-primary"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">{{ logs|length }}</h5>
+                            <p class="text-muted mb-0">Eventos Totales</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="ai-user-plus fs-1 text-success"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">0</h5>
+                            <p class="text-muted mb-0">Roles Asignados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="ai-shield fs-1 text-info"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">0</h5>
+                            <p class="text-muted mb-0">Permisos Modificados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="ai-users fs-1 text-warning"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h5 class="mb-0">0</h5>
+                            <p class="text-muted mb-0">Usuarios Afectados</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logs Table -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+            <h5 class="mb-0">Registro de Eventos</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="auditTable">
+                    <thead>
+                        <tr>
+                            <th>Fecha/Hora</th>
+                            <th>Usuario Afectado</th>
+                            <th>Acción</th>
+                            <th>Detalles</th>
+                            <th>Realizado por</th>
+                            <th>IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>
+                                <small>{{ log.performed_at|date:"d/m/Y" }}<br>
+                                {{ log.performed_at|date:"H:i:s" }}</small>
+                            </td>
+                            <td>
+                                {% if log.user %}
+                                <div class="d-flex align-items-center">
+                                    <img src="{% static 'assets/img/avatar/default.jpg' %}"
+                                         class="rounded-circle me-2" width="32" alt="Avatar">
+                                    <div>
+                                        <strong>{{ log.user.get_full_name|default:log.user.username }}</strong><br>
+                                        <small class="text-muted">{{ log.user.email }}</small>
+                                    </div>
+                                </div>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if log.action == 'role_assigned' %}
+                                    <span class="badge bg-success">Rol Asignado</span>
+                                {% elif log.action == 'role_removed' %}
+                                    <span class="badge bg-danger">Rol Removido</span>
+                                {% elif log.action == 'permission_added' %}
+                                    <span class="badge bg-info">Permiso Agregado</span>
+                                {% elif log.action == 'permission_removed' %}
+                                    <span class="badge bg-warning">Permiso Removido</span>
+                                {% elif log.action == 'user_activated' %}
+                                    <span class="badge bg-success">Usuario Activado</span>
+                                {% elif log.action == 'user_deactivated' %}
+                                    <span class="badge bg-danger">Usuario Desactivado</span>
+                                {% elif log.action == 'region_access_granted' %}
+                                    <span class="badge bg-primary">Acceso Regional Otorgado</span>
+                                {% elif log.action == 'region_access_revoked' %}
+                                    <span class="badge bg-secondary">Acceso Regional Revocado</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ log.get_action_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if log.details %}
+                                <button class="btn btn-sm btn-outline-primary"
+                                        onclick='showDetails({{ log.details|escapejs }})'>
+                                    <i class="ai-eye"></i> Ver
+                                </button>
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if log.performed_by %}
+                                {{ log.performed_by.get_full_name|default:log.performed_by.username }}
+                                {% else %}
+                                <span class="text-muted">Sistema</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <small class="text-muted">{{ log.ip_address|default:"-" }}</small>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <i class="ai-inbox fs-1 text-muted mb-2"></i>
+                                <p class="text-muted mb-0">No hay registros de auditoría disponibles</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if logs|length > 20 %}
+            <!-- Pagination -->
+            <nav aria-label="Audit log pagination" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Anterior</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Filter Modal -->
+<div class="modal fade" id="filterModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Filtrar Registros</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="filterForm">
+                    <div class="mb-3">
+                        <label class="form-label">Rango de Fechas</label>
+                        <div class="row g-2">
+                            <div class="col">
+                                <input type="date" class="form-control" name="date_from">
+                            </div>
+                            <div class="col">
+                                <input type="date" class="form-control" name="date_to">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tipo de Acción</label>
+                        <select class="form-select" name="action_type">
+                            <option value="">Todas</option>
+                            <option value="role_assigned">Roles Asignados</option>
+                            <option value="role_removed">Roles Removidos</option>
+                            <option value="permission_added">Permisos Agregados</option>
+                            <option value="permission_removed">Permisos Removidos</option>
+                            <option value="user_activated">Usuarios Activados</option>
+                            <option value="user_deactivated">Usuarios Desactivados</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Usuario</label>
+                        <input type="text" class="form-control" name="user_search" placeholder="Buscar por nombre o email">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" onclick="applyFilters()">Aplicar Filtros</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Details Modal -->
+<div class="modal fade" id="detailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detalles del Evento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <pre id="detailsContent" class="bg-light p-3 rounded"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function showDetails(details) {
+    document.getElementById('detailsContent').textContent = JSON.stringify(details, null, 2);
+    new bootstrap.Modal(document.getElementById('detailsModal')).show();
+}
+
+function exportLogs() {
+    if (confirm('¿Exportar los registros de auditoría a Excel?')) {
+        window.location.href = '{% url "permissions:audit_logs" %}?export=excel';
+    }
+}
+
+function applyFilters() {
+    const form = document.getElementById('filterForm');
+    const formData = new FormData(form);
+    const params = new URLSearchParams(formData);
+    window.location.href = '{% url "permissions:audit_logs" %}?' + params.toString();
+}
+</script>
+{% endblock %}

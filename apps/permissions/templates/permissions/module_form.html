@@ -1,0 +1,264 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}{% if object %}Editar{% else %}Crear{% endif %} Módulo - PyMEMAD{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+        <h1 class="h2 mb-0">
+            <i class="ai-{% if object %}edit-3{% else %}plus-circle{% endif %} text-primary me-2"></i>
+            {% if object %}Editar Módulo: {{ object.name }}{% else %}Crear Nuevo Módulo{% endif %}
+        </h1>
+        <a href="{% url 'permissions:modules_management' %}" class="btn btn-secondary">
+            <i class="ai-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <!-- Code -->
+                            <div class="col-md-6">
+                                <label for="{{ form.code.id_for_label }}" class="form-label">
+                                    Código <span class="text-danger">*</span>
+                                </label>
+                                {{ form.code }}
+                                {% if form.code.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.code.errors }}
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Solo minúsculas y guión bajo (ej: billing_reports)</small>
+                            </div>
+
+                            <!-- Name -->
+                            <div class="col-md-6">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    Nombre <span class="text-danger">*</span>
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.name.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- App Label -->
+                            <div class="col-md-6">
+                                <label for="{{ form.app_label.id_for_label }}" class="form-label">
+                                    App Django
+                                </label>
+                                {{ form.app_label }}
+                                {% if form.app_label.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.app_label.errors }}
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Nombre de la aplicación Django asociada</small>
+                            </div>
+
+                            <!-- Icon -->
+                            <div class="col-md-6">
+                                <label for="{{ form.icon.id_for_label }}" class="form-label">
+                                    Icono
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text" id="icon-preview">
+                                        <i class="{{ form.icon.value|default:'ai-folder' }}"></i>
+                                    </span>
+                                    {{ form.icon }}
+                                </div>
+                                {% if form.icon.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.icon.errors }}
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Clase CSS del icono (ej: ai-file-text)</small>
+                            </div>
+
+                            <!-- Parent Module -->
+                            {% if form.parent %}
+                            <div class="col-md-6">
+                                <label for="{{ form.parent.id_for_label }}" class="form-label">
+                                    Módulo Padre
+                                </label>
+                                {{ form.parent }}
+                                {% if form.parent.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.parent.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+
+                            <!-- Order -->
+                            <div class="col-md-6">
+                                <label for="{{ form.order.id_for_label }}" class="form-label">
+                                    Orden
+                                </label>
+                                {{ form.order }}
+                                {% if form.order.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.order.errors }}
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Orden de visualización (menor = primero)</small>
+                            </div>
+
+                            <!-- URL Namespace -->
+                            <div class="col-md-6">
+                                <label for="{{ form.url_namespace.id_for_label }}" class="form-label">
+                                    Namespace URL
+                                </label>
+                                {{ form.url_namespace }}
+                                {% if form.url_namespace.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.url_namespace.errors }}
+                                </div>
+                                {% endif %}
+                                <small class="text-muted">Namespace para las URLs del módulo</small>
+                            </div>
+
+                            <!-- Active Status -->
+                            {% if form.is_active %}
+                            <div class="col-md-6">
+                                <div class="form-check form-switch mt-4">
+                                    {{ form.is_active }}
+                                    <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                        Módulo Activo
+                                    </label>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- Description -->
+                            <div class="col-12">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">
+                                    Descripción
+                                </label>
+                                {{ form.description }}
+                                {% if form.description.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.description.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Available Actions -->
+                            <div class="col-12">
+                                <label class="form-label">
+                                    Acciones Disponibles
+                                </label>
+                                <div class="card bg-light">
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            {% for choice in form.available_actions.field.choices %}
+                                            <div class="col-md-4 col-lg-3">
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                           type="checkbox"
+                                                           name="available_actions"
+                                                           value="{{ choice.0 }}"
+                                                           id="action_{{ choice.0 }}"
+                                                           {% if choice.0 in form.available_actions.value|default:form.initial.available_actions %}checked{% endif %}>
+                                                    <label class="form-check-label" for="action_{{ choice.0 }}">
+                                                        {{ choice.1 }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% if form.available_actions.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.available_actions.errors }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Form Actions -->
+                        <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+                            <a href="{% url 'permissions:modules_management' %}" class="btn btn-secondary">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="ai-save me-2"></i>
+                                {% if object %}Actualizar{% else %}Crear{% endif %} Módulo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Card -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info bg-opacity-10">
+                    <h5 class="mb-0">
+                        <i class="ai-info-circle text-info me-2"></i>
+                        Información
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h6 class="fw-semibold">¿Qué es un módulo?</h6>
+                    <p class="text-muted">Los módulos definen las áreas funcionales del sistema y los permisos disponibles para cada una.</p>
+
+                    <h6 class="fw-semibold mt-3">Acciones Estándar</h6>
+                    <ul class="text-muted small">
+                        <li><strong>Ver:</strong> Permite visualizar registros</li>
+                        <li><strong>Crear:</strong> Permite crear nuevos registros</li>
+                        <li><strong>Modificar:</strong> Permite editar registros existentes</li>
+                        <li><strong>Eliminar:</strong> Permite eliminar registros</li>
+                        <li><strong>Exportar:</strong> Permite exportar datos</li>
+                        <li><strong>Importar:</strong> Permite importar datos</li>
+                    </ul>
+
+                    <h6 class="fw-semibold mt-3">Jerarquía</h6>
+                    <p class="text-muted small">Los módulos pueden tener submódulos para organizar mejor las funcionalidades.</p>
+
+                    {% if object %}
+                    <div class="alert alert-warning mt-3">
+                        <i class="ai-alert-triangle me-2"></i>
+                        <strong>Nota:</strong> Los cambios en este módulo afectarán a todos los usuarios con permisos asignados.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Update icon preview
+document.getElementById('{{ form.icon.id_for_label }}').addEventListener('input', function(e) {
+    const iconPreview = document.getElementById('icon-preview');
+    const iconClass = e.target.value || 'ai-folder';
+    iconPreview.innerHTML = `<i class="${iconClass}"></i>`;
+});
+
+// Validate code field (only lowercase and underscore)
+document.getElementById('{{ form.code.id_for_label }}').addEventListener('input', function(e) {
+    e.target.value = e.target.value.toLowerCase().replace(/[^a-z_]/g, '');
+});
+</script>
+{% endblock %}

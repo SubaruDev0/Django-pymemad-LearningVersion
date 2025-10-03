@@ -1,0 +1,352 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+
+{% block title %}Permisos de {{ selected_user.get_full_name|default:selected_user.username }} - PyMEMAD{% endblock %}
+
+{% block dashboard_content %}
+    <div class="container-fluid px-0">
+        <!-- Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+            <div>
+                <h1 class="h2 mb-2">
+                    <i class="ai-user-check text-primary me-2"></i>
+                    Permisos del Usuario
+                </h1>
+                <div class="d-flex align-items-center">
+                    <img src="{% static 'assets/img/avatar/default.jpg' %}" class="rounded-circle me-2" width="32" alt="Avatar">
+                    <div>
+                        <strong>{{ selected_user.get_full_name|default:selected_user.username }}</strong>
+                        <small class="text-muted d-block">{{ selected_user.email }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex gap-2">
+                <a href="{% url 'permissions:permissions_list' %}" class="btn btn-secondary">
+                    <i class="ai-arrow-left me-2"></i>Volver
+                </a>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPermissionsModal">
+                    <i class="ai-edit-3 me-2"></i>Editar Permisos
+                </button>
+            </div>
+        </div>
+
+        <!-- User Info Cards -->
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="ai-info-circle text-info me-2"></i>
+                            Información del Usuario
+                        </h5>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">Usuario:</dt>
+                            <dd class="col-sm-8">{{ selected_user.username }}</dd>
+
+                            <dt class="col-sm-4">Email:</dt>
+                            <dd class="col-sm-8">{{ selected_user.email }}</dd>
+
+                            <dt class="col-sm-4">Nombre:</dt>
+                            <dd class="col-sm-8">{{ selected_user.get_full_name|default:"No especificado" }}</dd>
+
+                            {% if person %}
+                                <dt class="col-sm-4">RUT:</dt>
+                                <dd class="col-sm-8">{{ person.rut|default:"No especificado" }}</dd>
+
+                                <dt class="col-sm-4">Teléfono:</dt>
+                                <dd class="col-sm-8">{{ person.phone|default:"No especificado" }}</dd>
+                            {% endif %}
+
+                            <dt class="col-sm-4">Estado:</dt>
+                            <dd class="col-sm-8">
+                                {% if selected_user.is_active %}
+                                    <span class="badge bg-success">Activo</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactivo</span>
+                                {% endif %}
+                            </dd>
+
+                            <dt class="col-sm-4">Último acceso:</dt>
+                            <dd class="col-sm-8">{{ selected_user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">
+                            <i class="ai-award text-warning me-2"></i>
+                            Roles Asignados
+                        </h5>
+
+                        {% if selected_user.primary_role %}
+                            <div class="mb-3">
+                                <h6 class="fw-semibold">Rol Principal:</h6>
+                                <div class="d-flex align-items-center flex-wrap gap-2">
+        <span class="badge bg-primary fs-base">
+            {{ selected_user.primary_role.name }}
+        </span>
+                                    {% if selected_user.primary_role.governance == 'national' %}
+                                        <span class="badge bg-success-subtle text-success">
+            <i class="ai-globe me-1"></i>Nacional
+        </span>
+                                    {% elif selected_user.primary_role.governance == 'regional' %}
+                                        <span class="badge bg-warning-subtle text-warning">
+            <i class="ai-map-pin me-1"></i>Regional
+        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-warning mb-3">
+                                <i class="ai-alert-triangle me-2"></i>
+                                Sin rol principal asignado
+                            </div>
+                        {% endif %}
+
+                        {# Mostrar regiones permitidas #}
+                        {% if selected_user.primary_role %}
+                            {% if selected_user.primary_role.governance == 'national' %}
+                                <div class="mt-3">
+                                    <div class="alert alert-success mb-0">
+                                        <i class="ai-globe me-2"></i>
+                                        <strong>Acceso Nacional:</strong> Todas las regiones
+                                    </div>
+                                </div>
+                            {% elif selected_user.primary_role.governance == 'regional' %}
+                                {% with regions=selected_user.primary_role.allowed_regions.all %}
+                                    {% if regions %}
+                                        <div class="mt-3">
+                                            <h6 class="fw-semibold">Regiones Permitidas:</h6>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                {% for region in regions %}
+                                                    <span class="badge bg-success-subtle text-success">
+                                    <i class="ai-map-pin me-1"></i>
+                                    {{ region.name }}
+                                </span>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="mt-3">
+                                            <div class="alert alert-warning mb-0">
+                                                <i class="ai-alert-circle me-2"></i>
+                                                Sin regiones asignadas (rol regional)
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endwith %}
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Permissions by Module -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="ai-shield text-primary me-2"></i>
+                    Permisos por Módulo
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if modules_access %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>Módulo</th>
+                                <th>Ver</th>
+                                <th>Crear</th>
+                                <th>Modificar</th>
+                                <th>Eliminar</th>
+                                <th>Acciones Especiales</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in modules_access %}
+                                <tr>
+                                    <td>
+                                        <i class="{{ item.module.icon|default:'ai-folder' }} me-2"></i>
+                                        <strong>{{ item.module.name }}</strong>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ item.can_view|yesno:"✓,✗" }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ item.can_add|yesno:"✓,✗" }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ item.can_change|yesno:"✓,✗" }}
+                                    </td>
+                                    <td class="text-center">
+                                        {{ item.can_delete|yesno:"✓,✗" }}
+                                    </td>
+                                    <td>
+                                        {% for action in item.enabled_actions %}
+                                            {% if action not in "view,add,change,delete" %}
+                                                <span class="badge bg-info-subtle text-info me-1">{{ action }}</span>
+                                            {% endif %}
+                                        {% empty %}
+                                            <span class="text-muted">-</span>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="ai-info-circle me-2"></i>
+                        Este usuario no tiene permisos asignados en ningún módulo.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Audit Logs -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="ai-activity text-info me-2"></i>
+                    Historial de Cambios Recientes
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if audit_logs %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Acción</th>
+                                <th>Realizado por</th>
+                                <th>Detalles</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for log in audit_logs %}
+                                <tr>
+                                    <td>{{ log.performed_at|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <span class="badge bg-secondary">{{ log.get_action_display }}</span>
+                                    </td>
+                                    <td>{{ log.performed_by.get_full_name|default:log.performed_by.username }}</td>
+                                    <td>
+                                        {% if log.details %}
+                                            <small class="text-muted">{{ log.details|truncatewords:10 }}</small>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">No hay registros de auditoría disponibles.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit Permissions -->
+    <div class="modal fade" id="editPermissionsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Permisos de Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPermissionsForm">
+                        {% csrf_token %}
+                        <input type="hidden" name="user_id" value="{{ selected_user.id }}">
+
+                        <div class="mb-3">
+                            <label class="form-label">Rol Principal</label>
+                            <select class="form-select" name="primary_role">
+                                <option value="">Sin rol principal</option>
+                                {% for role in roles %}
+                                    <option value="{{ role.id }}" {% if selected_user.primary_role == role %}selected{% endif %}>
+                                        {{ role.name }} ({{ role.get_level_display }})
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Roles Adicionales</label>
+                            {% for role in roles %}
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="additional_roles" value="{{ role.id }}"
+                                           id="role_{{ role.id }}"
+                                           {% if role in selected_user.additional_roles.all %}checked{% endif %}>
+                                    <label class="form-check-label" for="role_{{ role.id }}">
+                                        {{ role.name }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Notas</label>
+                            <textarea class="form-control" name="notes" rows="3" placeholder="Notas sobre la asignación..."></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="savePermissions()">
+                        <i class="ai-save me-2"></i>Guardar Cambios
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        function savePermissions() {
+            const form = document.getElementById('editPermissionsForm');
+            const formData = new FormData(form);
+
+            // Convert to regular form submission format
+            const data = {
+                user_id: formData.get('user_id'),
+                role_id: formData.get('primary_role'),
+                notes: formData.get('notes')
+            };
+
+            fetch('{% url "permissions:assign_role" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                },
+                body: new URLSearchParams(data)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Error al guardar los permisos');
+                    console.error(error);
+                });
+        }
+    </script>
+{% endblock %}

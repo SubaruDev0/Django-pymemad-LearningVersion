@@ -37,14 +37,18 @@ urlpatterns += i18n_patterns(
     # Páginas principales del sitio
     path('', include('apps.landing.urls')),
     path('dashboard/', include('apps.panel.urls')),
-    
+
     # Autenticación y cuentas
     path('accounts/', include('apps.accounts.urls')),
+
+    # Sistema de permisos ACL
+    path('permissions/', include('apps.permissions.urls')),
     # Usar True muestra /es/ incluso para el idioma por defecto
     # Usar False ocultará el prefijo para el idioma por defecto
     prefix_default_language=True,
 )
 
-# # Manejadores de errores
-# handler404 = lambda request, exception: Custom404View.as_view()(request, exception=exception)
-# handler500 = custom_500
+# Manejadores de errores personalizados
+handler403 = 'apps.core.error_views.permission_denied_view'
+handler404 = 'apps.core.error_views.page_not_found_view'
+handler500 = 'apps.core.error_views.server_error_view'

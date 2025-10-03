@@ -1,0 +1,153 @@
+{% extends "email/base_email.html" %}
+{% load i18n %}
+
+{% block email_title %}{% trans "Bienvenido a PymeMad" %}{% endblock %}
+
+{% block header_icon %}
+    <div class="header-icon">
+        <div class="header-icon-inner">
+            <span>👋</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header_title %}{% trans "¡Bienvenido a PymeMad!" %}{% endblock %}
+{% block header_subtitle %}{% trans "Tu cuenta ha sido creada exitosamente" %}{% endblock %}
+
+{% block content %}
+    <h2 class="greeting">{% trans "Hola" %} {{ user.get_full_name|default:user.username }},</h2>
+
+    <p class="intro-text">
+        {% trans "¡Nos alegra mucho que te hayas unido a PymeMad! Tu cuenta ha sido creada exitosamente y ahora tienes acceso a todos nuestros servicios y beneficios para asociados." %}
+    </p>
+
+    <!-- Success alert -->
+    <div class="alert-card success">
+        <div>
+            <span class="alert-icon">✅</span>
+            <h3 class="alert-title">{% trans "Cuenta Activada" %}</h3>
+        </div>
+        <p class="alert-text">
+            {% trans "Tu cuenta está lista para usar. Puedes iniciar sesión con tu correo electrónico y contraseña." %}
+        </p>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="cta-container">
+        <a href="{{ protocol }}://{{ domain }}{% url 'accounts:login' %}" class="cta-button">
+            {% trans "Iniciar Sesión" %}
+        </a>
+    </div>
+
+    <!-- Info section about benefits -->
+    <div class="tips-section">
+        <h3 class="tips-title">
+            <span style="display: inline-block; width: 30px; height: 30px; background: #2c5530; color: white; border-radius: 50%; line-height: 30px; text-align: center; margin-right: 8px; vertical-align: middle;">⭐</span>
+            {% trans "Beneficios de tu membresía" %}
+        </h3>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">✓</div>
+                        </div>
+                    </td>
+                    <td class="tip-text">{% trans "Acceso a servicios exclusivos para asociados" %}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">✓</div>
+                        </div>
+                    </td>
+                    <td class="tip-text">{% trans "Gestión de contactos y relaciones comerciales" %}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">✓</div>
+                        </div>
+                    </td>
+                    <td class="tip-text">{% trans "Acceso a información y recursos del sector" %}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">✓</div>
+                        </div>
+                    </td>
+                    <td class="tip-text">{% trans "Soporte personalizado de nuestro equipo" %}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Getting started section -->
+    <div class="alternative-section">
+        <h4 class="alternative-title">{% trans "Primeros pasos" %}</h4>
+        <p style="color: #6b7280; font-size: 14px; line-height: 1.6;">
+            {% trans "Te recomendamos completar tu perfil con información de tu empresa para aprovechar al máximo todos los beneficios de la plataforma." %}
+        </p>
+    </div>
+
+    <!-- Contact info -->
+    <div class="contact-section">
+        <h3 class="contact-title">{% trans "¿Necesitas ayuda? Estamos aquí para ti" %}</h3>
+        <div class="contact-grid">
+            <table class="contact-table">
+                <tr>
+                    <td class="contact-cell">
+                        <p class="contact-name">Soporte Técnico</p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">📞</span>
+                            <a href="tel:+56999182981">+56 9 12345678</a>
+                        </p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">✉</span>
+                            <a href="mailto:soporte@pymemad.cl">soporte@pymemad.cl</a>
+                        </p>
+                    </td>
+                    <td class="contact-spacer"></td>
+                    <td class="contact-cell">
+                        <p class="contact-name">Atención Asociados</p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">📞</span>
+                            <a href="tel:+56984092585">+56 9 9876543</a>
+                        </p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">✉</span>
+                            <a href="mailto:asociados@pymemad.cl">asociados@pymemad.cl</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p style="text-align: center; color: #6b7280; font-size: 13px; margin: 16px 0 0 0;">
+            {% trans "Atención todos los días, incluyendo fiestas y domingos" %}
+        </p>
+    </div>
+{% endblock %}
+
+{% block footer_disclaimer %}
+    <p class="footer-disclaimer">
+        {% trans "Este es un mensaje automático de bienvenida. Por favor no respondas a este correo." %}<br>
+        {% trans "Si tienes alguna pregunta, contáctanos a través de los medios indicados arriba." %}
+    </p>
+{% endblock %}

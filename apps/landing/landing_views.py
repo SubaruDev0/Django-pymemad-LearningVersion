@@ -215,8 +215,8 @@ class ContactView(View):
                     send_contact_email_task.delay(contact_data)
                     print("Email task sent successfully to administrators")
                     # # Enviar email de confirmación al usuario
-                    # send_contact_confirmation_email_task.delay(contact_data)
-                    # print(f"Confirmation email task sent to {contact.email}")
+                    send_contact_confirmation_email_task.delay(contact_data)
+                    print(f"Confirmation email task sent to {contact.email}")
                 except ImportError:
                     print("Email tasks not available - tasks module not found")
                 except Exception as e:
@@ -291,7 +291,7 @@ class ContactView(View):
         # Si no es AJAX y hay errores, mostrar el formulario con errores
         context = {
             'form': form,
-            'title': _('Contacto - Loginfor'),
+            'title': _('Contacto - PymeMad'), #Cambio de Loginfor a PymeMad
             'page_title': _('¿Cómo podemos ayudarte?'),
             'description': _(
                 'Completa el formulario o contáctanos directamente a través de nuestros canales de comunicación.'),

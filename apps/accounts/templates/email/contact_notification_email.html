@@ -1,0 +1,133 @@
+{% extends "email/base_email.html" %}
+{% load i18n %}
+
+{% block email_title %}{% trans "Nuevo Contacto - PymeMad" %}{% endblock %}
+
+{% block header_icon %}
+    <div class="header-icon">
+        <div class="header-icon-inner">
+            <span>📬</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header_title %}{% trans "Nuevo Mensaje de Contacto" %}{% endblock %}
+{% block header_subtitle %}{% trans "Recibido desde el formulario web" %}{% endblock %}
+
+{% block content %}
+    <!-- Alert de nuevo contacto -->
+    <div class="alert-card info">
+        <div>
+            <span class="alert-icon">📨</span>
+            <h3 class="alert-title">{% trans "Nuevo contacto recibido" %}</h3>
+        </div>
+        <p class="alert-text">
+            {% trans "Se ha recibido un nuevo mensaje a través del formulario de contacto de la web." %}
+        </p>
+    </div>
+
+    <!-- Información del contacto -->
+    <div class="tips-section">
+        <h3 class="tips-title">
+            <span style="display: inline-block; width: 30px; height: 30px; background: #2c5530; color: white; border-radius: 50%; line-height: 30px; text-align: center; margin-right: 8px; vertical-align: middle;">📋</span>
+            {% trans "Información del Contacto" %}
+        </h3>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">👤</div>
+                        </div>
+                    </td>
+                    <td class="tip-text"><strong>{% trans "Nombre:" %}</strong> {{ name }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">✉</div>
+                        </div>
+                    </td>
+                    <td class="tip-text"><strong>{% trans "Email:" %}</strong> {{ email }}</td>
+                </tr>
+            </table>
+        </div>
+
+        {% if phone %}
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">📞</div>
+                        </div>
+                    </td>
+                    <td class="tip-text"><strong>{% trans "Teléfono:" %}</strong> {{ phone }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if company %}
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">🏢</div>
+                        </div>
+                    </td>
+                    <td class="tip-text"><strong>{% trans "Empresa:" %}</strong> {{ company }}</td>
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+
+        <div class="tip-item">
+            <table class="tip-table">
+                <tr>
+                    <td class="tip-icon-cell">
+                        <div class="tip-icon">
+                            <div class="tip-icon-inner">📝</div>
+                        </div>
+                    </td>
+                    <td class="tip-text"><strong>{% trans "Asunto:" %}</strong> {{ subject }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- Mensaje -->
+    <div class="alternative-section">
+        <h4 class="alternative-title">{% trans "Mensaje" %}</h4>
+        <p style="color: #4b5563; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">{{ message }}</p>
+    </div>
+
+    <!-- CTA para responder -->
+    <div class="cta-container">
+        <a href="mailto:{{ email }}?subject=Re: {{ subject }}" class="cta-button">
+            {% trans "Responder al contacto" %}
+        </a>
+    </div>
+
+    <!-- Información adicional -->
+    <div style="text-align: center; margin-top: 20px;">
+        <p style="color: #6b7280; font-size: 13px;">
+            <strong>{% trans "Fecha de recepción:" %}</strong> {% now "j \d\e F \d\e Y, H:i" %}<br>
+            <strong>{% trans "Origen:" %}</strong> www.pymemad.cl
+        </p>
+    </div>
+{% endblock %}
+
+{% block footer_disclaimer %}
+    <p class="footer-disclaimer">
+        {% trans "Este es un mensaje automático del sistema de contacto. No respondas a este correo." %}<br>
+        {% trans "Para responder al contacto, usa el botón 'Responder al contacto' de arriba." %}
+    </p>
+{% endblock %}

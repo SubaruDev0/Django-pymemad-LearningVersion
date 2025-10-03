@@ -1,0 +1,204 @@
+{% extends 'base_landing.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}403 - {% trans "Acceso Denegado - PyMEMAD" %}{% endblock %}
+{% block description %}{% trans "No tienes permisos para acceder a esta página" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Reset para página */
+    body {
+        overflow-x: hidden;
+    }
+
+    /* Ocultar header y footer del base template */
+    .page-wrapper > header,
+    .page-wrapper > footer,
+    .btn-scroll-top {
+        display: none !important;
+    }
+
+    /* Contenedor principal */
+    .error-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    /* Contenedor del mensaje */
+    .error-wrapper {
+        width: 100%;
+        max-width: 526px;
+        background: white;
+        padding: 3rem 2.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    [data-bs-theme="dark"] .error-wrapper {
+        background: #1f2228;
+    }
+
+    .brand-logo {
+        max-width: 180px;
+        height: auto;
+        margin-bottom: 2rem;
+    }
+
+    .error-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 2rem;
+        background: #37715d;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    .error-icon i {
+        color: white;
+        font-size: 2.5rem;
+        animation: shake 3s ease-in-out infinite;
+    }
+
+    .error-code {
+        font-size: 5rem;
+        font-weight: 800;
+        color: #37715d;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+
+    /* Animación de entrada */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Animación de pulso para el círculo */
+    @keyframes pulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(55, 113, 93, 0.4);
+        }
+        50% {
+            box-shadow: 0 0 0 20px rgba(55, 113, 93, 0);
+        }
+    }
+
+    /* Animación de sacudida para el candado */
+    @keyframes shake {
+        0%, 100% {
+            transform: rotate(0deg);
+        }
+        10%, 30% {
+            transform: rotate(-10deg);
+        }
+        20%, 40% {
+            transform: rotate(10deg);
+        }
+        50%, 90% {
+            transform: rotate(0deg);
+        }
+    }
+
+    .error-wrapper {
+        animation: fadeInUp 0.6s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <div class="error-wrapper">
+        <!-- Logo -->
+        <div class="text-center">
+            <img src="{% static 'assets/img/logo_pymemad.webp' %}" alt="PyMEMAD" class="brand-logo">
+        </div>
+
+        <!-- Icono de error -->
+        <div class="error-icon">
+            <i class="ai-lock-closed"></i>
+        </div>
+
+        <!-- Código de error -->
+        <div class="error-code">403</div>
+
+        <!-- Mensaje -->
+        <h1 class="h3 mb-3">{% trans "Acceso Denegado" %}</h1>
+        <p class="text-muted mb-4">
+            {% if user.is_authenticated %}
+                {% trans "No tienes los permisos necesarios para acceder a esta página." %}
+            {% else %}
+                {% trans "Necesitas iniciar sesión con una cuenta autorizada para acceder a esta página." %}
+            {% endif %}
+        </p>
+
+        <!-- Información del usuario (si está autenticado) -->
+        {% if user.is_authenticated %}
+        <div class="alert alert-light text-start mb-4">
+            <h6 class="alert-heading">
+                <i class="ai-info-circle me-2"></i>
+                {% trans "Información de tu cuenta" %}
+            </h6>
+            <ul class="mb-0 ps-3 small">
+                <li>
+                    <strong>{% trans "Usuario" %}:</strong> {{ user.username }}
+                </li>
+                {% if user.primary_role %}
+                <li>
+                    <strong>{% trans "Rol" %}:</strong> {{ user.primary_role.name }}
+                </li>
+                {% endif %}
+                <li>
+                    <strong>{% trans "Email" %}:</strong> {{ user.email }}
+                </li>
+            </ul>
+            <hr class="my-2">
+            <p class="mb-0 small text-muted">
+                <i class="ai-alert-circle me-1"></i>
+                {% trans "Si crees que esto es un error, contacta al administrador del sistema." %}
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Botones -->
+        <div class="d-grid gap-2">
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard:dashboard' %}" class="btn btn-primary">
+                    <i class="ai-home me-2"></i>
+                    {% trans "Ir al Panel" %}
+                </a>
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                    <i class="ai-arrow-left me-2"></i>
+                    {% trans "Volver" %}
+                </a>
+            {% else %}
+                <a href="{% url 'accounts:login' %}" class="btn btn-primary">
+                    <i class="ai-log-in me-2"></i>
+                    {% trans "Iniciar Sesión" %}
+                </a>
+                <a href="{% url 'landing:home' %}" class="btn btn-outline-secondary">
+                    <i class="ai-home me-2"></i>
+                    {% trans "Ir al Inicio" %}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

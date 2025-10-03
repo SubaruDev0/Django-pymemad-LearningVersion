@@ -11,6 +11,7 @@ from django_filters import ChoiceFilter, ModelChoiceFilter, CharFilter
 
 from apps.accounts.models import User
 from apps.landing.models import Post, Category, Tag, Comment
+from apps.landing.models import ContactMessage  # nuevo import
 
 
 # =====================================================================
@@ -226,3 +227,68 @@ class CommentFilter(django_filters.FilterSet):
     class Meta:
         model = Comment
         fields = ['active', 'post', 'created_date_range']
+
+# =====================================================================
+# FILTROS DE MENSAJES DE CONTACTO
+# =====================================================================
+
+
+class ContactMessageFilter(django_filters.FilterSet):
+    """
+    Filtro para mensajes de contacto por tema, estado y fechas.
+    """
+    subject = ChoiceFilter(
+        choices=ContactMessage.SUBJECT_CHOICES,
+        label="Tema",
+        widget=forms.Select(attrs={'class': 'form-control select2-subject'}),
+        empty_label="Todos los temas"
+    )
+    
+    is_read = ChoiceFilter(
+        choices=(
+            (True, 'Leídos'),
+            (False, 'No leídos')
+        ),
+        label="Estado lectura",
+        widget=forms.Select(attrs={'class': 'form-control select2-status'}),
+        empty_label="Todos los estados"
+    )
+    
+    is_answered = ChoiceFilter(
+        choices=(
+            (True, 'Respondidos'),
+            (False, 'Pendientes')
+        ),
+        label="Estado respuesta",
+        widget=forms.Select(attrs={'class': 'form-control select2-status'}),
+        empty_label="Todos los estados"
+    )
+
+    created_date_range = CharFilter(
+        label='Rango de Fechas',
+        method='filter_by_date_range',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control flatpickr-input',
+            'placeholder': 'Seleccionar rango de fechas',
+            'autocomplete': 'off'
+        })
+    )
+
+    def filter_by_date_range(self, queryset, name, value):
+        if not value:
+            return queryset
+
+        try:
+            start_date, end_date = value.split(' a ')
+            start_date = parse_date(start_date.strip())
+            end_date = parse_date(end_date.strip())
+            if not start_date or not end_date:
+                return queryset
+
+            return queryset.filter(created_at__date__range=(start_date, end_date))
+        except (ValueError, IndexError):
+            return queryset
+
+    class Meta:
+        model = ContactMessage
+        fields = ['subject', 'is_read', 'is_answered', 'created_date_range']

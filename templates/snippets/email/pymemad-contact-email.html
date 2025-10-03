@@ -4,329 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Contacto - PymeMad</title>
-    <!--[if mso]>
-    <noscript>
-        <xml>
-            <o:OfficeDocumentSettings>
-                <o:PixelsPerInch>96</o:PixelsPerInch>
-            </o:OfficeDocumentSettings>
-        </xml>
-    </noscript>
-    <![endif]-->
     <style>
-        /* Reset styles */
-        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
-        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
-        img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-
-        /* Main styles */
         body {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            min-width: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
             line-height: 1.6;
-            color: #333333;
-            background-color: #f5f7fa;
+            color: #333;
+            background-color: #f4f4f4;
         }
-
-        .email-wrapper {
-            width: 100%;
-            background-color: #f5f7fa;
-            padding: 40px 0;
-        }
-
-        .email-container {
+        .container {
             max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        /* Header with gradient */
         .header {
-            background: #2f2f2ff2;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .logo-container {
-            margin-bottom: 20px;
-        }
-
-        .logo {
-            width: 180px;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .header-title {
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: 600;
-            margin: 20px 0 8px 0;
-            letter-spacing: -0.5px;
-        }
-
-        .header-subtitle {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-            margin: 0;
-        }
-
-        /* Content area */
-        .content {
-            padding: 40px 30px;
-        }
-
-        .section-title {
-            color: #2c5530;
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0 0 24px 0;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #e8f5e9;
-            letter-spacing: -0.3px;
-        }
-
-        /* Info cards */
-        .info-card {
-            background-color: #fafbfc;
-            border-radius: 8px;
-            padding: 16px;
-            margin-bottom: 12px;
-            border-left: 3px solid #2c5530;
-        }
-
-        .info-label {
-            font-size: 12px;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-            font-weight: 600;
-        }
-
-        .info-value {
-            font-size: 15px;
-            color: #1f2937;
-            margin: 0;
-            word-break: break-word;
-        }
-
-        .info-value a {
-            color: #2c5530;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .info-value a:hover {
-            text-decoration: underline;
-        }
-
-        /* Message section */
-        .message-section {
-            background: linear-gradient(135deg, #f0fdf4 0%, #e8f5e9 100%);
-            border-radius: 8px;
-            padding: 24px;
-            margin: 24px 0;
-            border: 1px solid #d1e7d4;
-        }
-
-        .message-title {
-            color: #2c5530;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin: 0 0 12px 0;
-        }
-
-        .message-content {
-            color: #374151;
-            font-size: 15px;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            margin: 0;
-        }
-
-        /* Priority badge */
-        .priority-badge {
-            display: inline-block;
-            background-color: #2c5530;
+            background: #2f2f2f;
             color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .priority-badge.high {
-            background-color: #dc2626;
-        }
-
-        .priority-badge.medium {
-            background-color: #f59e0b;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: #f8fafc;
-            padding: 30px;
+            padding: 20px;
             text-align: center;
-            border-top: 1px solid #e5e7eb;
         }
-
-        .footer-text {
-            color: #6b7280;
-            font-size: 13px;
-            margin: 0 0 8px 0;
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
         }
-
-        .footer-date {
-            color: #9ca3af;
+        .content {
+            padding: 30px;
+        }
+        .field {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .field:last-child {
+            border-bottom: none;
+        }
+        .label {
+            font-weight: bold;
+            color: #666;
             font-size: 12px;
-            margin: 8px 0 0 0;
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
-
-        /* Divider */
-        .divider {
-            height: 1px;
-            background-color: #e5e7eb;
-            margin: 24px 0;
+        .value {
+            color: #333;
+            font-size: 14px;
         }
-
-        /* Responsive */
-        @media only screen and (max-width: 600px) {
-            .email-container {
-                width: 100% !important;
-                border-radius: 0 !important;
-            }
-            .header, .content, .footer {
-                padding-left: 20px !important;
-                padding-right: 20px !important;
-            }
-            .header-title {
-                font-size: 20px !important;
-            }
-            .logo {
-                width: 140px !important;
-            }
+        .message-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .footer {
+            background: #f8f8f8;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            background: #2c5530;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="email-wrapper">
-        <div class="email-container">
-            <!-- Header with logo -->
-            <div class="header">
-                <div class="logo-container">
-                    <img src="https://pymemad-cdn.s3.amazonaws.com/static/assets/img/logo_pymemad_inverter.webp"
-                         alt="PymeMad Logo"
-                         class="logo"
-                         style="width: 180px; height: auto;">
-                </div>
-                <h1 class="header-title">Nuevo Mensaje de Contacto</h1>
-                <p class="header-subtitle">La Asociación Gremial de Pequeñas y Medianas Industriales de la Madera</p>
+    <div class="container">
+        <div class="header">
+            <h1>Nuevo Mensaje de Contacto</h1>
+        </div>
+
+        <div class="content">
+            <div class="field">
+                <div class="label">Nombre</div>
+                <div class="value">{{ name }}</div>
             </div>
 
-            <!-- Main content -->
-            <div class="content">
-                <h2 class="section-title">Información del Contacto</h2>
+            <div class="field">
+                <div class="label">Email</div>
+                <div class="value">{{ email }}</div>
+            </div>
 
-                <!-- Contact details in cards -->
-                <div class="info-card">
-                    <div class="info-label">Nombre Completo</div>
-                    <p class="info-value">{{ name }}</p>
-                </div>
+            {% if phone %}
+            <div class="field">
+                <div class="label">Teléfono</div>
+                <div class="value">{{ phone }}</div>
+            </div>
+            {% endif %}
 
-                <div class="info-card">
-                    <div class="info-label">Correo Electrónico</div>
-                    <p class="info-value">
-                        <a href="mailto:{{ email }}">{{ email }}</a>
-                    </p>
-                </div>
+            {% if company %}
+            <div class="field">
+                <div class="label">Empresa</div>
+                <div class="value">{{ company }}</div>
+            </div>
+            {% endif %}
 
-                {% if phone %}
-                <div class="info-card">
-                    <div class="info-label">Teléfono</div>
-                    <p class="info-value">{{ phone|default:"No proporcionado" }}</p>
-                </div>
-                {% endif %}
-
-                {% if company %}
-                <div class="info-card">
-                    <div class="info-label">Empresa</div>
-                    <p class="info-value">{{ company|default:"No especificada" }}</p>
-                </div>
-                {% endif %}
-
-                <div class="info-card">
-                    <div class="info-label">Asunto</div>
-                    <p class="info-value">
-                        {% if subject == 'join' %}
-                            <span class="priority-badge high">Quiero ser socio</span>
-                        {% elif subject == 'advertising' %}
-                            <span class="priority-badge medium">Publicidad en revista/web</span>
-                        {% elif subject == 'services' %}
-                            <span class="priority-badge">Consulta sobre servicios</span>
-                        {% elif subject == 'events' %}
-                            <span class="priority-badge">Eventos y capacitaciones</span>
-                        {% elif subject == 'commercial' %}
-                            <span class="priority-badge medium">Oportunidades comerciales</span>
-                        {% elif subject == 'press' %}
-                            <span class="priority-badge">Prensa y comunicaciones</span>
-                        {% elif subject == 'support' %}
-                            <span class="priority-badge">Soporte técnico</span>
-                        {% elif subject == 'complaints' %}
-                            <span class="priority-badge high">Reclamos, sugerencias o denuncias</span>
-                        {% else %}
-                            <span class="priority-badge">{{ subject }}</span>
-                        {% endif %}
-                    </p>
-                </div>
-
-                <!-- Message section -->
-                <div class="message-section">
-                    <h3 class="message-title">Mensaje</h3>
-                    <p class="message-content">{{ message }}</p>
-                </div>
-
-                <div class="divider"></div>
-
-                <!-- Quick action note -->
-                <div style="background-color: #fef3c7; border-radius: 8px; padding: 16px; border-left: 3px solid #f59e0b;">
-                    <p style="margin: 0; color: #92400e; font-size: 14px;">
-                        <strong>⚡ Acción requerida:</strong>
-                        {% if subject == 'join' or subject == 'complaints' %}
-                            Por favor, responder a este contacto dentro de las próximas 24 horas hábiles.
-                        {% else %}
-                            Por favor, responder a este contacto dentro de las próximas 24 horas hábiles.
-                        {% endif %}
-                    </p>
+            <div class="field">
+                <div class="label">Asunto</div>
+                <div class="value">
+                    <span class="badge">{{ subject_display|default:subject }}</span>
                 </div>
             </div>
 
-            <!-- Footer -->
-            <div class="footer">
-                <p class="footer-text">
-                    Este mensaje fue enviado desde el formulario de contacto de
-                    <strong>www.pymemad.cl</strong>
-                </p>
-                <p class="footer-date">
-                    Fecha y hora: {% now "d/m/Y - H:i" %} hrs
-                </p>
-                <p style="color: #9ca3af; font-size: 11px; margin-top: 16px;">
-                    PymeMad - La Asociación Gremial de Pequeñas y Medianas Industriales de la Madera<br>
-                    Balmaceda, Región de Los Lagos, Chile
-                </p>
+            <div class="message-box">
+                <div class="label">Mensaje</div>
+                <div class="value">{{ message }}</div>
             </div>
+        </div>
+
+        <div class="footer">
+            <p>Este mensaje fue enviado desde www.pymemad.cl</p>
+            <p>Fecha: {% now "d/m/Y H:i" %}</p>
         </div>
     </div>
 </body>

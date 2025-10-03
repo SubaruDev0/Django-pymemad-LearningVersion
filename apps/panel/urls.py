@@ -76,4 +76,13 @@ urlpatterns = [
     path('posts/comments/<int:pk>/delete/', post_views.CommentDeleteView.as_view(), name='comment-delete'),
     path('posts/comments/<int:pk>/update/', post_views.CommentUpdateView.as_view(), name='comment-update'),
 
+    # =====================================================================
+    # GESTIÓN DE CONTACTOS
+    # =====================================================================
+    path('contacts/', dashboard_views.ContactMessageListView.as_view(), name='contact-list'),
+    path('contacts/<int:pk>/delete/', dashboard_views.ContactMessageDeleteView.as_view(), name='contact-delete'),
+    path('contacts/export/', dashboard_views.ContactMessageExportView.as_view(), name='contact-export'),
+    path('contacts/<int:pk>/mark-read/', dashboard_views.ContactMarkReadView.as_view(), name='contact-mark-read'), #visto o no  
+    path('contacts/<int:pk>/answer/', dashboard_views.ContactMessageAnswerView.as_view(), name='contact-answer'), # RESPONDIDO O NO
+    path('contacts/<int:pk>/replies/', dashboard_views.ContactRepliesView.as_view(), name='contact-replies'), # Obtener respuestas
 ]

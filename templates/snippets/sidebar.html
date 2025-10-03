@@ -1,0 +1,70 @@
+{% load static %}
+
+<div class="offcanvas-lg offcanvas-start" id="sidebarAccount">
+    <button class="btn-close position-absolute top-0 end-0 mt-3 me-3 d-lg-none" type="button" data-bs-dismiss="offcanvas" data-bs-target="#sidebarAccount" aria-label="Close"></button>
+    <div class="offcanvas-body sidebar-compact">
+
+        {% comment %}
+        Sistema de menús dinámico basado en roles y permisos
+        Los módulos se muestran según los permisos del usuario
+        {% endcomment %}
+
+        {% if user_modules %}
+            <!-- Módulos agrupados por categoría -->
+            {% regroup user_modules by category as module_groups %}
+
+            {% for group in module_groups %}
+                {% if group.list %}
+                <nav class="nav flex-column pb-2 pb-lg-4 mb-3">
+                    <h4 class="fs-xs fw-medium text-body-secondary text-uppercase pb-1 mb-2">
+                        {{ group.grouper|default:"General" }}
+                    </h4>
+
+                    {% for module in group.list %}
+                        {% if module.is_parent %}
+                            <!-- Módulo con submódulos -->
+                            <a class="nav-link fw-semibold py-2 px-0 d-flex align-items-center {% if module.is_active %}active{% endif %}"
+                               href="#"
+                               data-bs-toggle="collapse"
+                               data-bs-target="#{{ module.code }}Submenu"
+                               aria-expanded="{% if module.is_expanded %}true{% else %}false{% endif %}">
+                                <i class="{{ module.icon }} fs-5 opacity-60 me-2"></i>
+                                {{ module.name }}
+                                <i class="ai-chevron-down fs-base ms-auto"></i>
+                            </a>
+                            <div class="collapse {% if module.is_expanded %}show{% endif %}" id="{{ module.code }}Submenu">
+                                <nav class="nav flex-column ms-4">
+                                    {% for submodule in module.submodules %}
+                                        {% if submodule.visible %}
+                                        <a class="nav-link fw-medium py-1 px-0 {% if submodule.is_active %}active{% endif %}"
+                                           href="{% if submodule.url and submodule.url != '#' %}{% url submodule.url %}{% else %}#{% endif %}">
+                                            <i class="{{ submodule.icon|default:'ai-circle' }} fs-base opacity-60 me-2"></i>
+                                            <small>{{ submodule.name }}</small>
+                                        </a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </nav>
+                            </div>
+                        {% else %}
+                            <!-- Módulo simple -->
+                            <a class="nav-link fw-semibold py-2 px-0 {% if module.is_active %}active{% endif %}"
+                               href="{% if module.url and module.url != '#' %}{% url module.url %}{% else %}#{% endif %}">
+                                <i class="{{ module.icon }} fs-5 opacity-60 me-2"></i>
+                                {{ module.name }}
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </nav>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Cerrar sesión -->
+            <nav class="nav flex-column">
+                <a class="nav-link fw-semibold py-2 px-0" href="{% url 'accounts:logout' %}">
+                    <i class="ai-logout fs-5 opacity-60 me-2"></i>
+                    Cerrar Sesión
+                </a>
+            </nav>
+        {% endif %}
+    </div>
+</div>

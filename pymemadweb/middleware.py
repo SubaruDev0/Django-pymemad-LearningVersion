@@ -22,7 +22,9 @@ class SmartCacheInvalidationMiddleware:
         response = self.get_response(request)
 
         # Si es una petición POST/PUT/DELETE desde el panel
+        # Excluir rutas de perfil de usuario que no afectan cache público
         if (request.method in ['POST', 'PUT', 'DELETE', 'PATCH'] and
+                not request.path.startswith('/accounts/profile/') and
                 (request.path.startswith('/dashboard/') or
                  request.path.startswith('/admin/') or
                  '/update/' in request.path or

@@ -337,11 +337,12 @@ class ContactMessage(TimestampedModel):
         ('other', _('Otro tema')),
     ]
 
-    name = models.CharField(_('Nombre completo'), max_length=100)
+    # Aumentar longitudes según Loginfor
+    name = models.CharField(_('Nombre completo'), max_length=255)  # ← De 100 a 255
     email = models.EmailField(_('Correo electrónico'))
     phone = models.CharField(_('Teléfono'), max_length=20, blank=True)
-    company = models.CharField(_('Empresa'), max_length=100, blank=True)
-    subject = models.CharField(_('Asunto'), max_length=20, choices=SUBJECT_CHOICES)
+    company = models.CharField(_('Empresa'), max_length=255, blank=True)  # ← De 100 a 255
+    subject = models.CharField(_('Asunto'), max_length=50, choices=SUBJECT_CHOICES)  # ← De 20 a 50
     message = models.TextField(_('Mensaje'))
     privacy_accepted = models.BooleanField(_('Acepta política de privacidad'), default=False)
     is_read = models.BooleanField(_('Leído'), default=False)
@@ -355,3 +356,33 @@ class ContactMessage(TimestampedModel):
 
     def __str__(self):
         return f'{self.name} - {self.get_subject_display()}'
+
+
+class ContactReply(TimestampedModel):
+    """Modelo para almacenar respuestas a mensajes de contacto"""
+    contact_message = models.ForeignKey(
+        ContactMessage,
+        on_delete=models.CASCADE,
+        related_name='replies',
+        verbose_name=_('Mensaje de contacto')
+    )
+    subject = models.CharField(_('Asunto'), max_length=200)
+    message = models.TextField(_('Mensaje de respuesta'))
+    sent_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        verbose_name=_('Enviado por')
+    )
+    sent_at = models.DateTimeField(_('Fecha de envío'), auto_now_add=True)
+    email_sent = models.BooleanField(_('Email enviado'), default=False)
+    email_error = models.TextField(_('Error de envío'), blank=True)
+
+    class Meta:
+        ordering = ('-sent_at',)
+        verbose_name = _('respuesta de contacto')
+        verbose_name_plural = _('respuestas de contacto')
+
+    def __str__(self):
+        return f'Respuesta a {self.contact_message.name} - {self.sent_at.strftime("%Y-%m-%d")}'

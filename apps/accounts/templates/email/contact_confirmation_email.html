@@ -1,0 +1,75 @@
+{% extends "email/base_email.html" %}
+{% load i18n %}
+
+{% block email_title %}{% trans "Confirmación de contacto - PymeMad" %}{% endblock %}
+
+{% block header_icon %}
+    <div class="header-icon">
+        <div class="header-icon-inner">
+            <span>✅</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block header_title %}{% trans "¡Mensaje Recibido!" %}{% endblock %}
+{% block header_subtitle %}{% trans "Gracias por contactarnos" %}{% endblock %}
+
+{% block content %}
+    <h2 class="greeting">{% trans "Estimado(a)" %} {{ name }},</h2>
+
+    <p class="intro-text">
+        {% trans "Hemos recibido exitosamente tu mensaje. Nuestro equipo lo revisará y te responderá a la brevedad posible." %}
+    </p>
+
+    <!-- Alert de confirmación -->
+    <div class="alert-card success">
+        <div>
+            <span class="alert-icon">📧</span>
+            <h3 class="alert-title">{% trans "Mensaje recibido correctamente" %}</h3>
+        </div>
+        <p class="alert-text">
+            {% trans "Tu consulta es importante para nosotros y nos comprometemos a brindarte una respuesta dentro de las próximas 24-48 horas hábiles." %}
+        </p>
+    </div>
+
+    <!-- Resumen del mensaje -->
+    <div class="alternative-section">
+        <h4 class="alternative-title">{% trans "Resumen de tu mensaje" %}</h4>
+        <p style="color: #4b5563; font-size: 14px; margin: 8px 0;">
+            <strong>{% trans "Asunto:" %}</strong> {{ subject }}<br>
+            <strong>{% trans "Fecha:" %}</strong> {% now "j \d\e F \d\e Y, H:i" %}
+        </p>
+    </div>
+
+    <!-- Información de contacto directo -->
+    <div class="contact-section">
+        <h3 class="contact-title">{% trans "¿Necesitas contactarnos con urgencia?" %}</h3>
+        <div class="contact-grid">
+            <table class="contact-table">
+                <tr>
+                    <td class="contact-cell" style="width: 100%;">
+                        <p class="contact-name">{% trans "Atención al Cliente" %}</p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">📞</span>
+                            <a href="tel:+56999182981">+56 9 12345678</a>
+                        </p>
+                        <p class="contact-detail">
+                            <span class="contact-icon">✉</span>
+                            <a href="mailto:contacto@pymemad.cl">contacto@pymemad.cl</a>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p style="text-align: center; color: #6b7280; font-size: 13px; margin: 16px 0 0 0;">
+            {% trans "Horario de atención: Lunes a Viernes, 9:00 - 18:00" %}
+        </p>
+    </div>
+{% endblock %}
+
+{% block footer_disclaimer %}
+    <p class="footer-disclaimer">
+        {% trans "Este es un mensaje automático de confirmación. Por favor no respondas a este correo." %}<br>
+        {% trans "Si tienes alguna pregunta adicional, contáctanos a través de los medios indicados." %}
+    </p>
+{% endblock %}

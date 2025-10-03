@@ -1,0 +1,562 @@
+{% extends "base_dashboard.html" %}
+{% load static %}
+{% block title %}Configuración de Perfil{% endblock %}
+
+{% block extra_css %}
+<style>
+    .avatar-container {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto;
+    }
+    .avatar-img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border: 3px solid #e0e0e0;
+        border-radius: 50%;
+    }
+    .avatar-upload-btn {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #e0e0e0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    /* Corrección de padding en inputs */
+    .form-control.ps-5 {
+        padding-left: 1rem !important;
+    }
+
+    /* Asegurar que los labels tengan margen adecuado */
+    .form-label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    /* Corrección específica para el campo de avatar (opcional) */
+    #id_avatar {
+        padding-left: 0.75rem !important;
+    }
+    .avatar-upload-btn:hover {
+        background: #f0f0f0;
+        transform: scale(1.1);
+    }
+    /* Modo oscuro: Asegurar visibilidad del icono */
+    [data-bs-theme="dark"] .avatar-upload-btn {
+        background: rgba(30, 30, 30, 0.9);
+        border-color: #555;
+    }
+    [data-bs-theme="dark"] .avatar-upload-btn:hover {
+        background: #444;
+    }
+    [data-bs-theme="dark"] .avatar-upload-btn i {
+        color: white;
+    }
+
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: none;
+        padding: 0.75rem 1.5rem;
+    }
+    .nav-tabs .nav-link.active {
+        color: #0d6efd;
+        background: transparent;
+        border-bottom: 3px solid #0d6efd;
+    }
+    .tab-content {
+        padding-top: 2rem;
+    }
+
+    /* Eliminar espacio extra antes de los inputs */
+    .form-control {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    .form-label {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2 class="h3 mb-1">Configuración de Perfil</h2>
+        <p class="text-muted">Administra tu información personal y configuración de cuenta</p>
+    </div>
+
+    <!-- Tabs de navegación -->
+    <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="general-tab" data-bs-toggle="tab" data-bs-target="#general" type="button" role="tab">
+                <i class="ai-user me-2"></i>Información General
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="security-tab" data-bs-toggle="tab" data-bs-target="#security" type="button" role="tab">
+                <i class="ai-lock me-2"></i>Seguridad
+            </button>
+        </li>
+    </ul>
+
+    <!-- Contenido de las tabs -->
+    <div class="tab-content" id="profileTabsContent">
+        <!-- Tab de Información General -->
+        <div class="tab-pane fade show active" id="general" role="tabpanel">
+            <div class="row">
+                <!-- Columna izquierda: Avatar -->
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h5 class="card-title mb-4">Foto de Perfil</h5>
+                            
+                            <div class="avatar-container mx-auto mb-3">
+                                <img id="avatarPreview" 
+                                     src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static 'assets/img/avatar/default.jpg' %}{% endif %}" 
+                                     alt="Avatar" 
+                                     class="rounded-circle avatar-img">
+                                <label for="id_avatar" class="avatar-upload-btn">
+                                    <i class="ai-camera"></i>
+                                </label>
+                            </div>
+                            
+                            <form id="avatarForm" enctype="multipart/form-data" style="display:none;">
+                                {% csrf_token %}
+                                {{ avatar_form.avatar }}
+                            </form>
+                            
+                            <p class="text-muted small mb-3">JPG, PNG o GIF. Máximo 5MB.</p>
+                            
+                            {% if user.avatar %}
+                            <button type="button" class="btn btn-outline-danger btn-sm" id="deleteAvatarBtn">
+                                <i class="ai-trash me-1"></i>Eliminar foto
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Columna derecha: Formulario de perfil -->
+                <div class="col-lg-8 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Información Personal</h5>
+                            
+                            <form id="profileForm">
+                                {% csrf_token %}
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ profile_form.first_name.id_for_label }}" class="form-label">
+                                            {{ profile_form.first_name.label }}
+                                        </label>
+                                        {{ profile_form.first_name }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ profile_form.last_name.id_for_label }}" class="form-label">
+                                            {{ profile_form.last_name.label }}
+                                        </label>
+                                        {{ profile_form.last_name }}
+                                    </div>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <label for="{{ profile_form.email.id_for_label }}" class="form-label">
+                                            {{ profile_form.email.label }}
+                                        </label>
+                                        {{ profile_form.email }}
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="{{ profile_form.phone.id_for_label }}" class="form-label">
+                                            {{ profile_form.phone.label }}
+                                        </label>
+                                        {{ profile_form.phone }}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ profile_form.bio.id_for_label }}" class="form-label">
+                                        {{ profile_form.bio.label }}
+                                    </label>
+                                    {{ profile_form.bio }}
+                                    <small class="form-text text-muted">{{ profile_form.bio.help_text }}</small>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ai-check me-2"></i>Guardar Cambios
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab de Seguridad -->
+        <div class="tab-pane fade" id="security" role="tabpanel">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Cambiar Contraseña</h5>
+                            
+                            <form id="passwordForm">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="{{ password_form.old_password.id_for_label }}" class="form-label">
+                                        {{ password_form.old_password.label }}
+                                    </label>
+                                    {{ password_form.old_password }}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ password_form.new_password1.id_for_label }}" class="form-label">
+                                        {{ password_form.new_password1.label }}
+                                    </label>
+                                    {{ password_form.new_password1 }}
+                                    <div class="form-text">{{ password_form.new_password1.help_text|safe }}</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="{{ password_form.new_password2.id_for_label }}" class="form-label">
+                                        {{ password_form.new_password2.label }}
+                                    </label>
+                                    {{ password_form.new_password2 }}
+                                </div>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="ai-lock me-2"></i>Actualizar Contraseña
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <i class="ai-shield text-primary me-2"></i>Consejos de Seguridad
+                            </h6>
+                            <ul class="small mb-0">
+                                <li>Usa una contraseña única y segura</li>
+                                <li>No compartas tu contraseña con nadie</li>
+                                <li>Cambia tu contraseña regularmente</li>
+                                <li>Evita usar información personal en tu contraseña</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+    // Actualizar perfil
+    $('#profileForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: '{% url "accounts:profile-update" %}',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                }
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    let errorMessages = '';
+                    for (let field in xhr.responseJSON.errors) {
+                        errorMessages += xhr.responseJSON.errors[field].messages.join('<br>') + '<br>';
+                    }
+                    Swal.fire({
+                        title: 'Error',
+                        html: errorMessages,
+                        icon: 'error'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Ocurrió un error al actualizar el perfil',
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+    });
+
+    // ✅ MEJORADO: Actualizar avatar con loading state
+    $('#id_avatar').on('change', function() {
+        const file = this.files[0];
+        if (file) {
+            // Validar tamaño
+            if (file.size > 5 * 1024 * 1024) {
+                Swal.fire({
+                    title: 'Error',
+                    text: 'La imagen no debe superar los 5MB',
+                    icon: 'error'
+                });
+                this.value = ''; // Limpiar el input
+                return;
+            }
+
+            // ✅ MOSTRAR LOADING EN HEADER
+            $('.header-avatar-loading').removeClass('d-none');
+            $('.header-avatar-img').css('opacity', '0.3');
+            
+            // Preview de la imagen
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                $('#avatarPreview').attr('src', e.target.result);
+            };
+            reader.readAsDataURL(file);
+
+            // Crear FormData manualmente para asegurar que el archivo se envíe
+            const formData = new FormData();
+            formData.append('csrfmiddlewaretoken', $('[name=csrfmiddlewaretoken]').val());
+            formData.append('avatar', file);
+            
+            // ✅ MOSTRAR MENSAJE DE CARGA
+            Swal.fire({
+                title: 'Subiendo imagen...',
+                text: 'Por favor espera mientras procesamos tu foto',
+                icon: 'info',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            $.ajax({
+                url: '{% url "accounts:avatar-update" %}',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // ✅ OCULTAR LOADING
+                    $('.header-avatar-loading').addClass('d-none');
+                    $('.header-avatar-img').css('opacity', '1');
+                    
+                    Swal.fire({
+                        title: '¡Imagen cargada con éxito!',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Actualizar solo el preview en la página actual
+                    if (response.avatar_url) {
+                        $('#avatarPreview').attr('src', response.avatar_url);
+                        
+                        // ✅ ACTUALIZAR AVATAR EN EL HEADER CON CACHE BUSTER
+                        const timestamp = new Date().getTime();
+                        $('.header-avatar-img').attr('src', response.avatar_url + '?t=' + timestamp);
+                        
+                        // Si no había botón de eliminar, agregarlo
+                        if (!$('#deleteAvatarBtn').length) {
+                            $('.avatar-container').parent().append(
+                                '<button type="button" class="btn btn-outline-danger btn-sm" id="deleteAvatarBtn">' +
+                                '<i class="ai-trash me-1"></i>Eliminar foto</button>'
+                            );
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    // ✅ OCULTAR LOADING EN ERROR
+                    $('.header-avatar-loading').addClass('d-none');
+                    $('.header-avatar-img').css('opacity', '1');
+                    
+                    Swal.fire({
+                        title: 'Error',
+                        text: xhr.responseJSON?.message || 'Error al actualizar la foto de perfil',
+                        icon: 'error'
+                    });
+                }
+            });
+        }
+    });
+
+    // ✅ MEJORADO: Eliminar avatar con loading state
+    $(document).on('click', '#deleteAvatarBtn', function() {
+        Swal.fire({
+            title: '¿Eliminar foto de perfil?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // ✅ MOSTRAR LOADING EN HEADER
+                $('.header-avatar-loading').removeClass('d-none');
+                $('.header-avatar-img').css('opacity', '0.3');
+                
+                $.ajax({
+                    url: '{% url "accounts:avatar-delete" %}',
+                    type: 'POST',
+                    data: {
+                        csrfmiddlewaretoken: $('[name=csrfmiddlewaretoken]').val()
+                    },
+                    success: function(response) {
+                        // ✅ OCULTAR LOADING
+                        $('.header-avatar-loading').addClass('d-none');
+                        $('.header-avatar-img').css('opacity', '1');
+                        
+                        if (response.success) {
+                            Swal.fire({
+                                title: 'Eliminada',
+                                text: response.message,
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            
+                            // Actualizar a imagen por defecto
+                            $('#avatarPreview').attr('src', '{% static "assets/img/avatar/default.jpg" %}');
+                            
+                            // ✅ ACTUALIZAR AVATAR EN EL HEADER (imagen por defecto)
+                            $('.header-avatar-img').attr('src', '{% static "assets/img/avatar/yllorca.webp" %}');
+                            
+                            $('#deleteAvatarBtn').remove();
+                        }
+                    },
+                    error: function(xhr) {
+                        // ✅ OCULTAR LOADING EN ERROR
+                        $('.header-avatar-loading').addClass('d-none');
+                        $('.header-avatar-img').css('opacity', '1');
+                        
+                        Swal.fire({
+                            title: 'Error',
+                            text: xhr.responseJSON?.message || 'Error al eliminar la foto de perfil',
+                            icon: 'error'
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // Cambiar contraseña
+    $('#passwordForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: '{% url "accounts:password-change" %}',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        title: 'Éxito',
+                        text: response.message,
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    $('#passwordForm')[0].reset();
+                }
+            },
+            error: function(xhr) {
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    let errorMessages = '';
+                    for (let field in xhr.responseJSON.errors) {
+                        const fieldName = xhr.responseJSON.errors[field].field_name;
+                        const messages = xhr.responseJSON.errors[field].messages.join(', ');
+                        errorMessages += `<strong>${fieldName}:</strong> ${messages}<br>`;
+                    }
+                    Swal.fire({
+                        title: 'Error',
+                        html: errorMessages,
+                        icon: 'error'
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Error al cambiar la contraseña',
+                        icon: 'error'
+                    });
+                }
+            }
+        });
+    });
+});
+
+// Funciones auxiliares adicionales 
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+function showAlert(type, message) {
+    Swal.fire({
+        title: type === 'success' ? 'Éxito' : 'Error',
+        text: message,
+        icon: type,
+        timer: 3000,
+        showConfirmButton: false
+    });
+}
+
+function showErrors(errors) {
+    // Limpiar errores anteriores
+    $('.invalid-feedback').remove();
+    $('.is-invalid').removeClass('is-invalid');
+
+    // Mostrar nuevos errores
+    for (const [field, error] of Object.entries(errors)) {
+        const input = $(`[name="${field}"]`);
+        input.addClass('is-invalid');
+        input.after(`
+            <div class="invalid-feedback">
+                ${error.messages ? error.messages.join(', ') : error}
+            </div>
+        `);
+    }
+}
+</script>
+{% endblock %}

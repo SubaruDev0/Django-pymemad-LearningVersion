@@ -1,0 +1,644 @@
+{% extends 'base_dashboard.html' %}
+{% load static %}
+
+{% block title %}Gestión de Roles - PyMEMAD{% endblock %}
+
+{% block dashboard_content %}
+
+<div class="container-fluid px-0">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between pb-3 mb-3 mb-sm-4 border-bottom">
+        <h1 class="h2 mb-0">
+            <i class="ai-user-plus text-primary me-2"></i>
+            Gestión de Roles
+        </h1>
+        <a href="{% url 'permissions:permissions_list' %}" class="btn btn-secondary">
+            <i class="ai-arrow-left me-2"></i>Volver
+        </a>
+    </div>
+
+    <!-- Estadísticas -->
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Total Roles</p>
+                            <h4 class="mb-0">{{ roles|length }}</h4>
+                        </div>
+                        <div class="text-primary opacity-50">
+                            <i class="ai-users fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Roles Activos</p>
+                            <h4 class="mb-0">{{ roles|length }}</h4>
+                        </div>
+                        <div class="text-success opacity-50">
+                            <i class="ai-check-circle fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Roles del Sistema</p>
+                            <h4 class="mb-0">{{ system_roles_count|default:2 }}</h4>
+                        </div>
+                        <div class="text-info opacity-50">
+                            <i class="ai-shield fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-1">Usuarios Asignados</p>
+                            <h4 class="mb-0">{{ total_users|default:0 }}</h4>
+                        </div>
+                        <div class="text-warning opacity-50">
+                            <i class="ai-user-check fs-2"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Roles -->
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="ai-users text-primary me-2"></i>
+                    Roles del Sistema
+                </h5>
+                <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createRoleModal">
+                    <i class="ai-plus-circle me-2"></i>Nuevo Rol
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if roles %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Rol</th>
+                                <th>Descripción</th>
+                                <th>Alcance</th>
+                                <th>Usuarios</th>
+                                <th>Estado</th>
+                                <th class="text-end">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for role in roles %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="ai-user-plus text-primary me-2"></i>
+                                        <div>
+                                            <strong>{{ role.name }}</strong>
+                                            {% if role.is_system %}
+                                                <span class="badge bg-secondary ms-2">Sistema</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-muted">{{ role.description|default:"-" }}</td>
+                                <td>
+                                    {% if role.scope == 'national' %}
+                                        <span class="badge bg-danger">Nacional</span>
+                                    {% elif role.scope == 'regional' %}
+                                        <span class="badge bg-warning text-dark">Regional</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Propio</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ role.user_count|default:0 }}</td>
+                                <td>
+                                    <span class="badge bg-success">Activo</span>
+                                </td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-outline-info btn-view-users"
+                                            data-role-id="{{ role.id }}"
+                                            data-role-name="{{ role.name }}"
+                                            title="Ver usuarios">
+                                        <i class="ai-user"></i>
+                                    </button>
+                                    <a href="{% url 'permissions:configure_role_wizard' role.id %}"
+                                       class="btn btn-sm btn-outline-primary"
+                                       title="Configurar permisos">
+                                        <i class="ai-settings"></i>
+                                    </a>
+                                    {% if not role.is_system %}
+                                        <button class="btn btn-sm btn-outline-danger btn-delete-role"
+                                                data-role-id="{{ role.id }}"
+                                                data-role-name="{{ role.name }}"
+                                                title="Eliminar rol">
+                                            <i class="ai-trash"></i>
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="ai-users fs-1 text-muted mb-3 d-block"></i>
+                    <h5>No hay roles configurados</h5>
+                    <p class="text-muted">Crea tu primer rol para comenzar a gestionar permisos</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createRoleModal">
+                        <i class="ai-plus-circle me-2"></i>Crear Primer Rol
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal para crear rol -->
+<div class="modal fade" id="createRoleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="ai-plus-circle me-2"></i>
+                    Crear Nuevo Rol
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createRoleForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="roleCode" class="form-label">Código *</label>
+                            <input type="text" class="form-control" id="roleCode" name="code" required
+                                   placeholder="ej: coordinador_regional">
+                            <small class="text-muted">Código único sin espacios</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="roleName" class="form-label">Nombre *</label>
+                            <input type="text" class="form-control" id="roleName" name="name" required
+                                   placeholder="ej: Coordinador Regional">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="roleLevel" class="form-label">Nivel del Rol *</label>
+                            <select class="form-select" id="roleLevel" name="level" required>
+                                <option value="">Seleccione un nivel...</option>
+                                <option value="board_member">Miembro de Junta</option>
+                                <option value="member">Miembro</option>
+                                <option value="external">Externo</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="roleScope" class="form-label">Alcance *</label>
+                            <select class="form-select" id="roleScope" name="scope" required>
+                                <option value="own">Propio - Solo sus propios datos</option>
+                                <option value="regional">Regional - Datos de su región</option>
+                                <option value="national">Nacional - Todos los datos</option>
+                            </select>
+                            <small class="text-muted">Define el alcance de los permisos del rol</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="roleDescription" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="roleDescription" name="description" rows="3"
+                                  placeholder="Describe las responsabilidades del rol..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="saveRoleBtn">
+                    <i class="ai-save me-2"></i>Crear Rol
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Ver/Gestionar Usuarios del Rol -->
+<div class="modal fade" id="roleUsersModal" tabindex="-1" aria-labelledby="roleUsersModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="roleUsersModalLabel">
+                    <i class="ai-users text-primary me-2"></i>
+                    Usuarios del Rol: <span id="modalRoleName"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Agregar nuevo usuario al rol -->
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">Agregar Usuario al Rol</h6>
+                        <div class="row g-2">
+                            <div class="col-md-9">
+                                <select class="form-control" id="userToAdd" style="width: 100%;">
+                                    <option value="">Seleccionar usuario...</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <button class="btn btn-primary w-100" id="addUserToRoleBtn">
+                                    <i class="ai-plus me-1"></i>Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lista de usuarios actuales -->
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Usuarios Asignados</h6>
+                        <div id="roleUsersList" class="table-responsive">
+                            <p class="text-center text-muted">Cargando usuarios...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+        $(document).ready(function() {
+            // Guardar nuevo rol
+            $('#saveRoleBtn').on('click', function() {
+                var formData = {
+                    code: $('#roleCode').val(),
+                    name: $('#roleName').val(),
+                    level: $('#roleLevel').val(),
+                    scope: $('#roleScope').val(),
+                    description: $('#roleDescription').val()
+                };
+
+                if (!formData.code || !formData.name || !formData.level || !formData.scope) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Por favor complete todos los campos requeridos'
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: '{% url "permissions:api_create_role" %}',
+                    type: 'POST',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: response.message,
+                                timer: 2000,
+                                showConfirmButton: false
+                            }).then(() => {
+                                location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al crear el rol'
+                        });
+                    }
+                });
+
+                $('#createRoleModal').modal('hide');
+            });
+
+            // Ver usuarios del rol
+            let currentRoleId = null;
+            let currentRoleRow = null;
+
+            $('.btn-view-users').on('click', function() {
+                currentRoleId = $(this).data('role-id');
+                const roleName = $(this).data('role-name');
+                currentRoleRow = $(this).closest('tr'); // Guardar referencia a la fila
+
+                $('#modalRoleName').text(roleName);
+                $('#roleUsersList').html('<p class="text-center text-muted">Cargando usuarios...</p>');
+
+                // Cargar usuarios del rol
+                loadRoleUsers(currentRoleId);
+
+                // Cargar usuarios disponibles para agregar
+                loadAvailableUsers();
+
+                $('#roleUsersModal').modal('show');
+            });
+
+            function loadRoleUsers(roleId) {
+                $.ajax({
+                    url: '{% url "permissions:api_get_role_users" 0 %}'.replace('0', roleId),
+                    type: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        // Actualizar contador en la tabla
+                        if (currentRoleRow) {
+                            const userCount = response.users ? response.users.length : 0;
+                            currentRoleRow.find('td:eq(3)').text(userCount); // Columna de usuarios
+                        }
+
+                        if (response.success && response.users.length > 0) {
+                            let html = `
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Email</th>
+                                            <th>Tipo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                            response.users.forEach(function(user) {
+                                html += `
+                                    <tr>
+                                        <td>${user.username}</td>
+                                        <td>${user.email}</td>
+                                        <td>
+                                            <span class="badge ${user.is_primary ? 'bg-primary' : 'bg-secondary'}">
+                                                ${user.is_primary ? 'Principal' : 'Adicional'}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-danger btn-remove-user"
+                                                    data-user-id="${user.id}"
+                                                    data-username="${user.username}">
+                                                <i class="ai-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>`;
+                            });
+
+                            html += '</tbody></table>';
+                            $('#roleUsersList').html(html);
+
+                            // Bind remove buttons
+                            $('.btn-remove-user').on('click', function() {
+                                const userId = $(this).data('user-id');
+                                const username = $(this).data('username');
+                                removeUserFromRole(userId, username);
+                            });
+                        } else {
+                            $('#roleUsersList').html('<p class="text-center text-muted">No hay usuarios asignados a este rol</p>');
+                        }
+                    },
+                    error: function() {
+                        $('#roleUsersList').html('<p class="text-center text-danger">Error al cargar usuarios</p>');
+                    }
+                });
+            }
+
+            function loadAvailableUsers() {
+                $.ajax({
+                    url: '{% url "permissions:permissions_list" %}?api=true',
+                    type: 'GET',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        let html = '<option value="">Seleccionar usuario...</option>';
+                        if (response.users) {
+                            response.users.forEach(function(user) {
+                                html += `<option value="${user.id}">${user.username} - ${user.email}</option>`;
+                            });
+                        }
+                        $('#userToAdd').html(html);
+
+                        // Inicializar Select2 con un pequeño delay para asegurar que el DOM esté listo
+                        setTimeout(function() {
+                            $('#userToAdd').select2({
+                                placeholder: 'Buscar y seleccionar usuario...',
+                                allowClear: true,
+                                width: '100%',
+                                dropdownParent: $('#roleUsersModal'),
+                                language: 'es'
+                            });
+                        }, 100);
+                    },
+                    error: function() {
+                        $('#userToAdd').html('<option value="">Error al cargar usuarios</option>');
+                    }
+                });
+            }
+
+            // Agregar usuario al rol
+            $('#addUserToRoleBtn').on('click', function() {
+                const userId = $('#userToAdd').val();
+
+                if (!userId) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Atención',
+                        text: 'Por favor selecciona un usuario'
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: '{% url "permissions:assign_role" %}',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        user_id: userId,
+                        role_id: currentRoleId
+                    }),
+                    contentType: 'application/json',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Éxito',
+                                text: 'Usuario agregado al rol',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            loadRoleUsers(currentRoleId);
+                            $('#userToAdd').val('');
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: response.message || 'No se pudo agregar el usuario'
+                            });
+                        }
+                    },
+                    error: function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Ocurrió un error al agregar el usuario'
+                        });
+                    }
+                });
+            });
+
+            function removeUserFromRole(userId, username) {
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas quitar a "${username}" de este rol?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, quitar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{% url "permissions:api_remove_user_role" 0 %}'.replace('0', userId),
+                            type: 'DELETE',
+                            data: JSON.stringify({
+                                role_id: currentRoleId
+                            }),
+                            contentType: 'application/json',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Éxito',
+                                        text: 'Usuario removido del rol',
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                    loadRoleUsers(currentRoleId);
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message || 'No se pudo quitar el usuario'
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Ocurrió un error al quitar el usuario'
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Limpiar modal al cerrar
+            $('#roleUsersModal').on('hidden.bs.modal', function() {
+                // Destruir Select2 si existe
+                if ($('#userToAdd').hasClass('select2-hidden-accessible')) {
+                    $('#userToAdd').select2('destroy');
+                }
+                $('#userToAdd').val('').html('<option value="">Seleccionar usuario...</option>');
+                currentRoleId = null;
+                currentRoleRow = null;
+            });
+
+            // Eliminar rol
+            $('.btn-delete-role').on('click', function() {
+                var roleId = $(this).data('role-id');
+                var roleName = $(this).data('role-name');
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: `¿Deseas eliminar el rol "${roleName}"? Esta acción no se puede deshacer.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '{% url "permissions:api_delete_role" 0 %}'.replace('0', roleId),
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Eliminado',
+                                        text: response.message,
+                                        timer: 2000,
+                                        showConfirmButton: false
+                                    }).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function() {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error',
+                                    text: 'Ocurrió un error al eliminar el rol'
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}
